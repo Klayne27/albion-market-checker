@@ -1,0 +1,240 @@
+{
+  "inventory": {
+    "item": {
+      "id": 1,
+      "username": "Klayne",
+      "silver": 10000,
+      "inventory": []
+    },
+    "id": 1,
+    "username": "Klayne",
+    "silver": 85283771,
+    "inventory": [
+      {
+        "name": "Adept's Undead Cape",
+        "quantity": 17,
+        "price": 299988
+      },
+      {
+        "name": "Expert's Broadsword",
+        "quantity": 4,
+        "price": 768
+      },
+      {
+        "name": "Elder's Torch",
+        "quantity": 2,
+        "price": 2048
+      },
+      {
+        "name": "Elder's Carving Sword",
+        "quantity": 2,
+        "price": 1195960
+      },
+      {
+        "name": "Battle Mount Token",
+        "quantity": 1,
+        "price": 300000
+      },
+      {
+        "name": "Expert's Knight Armor",
+        "quantity": 1,
+        "price": 72000
+      },
+      {
+        "name": "Adept's Fiend Sandals",
+        "quantity": 1,
+        "price": 38000
+      },
+      {
+        "name": "Master's Hunter Shoes",
+        "quantity": 1,
+        "price": 58000
+      },
+      {
+        "name": "Elder's Druid Robe",
+        "quantity": 1,
+        "price": 95000
+      },
+      {
+        "name": "Adept's Stalker Hood",
+        "quantity": 1,
+        "price": 35000
+      },
+      {
+        "name": "Master's Mage Cowl",
+        "quantity": 1,
+        "price": 68000
+      },
+      {
+        "name": "Expert's Guardian Helmet",
+        "quantity": 1,
+        "price": 37000
+      },
+      {
+        "name": "Elder's Hunter Shoes",
+        "quantity": 1,
+        "price": 40000
+      },
+      {
+        "name": "Master's Assassin Jacket",
+        "quantity": 1,
+        "price": 48000
+      },
+      {
+        "name": "Adept's Mercenary Hood",
+        "quantity": 1,
+        "price": 25000
+      },
+      {
+        "name": "Elder's Scholar Sandals",
+        "quantity": 1,
+        "price": 38000
+      },
+      {
+        "name": "Master's Cleric Robe",
+        "quantity": 1,
+        "price": 42000
+      },
+      {
+        "name": "Expert's Mage Cowl",
+        "quantity": 1,
+        "price": 28000
+      },
+      {
+        "name": "Elder's Light Crossbow",
+        "quantity": 1,
+        "price": 85000
+      },
+      {
+        "name": "Master's Soulscythe",
+        "quantity": 1,
+        "price": 110000
+      },
+      {
+        "name": "Expert's Tombhammer",
+        "quantity": 1,
+        "price": 76000
+      },
+      {
+        "name": "Elder's Enigmatic Staff",
+        "quantity": 1,
+        "price": 92000
+      },
+      {
+        "name": "Master's Soldier Armor",
+        "quantity": 1,
+        "price": 44000
+      },
+      {
+        "name": "Elder's Knight Boots",
+        "quantity": 2,
+        "price": 50000
+      },
+      {
+        "name": "Minor Poison Potion",
+        "quantity": 1,
+        "price": 20000
+      },
+      {
+        "name": "Tome of Insight",
+        "quantity": 1,
+        "price": 8000
+      },
+      {
+        "name": "Major Healing Potion",
+        "quantity": 1,
+        "price": 35000
+      },
+      {
+        "name": "Gigantify Potion",
+        "quantity": 1,
+        "price": 22000
+      },
+      {
+        "name": "Invisibility Potion",
+        "quantity": 1,
+        "price": 40000
+      },
+      {
+        "name": "Resistance Potion",
+        "quantity": 1,
+        "price": 28000
+      },
+      {
+        "name": "Roast Pork",
+        "quantity": 1,
+        "price": 30000
+      },
+      {
+        "name": "Omelette",
+        "quantity": 1,
+        "price": 25000
+      },
+      {
+        "name": "Beef Stew",
+        "quantity": 1,
+        "price": 32000
+      },
+      {
+        "name": "Cabbage Soup",
+        "quantity": 1,
+        "price": 15000
+      },
+      {
+        "name": "Goose Pie",
+        "quantity": 1,
+        "price": 40000
+      },
+      {
+        "name": "Avalonian Energy Reserves",
+        "quantity": 1,
+        "price": 90000
+      },
+      {
+        "name": "Expert's Cryptcandle",
+        "quantity": 1,
+        "price": 50000
+      },
+      {
+        "name": "Elder's Shield",
+        "quantity": 1,
+        "price": 60000
+      },
+      {
+        "name": "Master's Sarcophagus",
+        "quantity": 1,
+        "price": 65000
+      },
+      {
+        "name": "Expert's Thetford Cape",
+        "quantity": 1,
+        "price": 75000
+      },
+      {
+        "name": "Adept's Cape",
+        "quantity": 1,
+        "price": 20000
+      },
+      {
+        "name": "Elder's Lymhurst Cape",
+        "quantity": 1,
+        "price": 82000
+      },
+      {
+        "name": "Teleport Scroll",
+        "quantity": 1,
+        "price": 12000
+      },
+      {
+        "name": "Energy Brew",
+        "quantity": 1,
+        "price": 20000
+      },
+      {
+        "name": "Guild Banner",
+        "quantity": 1,
+        "price": 25000
+      }
+    ]
+  }
+}
