@@ -10,10 +10,6 @@ function useItemData() {
   } = useQuery({
     queryKey: ["itemData"],
     queryFn: getItemData,
-
-    // Options: Configure the query behavior for this static data
-    // staleTime: Set a very high staleTime or Infinity for static data
-    // so it's considered fresh forever after the first fetch.
     staleTime: Infinity,
     cacheTime: Infinity,
     refetchOnWindowFocus: false,

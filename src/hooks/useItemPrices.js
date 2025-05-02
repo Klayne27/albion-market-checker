@@ -13,8 +13,6 @@ export const useItemPrices = (itemIdsToFetch, city, isItemDataLoading, itemDataE
     queryFn: () => getItemPrices(itemIdsToFetch, city),
     enabled:
       !isItemDataLoading && !itemDataError && itemIdsToFetch.length > 0 && city !== "",
-
-    // Use a short staleTime for market data as it changes frequently.
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: true,
     retry: 2,

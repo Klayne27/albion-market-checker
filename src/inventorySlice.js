@@ -3,8 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   id: 1,
   username: "Klayne",
-  silver: 98500000,
-  inventory: [], 
+  silver: 98300000,
+  inventory: [],
 };
 
 const inventorySlice = createSlice({
@@ -12,13 +12,15 @@ const inventorySlice = createSlice({
   initialState,
   reducers: {
     buyItem: (state, action) => {
-      const {id, name, quantity, sell_price_min } = action.payload;
-      const existingItem = state.inventory.find((item) => item.name ===  id);
+      const { id, name, quantity, sell_price_min, quality } = action.payload;
+      const existingItem = state.inventory.find(
+        (item) => item.id === id && item.quality === quality
+      );
 
       if (existingItem) {
         existingItem.quantity += quantity;
       } else {
-        state.inventory.push({id, name, quantity, price: sell_price_min });
+        state.inventory.push({ id, name, quality, quantity, price: sell_price_min });
       }
       state.silver -= sell_price_min * quantity;
     },

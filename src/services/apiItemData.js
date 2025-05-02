@@ -18,21 +18,21 @@ export const getItemData = async () => {
   lines.forEach((line) => {
     const firstColonIndex = line.indexOf(":");
 
-    const restOfLine = line.substring(firstColonIndex + 1).trim(); // e.g T4_BAG            : Adept's Bag
+    const restOfLine = line.substring(firstColonIndex + 1).trim();
 
     const secondColonIndex = restOfLine.indexOf(":");
 
     if (secondColonIndex === -1) {
-      return; // Skip lines that don't have the second colon
+      return;
     }
 
-    const uniqueName = restOfLine.substring(0, secondColonIndex).trim(); // Extract unique name
-    const displayName = restOfLine.substring(secondColonIndex + 1).trim(); // Extract human readable name
+    const uniqueName = restOfLine.substring(0, secondColonIndex).trim();
+    const displayName = restOfLine.substring(secondColonIndex + 1).trim();
 
     if (uniqueName && displayName) {
       processedArray.push({
-        id: uniqueName, // id for uniqueName
-        name: displayName, // name for displayName (human readable name)
+        id: uniqueName,
+        name: displayName,
       });
     }
   });

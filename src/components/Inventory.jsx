@@ -10,7 +10,6 @@ function Inventory() {
   const inventory = useSelector(selectInventory);
 
   const totalInventoryValue = inventory.inventory.reduce((acc, item) => {
-    // Ensure item is not empty and has price and quantity properties
     if (!item.empty && item.price !== undefined && item.quantity !== undefined) {
       return acc + item.price * item.quantity;
     }
@@ -63,7 +62,7 @@ function Inventory() {
             className={`w-24 h-24 relative ${"overflow-hidden bg-cover bg-center bg-no-repeat"}`}
             style={{
               backgroundImage: `url('https://render.albiononline.com/v1/item/T6_POTION_HEAL@3')`,
-              backgroundSize: "119%",
+              backgroundSize: "114%",
             }}
           >
             <p className="absolute text-white left-17 bottom-3 text-xs border-3 rounded-full px-0.5 border-gray-300 font-sans">
@@ -151,8 +150,7 @@ function Inventory() {
               backgroundSize: "114%",
               opacity: "50%",
             }}
-          >
-          </div>
+          ></div>
           <div
             className={`w-24 h-24 relative ${"overflow-hidden bg-cover bg-center bg-no-repeat"}`}
             style={{
@@ -198,7 +196,7 @@ function Inventory() {
               style={
                 !item.empty
                   ? {
-                      backgroundImage: `url('${baseURLimage}${item.id}')`,
+                      backgroundImage: `url('${baseURLimage}${item.id}?quality=${item.quality}')`,
                       backgroundSize: "114%",
                     }
                   : {}

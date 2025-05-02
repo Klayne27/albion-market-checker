@@ -3,6 +3,19 @@ import { RxCaretLeft, RxCaretRight } from "react-icons/rx";
 import { formatNumber } from "../utils/helpers";
 import { useItemData } from "../hooks/useItemData";
 import { useItemPrices } from "../hooks/useItemPrices";
+import { IoIosCheckmark } from "react-icons/io";
+import CustomDropdown from "./CustomDropdown";
+
+const commonHoverActiveStyles = `
+    hover:bg-gradient-to-b hover:from-stone-800 hover:via-stone-700 hover:to-stone-500
+    active:bg-stone-950
+    active:scale-95
+    transition ease-in-out duration-150
+  `;
+
+const focusStyles = `
+    focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 focus:ring-offset-gray-900
+  `;
 
 const baseURLimage = "https://render.albiononline.com/v1/item/";
 
@@ -13,8 +26,12 @@ function ShopBuy({
   selectTier,
   selectEnchantment,
   selectedCity,
-  setSelectedCity,
   selectType,
+  showPricedItems,
+  onShowPricedItems,
+  handleCityChange,
+  openDropdown,
+  onOpenDropdown
 }) {
   const { itemArray, loading: isItemDataLoading, error: itemDataError } = useItemData();
   const [currentPage, setCurrentPage] = useState(1);
@@ -28,11 +45,13 @@ function ShopBuy({
     { name: "Black Market", value: "Black Market" },
   ];
 
-  const itemsPerPage = 30;
+  const itemsPerPage = 170;
 
   const filteredItems = useMemo(() => {
     let currentItems = itemArray;
 
+    console.log("--- Filtered Items (after all filters) ---", currentItems);
+    console.log("Filtered Items Count:", currentItems.length);
     currentItems = currentItems.filter((item) => {
       const itemId = item.id;
       const isArtifact = itemId.includes("ARTEFACT");
@@ -71,7 +90,7 @@ function ShopBuy({
 
     if (selectType !== "any") {
       currentItems = currentItems.filter((item) => {
-        const parts = item.id.split("_"); 
+        const parts = item.id.split("_");
         return parts.length > 1 && parts[1] === selectType;
       });
     }
@@ -116,19 +135,23 @@ function ShopBuy({
       });
   }, [itemArray, priceData, itemIdsToFetch, selectedCity, isItemDataLoading]);
 
+  console.log("--- Combined Item Data (for current page) ---", combinedItemData);
+  console.log("Combined Item Data Count:", combinedItemData.length);
+
   useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm]);
 
   const displayItems = useMemo(() => {
-    const term = searchTerm.trim().toLowerCase();
+    let itemsToDisplay = combinedItemData;
 
-    if (!term) {
-      return combinedItemData;
+    if (showPricedItems) {
+      itemsToDisplay = itemsToDisplay.filter((item) => item.sell_price_min > 0);
     }
-
-    return combinedItemData.filter((item) => item.name.toLowerCase().includes(term));
-  }, [combinedItemData, searchTerm]);
+    console.log("--- Final Display Items ---", itemsToDisplay);
+    console.log("Final Display Items Count:", itemsToDisplay.length);
+    return itemsToDisplay;
+  }, [combinedItemData, showPricedItems]);
 
   function useThrottle(fn, delay = 200) {
     const last = useRef(0);
@@ -168,18 +191,33 @@ function ShopBuy({
       <div className="border px-3 py-3 bg-[#e4bb93] shadow-[inset_0_0_25px_15px_#eca966]">
         <div className="flex gap-2">
           <h1 className="font-bold mb-1 text-4xl">Market Offers</h1>
+
           <div className="flex border rounded-full p-[5px] bg-gradient-to-b from-[#716F7B] via-[#4c4a50] to-[#38373b] mr-4 mb-2">
-            <select
-              value={selectedCity}
-              onChange={(e) => setSelectedCity(e.target.value)}
-              className="border border-[#646179] rounded-full w-40 px-2 text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] text-[#000000]"
+            <CustomDropdown
+              id="city"
+              options={citiesOptions}
+              onValueChange={handleCityChange}
+              selectedValue={selectedCity}
+              onOpenDropdown={onOpenDropdown}
+              openDropdown={openDropdown}
+            />
+          </div>
+          <div className=" flex items-center justify-start sm:justify-start gap-2 mb-2">
+            <button
+              type="button"
+              id="show-price"
+              onClick={() => onShowPricedItems(!showPricedItems)}
+              className={`text-sm border-3 rounded-full border-gray-500 bg-gradient-to-b from-stone-900 via-stone-800 to-stone-600 hover:from-stone-800 hover:via-stone-700 hover:to-stone-600 text-[#0c0e0f] cursor-pointer ${
+                showPricedItems
+                  ? "bg-gradient-to-b from-yellow-400 via-yellow-500 to-yellow-600 hover:from-yellow-400 hover:via-yellow-500 hover:to-yellow-600 text-yellow-700"
+                  : ""
+              } ${commonHoverActiveStyles} ${focusStyles}`}
             >
-              {citiesOptions.map((city) => (
-                <option key={city.value} value={city.value}>
-                  {city.name}
-                </option>
-              ))}
-            </select>
+              <IoIosCheckmark size={18} style={{ strokeWidth: "8%" }} />
+            </button>
+            <label htmlFor="show-price" className="text-md text-[black]">
+              Show Priced Items
+            </label>
           </div>
         </div>
 
@@ -227,8 +265,8 @@ function ShopBuy({
                   </span>
                   <button
                     type="button"
-                    className=" w-[118px] py-1 border-2 rounded-full text-lg border-gray-500 cursor-pointer shadow-[inset_0_0_10px_1px_#660101] bg-[#c70101] text-yellow-400 hover:opacity-80 active:scale-95"
-                    onClick={() => onShowPanel(item)}
+                    className=" w-[118px] py-1 border-2 rounded-full text-lg border-gray-500 cursor-pointer shadow-[inset_0_0_10px_1px_#660101] bg-[#b10808] text-yellow-400 hover:opacity-80 active:scale-95"
+                    onClick={() => onShowPanel(item, selectQuality)}
                   >
                     Buy
                   </button>
@@ -254,7 +292,7 @@ function ShopBuy({
           <span className="border h-0 w-full border-[#917663]"></span>
           <button
             onClick={goToPrevPage}
-            className="border-2 rounded-full px-3 size-7 text-yellow-400 border-[#646179] bg-[#2c2b35] relative cursor-pointer disabled:opacity-30"
+            className="border-2 rounded-full px-3 size-7 text-yellow-400 border-[#646179] bg-[#2c2b35] relative cursor-pointer disabled:opacity-30 hover:opacity-80"
             disabled={currentPage === 1 || isPriceLoading || isPriceFetching}
             aria-label="Previous Page"
           >
@@ -263,7 +301,7 @@ function ShopBuy({
           <p className="text-lg text-[#43342D]">{currentPage}</p>
           <button
             onClick={goToNextPage}
-            className="border-2 rounded-full px-3 size-7 text-yellow-400 border-[#646179] bg-[#2c2b35] relative cursor-pointer disabled:opacity-30"
+            className="border-2 rounded-full px-3 size-7 text-yellow-400 border-[#646179] bg-[#2c2b35] relative cursor-pointer disabled:opacity-30 hover:opacity-80"
             disabled={currentPage === totalPages || isPriceLoading || isPriceFetching}
             aria-label="Next Page"
           >

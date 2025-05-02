@@ -6,15 +6,27 @@ html {
   font-weight: 600;
 }
 
+body {
+  cursor: url(/cursor.png), auto;
+}
+
+input,
+textarea,
+select,
+label,
+option,
+button {
+  cursor: inherit;
+}
 
 .custom-scrollbar {
   /* For Webkit-based browsers (Chrome, Safari, Edge) */
   &::-webkit-scrollbar {
-    width: 8px; 
+    width: 8px;
   }
 
   &::-webkit-scrollbar-track {
-    background: #EDC298; /* Color of the track */
+    background: #edc298; /* Color of the track */
     border-radius: 4px; /* Optional: rounded track corners */
   }
 
