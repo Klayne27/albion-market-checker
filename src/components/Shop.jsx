@@ -17,14 +17,19 @@ function Shop() {
   const [selectQuality, setSelectQuality] = useState(1);
   const [selectTier, setSelectTier] = useState("any");
   const [selectEnchantment, setSelectEnchantment] = useState("any");
-  const [searchTerm, setSearchTerm] = useState(""); // --- Step 1: Add state for search term ---
+  const [selectType, setSelectType] = useState("any");
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const tabStyles = (tabName) =>
-    `cursor-pointer px-2 py-2 font-bold rounded-tr-full rounded-br-full border-r-2 border-t-2 border-b-2 ${
-      activeTab === tabName
-        ? "bg-[#EDC298] text-[#43342D] border-[#43342D] border-r-2 border-t-2 border-b-2"
-        : "bg-[#EDC298] text-[#43342D] border-[#43342D] z-1"
-    }`;
+  const tabStyles = (tabName) => {
+    const baseStyles =
+      "cursor-pointer px-4 py-5 font-bold rounded-tr-full rounded-br-full border-r-5 border-t-5 border-b-5 border-[#716F7B]";
+    const activeStyles = "bg-[#535166] text-[#43342D] z-10 shadow-md";
+    const inactiveStyles = "bg-[#2c2b35] hover:bg-[#535166] hover:shadow-sm z-0";
+
+    return `${baseStyles} ${activeTab === tabName ? activeStyles : inactiveStyles}`;
+  };
+
+  const [selectedCity, setSelectedCity] = useState("Thetford");
 
   const handleShowPanel = (item) => {
     setSelectedItem(item);
@@ -37,11 +42,11 @@ function Shop() {
   };
 
   const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value); // --- Step 2: Update search term state ---
+    setSearchTerm(event.target.value);
   };
 
   const handleResetSearch = () => {
-    setSearchTerm(""); // --- Step 5: Reset search term ---
+    setSearchTerm("");
   };
 
   const handleSelectQuality = (e) => {
@@ -56,15 +61,26 @@ function Shop() {
     setSelectEnchantment(e.target.value);
   };
 
+  const handleSelectType = (e) => {
+    setSelectType(e.target.value);
+  };
+
+  const handleResetFilters = () => {
+    setSelectQuality("any");
+    setSelectTier("any");
+    setSelectEnchantment("any");
+    setSelectType("any");
+  };
+
   return (
     <>
       <div className="border bg-[#43342D] w-[70rem] h-[57rem] z-0 relative">
         <div className="border-b-2 border-[#29201B] pb-4 pt-4 bg-[#43342D] px-5">
           <div className="flex items-center gap-2">
-            <div className="border-3 border-[#8C7C6B] rounded-full w-24 h-24 relative my-2"></div>
+            <div className="border-3 border-[#8C7C6B] rounded-full w-24 h-24 my-2"></div>
             <img src="./albion.png" className="absolute size-45 -left-5.5" />
             <span className="text-[#8C7C6B] font-extrabold text-3xl">
-              Lymhurst's Marketplace
+              {selectedCity}'s Marketplace
             </span>
             <span className="border-2 rounded-full px-1 size-6 text-yellow-400 border-[#646179] bg-[#2c2b35] mt-2 relative">
               <FaArrowRotateRight size={16} className="absolute right-0.5 top-0.5" />
@@ -74,16 +90,16 @@ function Shop() {
                 🪩{formatNumber(inventory.silver)}
               </div>
             </div>
-            <div className="relative">
-              <button className="border-2 rounded-full px-2 size-7 text-yellow-400 border-[#646179] bg-[#2c2b35] relative left-[515px] bottom-9 cursor-pointer">
-                <ImCross size={14} className="absolute top-1.5 left-1.5" />
-              </button>
-              <div className="flex mt-2 absolute flex-col left-[34rem] top-32 gap-3 ">
-                <button className={tabStyles("buy")} onClick={() => setActiveTab("buy")}>
+            <div>
+              <div className="flex mt-2 absolute flex-col left-[69rem] top-46 gap-3 ">
+                <button
+                  className={`${tabStyles("buy")} text-green-400`}
+                  onClick={() => setActiveTab("buy")}
+                >
                   Buy
                 </button>
                 <button
-                  className={tabStyles("sell")}
+                  className={`${tabStyles("sell")} text-red-500`}
                   onClick={() => setActiveTab("sell")}
                 >
                   Sell
@@ -91,9 +107,9 @@ function Shop() {
               </div>
             </div>
           </div>
-          {/* ... (Filter dropdowns section) ... */}
+
           <div className="flex">
-            <div className="flex border rounded-full p-[5px] gap-0.5 bg-gradient-to-b from-[#716F7B] via-[#4c4a50] to-[#38373b] mr-6">
+            <div className="flex border rounded-full p-[5px] gap-0.5 bg-gradient-to-b from-[#716F7B] via-[#4c4a50] to-[#38373b] mr-4 z-50">
               <input
                 className="border rounded-full w-45 px-2 text-md bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] placeholder:text-[#926e47] "
                 placeholder="Search..."
@@ -108,13 +124,23 @@ function Shop() {
               </span>
             </div>
             <div className="flex border rounded-full p-[5px] gap-5 bg-gradient-to-b from-[#716F7B] via-[#4c4a50] to-[#38373b] mr-3">
-              {/* ... your select dropdowns ... */}
-
-              <select className="border border-[#646179] rounded-full w-45 px-2 py-0.5 text-md bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] text-[#926e47]">
-                <option>Melee</option>
+              <select
+                className="border border-[#646179] rounded-full w-45 px-2 py-0.5 text-md bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] text-[#926e47]"
+                value={selectType}
+                onChange={handleSelectType}
+              >
+                <option value="any">Any</option>
+                <option value="2H">2H Weapon</option>
+                <option value="OFF">Off-Hand</option>
+                <option value="MAIN">Main Hand</option>
+                <option value="HEAD">Head</option>
+                <option value="ARMOR">Armor</option>
+                <option value="SHOES">Shoes</option>
+                <option value="CAPEITEM">Cape</option>
               </select>
               <select
                 className="border border-[#646179] rounded-full w-45 px-2 text-md bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] text-[#926e47]"
+                value={selectTier}
                 onChange={handleSelectTier}
               >
                 <option value="any">Tier</option>
@@ -129,17 +155,19 @@ function Shop() {
               </select>
               <select
                 className="border border-[#646179] rounded-full w-45 px-2 text-md bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] text-[#926e47]"
+                value={selectEnchantment}
                 onChange={handleSelectEnchantment}
               >
                 <option value="any">Enchantment</option>
                 <option value={1}>Uncommon</option>
                 <option value={2}>Rare</option>
-                <option value={3}>Exceotional</option>
+                <option value={3}>Exceptional</option>
                 <option value={4}>Pristine</option>
               </select>
               <div className="flex gap-1">
                 <select
                   className="border border-[#646179] rounded-full w-45  px-2 text-md bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] text-[#926e47]"
+                  value={selectQuality}
                   onChange={handleSelectQuality}
                 >
                   <option value="any">Quality</option>
@@ -149,7 +177,10 @@ function Shop() {
                   <option value={4}>Excellent</option>
                   <option value={5}>Masterpiece</option>
                 </select>
-                <span className="border-2 rounded-full px-1 size-6 text-yellow-400 border-[#646179] bg-[#2c2b35] relative">
+                <span
+                  className="border-2 rounded-full px-1 size-6 text-yellow-400 border-[#646179] bg-[#2c2b35] relative"
+                  onClick={handleResetFilters}
+                >
                   <FaArrowRotateLeft size={16} className="absolute right-0.5 top-0.5" />
                 </span>
               </div>
@@ -157,7 +188,6 @@ function Shop() {
           </div>
         </div>
         <div className="flex-grow overflow-hidden">
-          {/* --- Step 3: Pass searchTerm down to active tab component --- */}
           {activeTab === "buy" && (
             <ShopBuy
               onShowPanel={handleShowPanel}
@@ -166,6 +196,9 @@ function Shop() {
               selectQuality={selectQuality}
               selectTier={selectTier}
               selectEnchantment={selectEnchantment}
+              selectType={selectType}
+              selectedCity={selectedCity}
+              setSelectedCity={setSelectedCity}
             />
           )}
           {activeTab === "sell" && (
@@ -177,7 +210,6 @@ function Shop() {
           )}
         </div>
       </div>
-      {/* ... (ItemDetailPanel logic - unchanged) ... */}
       {isPanelOpen && selectedItem && (
         <>
           <div

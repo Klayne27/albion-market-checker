@@ -12,11 +12,13 @@ function ShopBuy({
   selectQuality,
   selectTier,
   selectEnchantment,
+  selectedCity,
+  setSelectedCity,
+  selectType,
 }) {
   const { itemArray, loading: isItemDataLoading, error: itemDataError } = useItemData();
   const [currentPage, setCurrentPage] = useState(1);
 
-  const [selectedCity, setSelectedCity] = useState("Lymhurst");
   const citiesOptions = [
     { name: "Thetford", value: "Thetford" },
     { name: "Bridgewatch", value: "Bridgewatch" },
@@ -25,15 +27,24 @@ function ShopBuy({
     { name: "Caerleon", value: "Caerleon" },
     { name: "Black Market", value: "Black Market" },
   ];
-  const customItemId = `T${selectTier}_`;
+
   const itemsPerPage = 30;
 
   const filteredItems = useMemo(() => {
-    let currentItems = itemArray; // Ensure itemArray is loaded before filtering
+    let currentItems = itemArray;
+
+    currentItems = currentItems.filter((item) => {
+      const itemId = item.id;
+      const isArtifact = itemId.includes("ARTEFACT");
+      const isUnique = itemId.startsWith("UNIQUE_");
+      const isVanity = itemId.includes("VANITY");
+
+      return !isArtifact && !isUnique && !isVanity;
+    });
 
     if (!Array.isArray(currentItems)) {
       return [];
-    } // --- Apply Search Term Filter ---
+    }
 
     if (searchTerm) {
       const lower = searchTerm.toLowerCase();
@@ -41,26 +52,32 @@ function ShopBuy({
         (item) =>
           item.name.toLowerCase().includes(lower) || item.id.toLowerCase().includes(lower)
       );
-    } // --- Apply Tier Filter ---
+    }
 
     if (selectTier !== "any") {
       currentItems = currentItems.filter((item) => {
-        // Item ID must start with T followed by the selected tier number and an underscore
         return item.id.startsWith(`T${selectTier}_`);
       });
-    } // --- Apply Enchantment Filter ---
+    }
 
     if (selectEnchantment !== "any") {
       currentItems = currentItems.filter((item) => {
-        const enchantmentMatch = item.id.match(/@(\d+)$/); // Finds '@' followed by digits at the end
-        const itemEnchantment = enchantmentMatch ? enchantmentMatch[1] : "0"; // '0' if no '@' found
+        const enchantmentMatch = item.id.match(/@(\d+)$/);
+        const itemEnchantment = enchantmentMatch ? enchantmentMatch[1] : "0";
 
         return itemEnchantment === selectEnchantment;
       });
     }
 
+    if (selectType !== "any") {
+      currentItems = currentItems.filter((item) => {
+        const parts = item.id.split("_"); 
+        return parts.length > 1 && parts[1] === selectType;
+      });
+    }
+
     return currentItems;
-  }, [itemArray, searchTerm, selectTier, selectEnchantment]);
+  }, [itemArray, searchTerm, selectTier, selectEnchantment, selectType]);
 
   const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
 
@@ -102,10 +119,6 @@ function ShopBuy({
   useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm]);
-
-  useEffect(() => {
-    // No state change needed here, just dependency for re-render
-  }, [selectQuality]);
 
   const displayItems = useMemo(() => {
     const term = searchTerm.trim().toLowerCase();
@@ -153,13 +166,13 @@ function ShopBuy({
   return (
     <div className="p-2">
       <div className="border px-3 py-3 bg-[#e4bb93] shadow-[inset_0_0_25px_15px_#eca966]">
-        <div className="flex flex-">
+        <div className="flex gap-2">
           <h1 className="font-bold mb-1 text-4xl">Market Offers</h1>
-          <div className="flex border rounded-full p-[5px] bg-gradient-to-b from-[#716F7B] via-[#4c4a50] to-[#38373b] mr-3 mb-2">
+          <div className="flex border rounded-full p-[5px] bg-gradient-to-b from-[#716F7B] via-[#4c4a50] to-[#38373b] mr-4 mb-2">
             <select
               value={selectedCity}
               onChange={(e) => setSelectedCity(e.target.value)}
-              className="border border-[#646179] rounded-full w-40 px-2 text-sm  bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] text-[#000000]"
+              className="border border-[#646179] rounded-full w-40 px-2 text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] text-[#000000]"
             >
               {citiesOptions.map((city) => (
                 <option key={city.value} value={city.value}>
@@ -187,7 +200,7 @@ function ShopBuy({
             displayItems.length > 0 &&
             displayItems.map((item, i) => (
               <div
-                key={`${item.id}-${currentPage}`} // Add currentPage to key if items might reappear on different pages
+                key={`${item.id}-${currentPage}`}
                 className={`px-2 py-2 grid grid-cols-[2fr_1fr_2fr] items-center ${
                   i % 2 === 0 ? "bg-[#dab593]" : ""
                 }`}
@@ -196,7 +209,7 @@ function ShopBuy({
                   <div
                     className={`w-22 h-22 relative ${"overflow-hidden bg-cover bg-center bg-no-repeat"}`}
                     style={{
-                      backgroundImage: `url('${baseURLimage}${item.id}?quality=${selectQuality}')`,
+                      backgroundImage: `url('${baseURLimage}${item?.id}?quality=${selectQuality}')`,
                       backgroundSize: "114%",
                     }}
                   ></div>

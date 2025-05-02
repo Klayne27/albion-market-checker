@@ -81,7 +81,7 @@ function Inventory() {
               <span className="border rounded-full bg-[#2C2B35] border-[#646179] text-lg py-0.5">
                 🪩
               </span>{" "}
-              <span className="text-xl">{formatNumber(inventory.silver)}</span>
+              <span className="text-lg">{formatNumber(inventory.silver)}</span>
             </div>
           </div>
         </div>

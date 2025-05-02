@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   id: 1,
   username: "Klayne",
-  silver: 500000000,
+  silver: 98500000,
   inventory: [], 
 };
 
