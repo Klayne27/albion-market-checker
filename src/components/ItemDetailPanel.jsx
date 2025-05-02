@@ -1,56 +1,40 @@
 import { FaArrowRotateRight } from "react-icons/fa6";
-import { useBuyItem } from "../hooks/useBuyItem";
-import { useSellItem } from "../hooks/useSellItem";
 import { useState } from "react";
-import { useShop } from "../hooks/useShop";
 import { formatNumber } from "../utils/helpers";
 import { ImCross } from "react-icons/im";
 import { IoIosCheckmark } from "react-icons/io";
+import { useDispatch } from "react-redux";
+import { buyItem, sellItem } from "../inventorySlice";
 
 function ItemDetailPanel({ item, onClose, mode }) {
-  const { buyItem, isBuying } = useBuyItem(); // Get mutation functions if needed
-  const { sellItem, isSelling } = useSellItem(); // Get mutation functions if needed
-  const [quantity, setQuantity] = useState(1); // Example state for amount
-  const [price, setPrice] = useState(item?.price || 0); // Example state for sell price
-  const [rememberMeClicked, setRememberMeClicked] = useState(false)
-  const { shop, isLoading } = useShop();
+  const [quantity, setQuantity] = useState(1);
+  const [rememberMeClicked, setRememberMeClicked] = useState(false);
 
-  if (!item) return null; // Don't render if no item is selected
+  const dispatch = useDispatch();
+
+  if (!item) return null;
 
   const handleConfirmBuy = () => {
-    // Add quantity logic if needed before buying
-    buyItem(
-      { ...item, quantity: quantity },
-      {
-        onSuccess: () => {
-          onClose(); // Close panel on successful buy
-        },
-      }
-    );
+    dispatch(buyItem({ ...item, quantity: quantity }));
+    onClose();
   };
 
   const handleCreateSellOrder = () => {
     // Here you'd likely need more complex logic for sell orders
     // involving setting price, quantity, etc.
     // For now, let's just simulate selling the item directly
-    sellItem(item.name, {
-      onSuccess: () => {
-        onClose(); // Close panel on successful sell
-      },
-    });
+    dispatch(sellItem(item.name, {}));
+    onClose();
   };
 
-    const mainBannerClipPath = "polygon(0% 0%, 99% 0%, 99% 84%, 49% 99%, 0% 84%)";
-    const borderClipPath = "polygon(0% 0%, 100% 0%, 100% 85%, 50% 100%, 0% 85%)";
-
-    const commonHoverActiveStyles = `
+  const commonHoverActiveStyles = `
     hover:bg-gradient-to-b hover:from-stone-800 hover:via-stone-700 hover:to-stone-500
     active:bg-stone-950
     active:scale-95
     transition ease-in-out duration-150
   `;
 
-    const focusStyles = `
+  const focusStyles = `
     focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 focus:ring-offset-gray-900
   `;
 
@@ -162,13 +146,12 @@ function ItemDetailPanel({ item, onClose, mode }) {
             <p>380(2 % premium tax)</p>
             <div></div>
             <p>190(1 % setup fee)</p>
-            <div className="ml-9 mt-1">Total:</div>
+            <div className="ml-9 mt-1">Total: </div>
             <div className="flex justify-between mt-1">
               {formatNumber(item?.price)}
               <button
                 className="px-9 py-1 border-3 rounded-full text-sm border-gray-500 cursor-pointer active:scale-95 transition ease-in-out duration-150 bg-gradient-to-b from-[#660101] via-[#7c0101] to-[#c70101] text-yellow-400 hover:from-[#7a0101] hover:via-[#700101] hover:to-[#a80101] active:from-[#520101] active:via-[#690101] active:to-[#970202]"
-                onClick={handleCreateSellOrder} // Adjust logic as needed
-                disabled={isSelling}
+                onClick={handleCreateSellOrder}
               >
                 Sell
               </button>
@@ -267,7 +250,7 @@ function ItemDetailPanel({ item, onClose, mode }) {
             <p className="ml-10">Price</p>
             <div className="flex mb-3">
               <button>-</button>
-              <p>{formatNumber(item?.price)}</p>
+              <p>{formatNumber(item.sell_price_min)}</p>
               <p>9% above average</p>
               <button>+</button>
             </div>
@@ -277,11 +260,10 @@ function ItemDetailPanel({ item, onClose, mode }) {
             <p>380(2 % premium tax)</p>
             <div className="ml-9 mt-1">Total:</div>
             <div className="flex justify-between mt-1">
-              {formatNumber(item?.price)}
+              {formatNumber(item.sell_price_min)}
               <button
                 className="px-9 py-1 border-3 rounded-full text-sm border-gray-500 cursor-pointer active:scale-95 transition ease-in-out duration-150 bg-gradient-to-b from-[#660101] via-[#7c0101] to-[#c70101] text-yellow-400 hover:from-[#7a0101] hover:via-[#700101] hover:to-[#a80101] active:from-[#520101] active:via-[#690101] active:to-[#970202]"
                 onClick={handleConfirmBuy}
-                disabled={isSelling}
               >
                 Buy
               </button>

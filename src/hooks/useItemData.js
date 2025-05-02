@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getItemData } from "../services/apiItemData";
 
-
 function useItemData() {
   const {
     data: itemArray,
