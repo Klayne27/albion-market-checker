@@ -122,11 +122,11 @@ function Shop() {
 
   return (
     <>
-      <div className="border border-[#665249] bg-[#43342D] shadow-[inset_0_0_25px_10px_#665249] w-[70rem] h-[57rem] z-0 relative">
-        <div className="border-b-5 border-[#29201B] pb-4 pt-4 bg-[#43342D] shadow-[inset_0_0_25px_10px_#665249] px-5">
+      <div className="border border-[#665249] bg-[#43342D] shadow-[inset_0_0_25px_10px_#665249] w-[56rem] h-[748px] z-0 relative">
+        <div className="border-b-5 border-[#29201B] pb-2 pt-2 bg-[#43342D] shadow-[inset_0_0_25px_10px_#665249] px-5">
           <div className="flex items-center gap-2">
-            <div className="border-3 border-[#8C7C6B] rounded-full w-24 h-24 my-2"></div>
-            <img src="./albion.png" className="absolute size-45 -left-5.5" />
+            <div className="border-3 border-[#8C7C6B] rounded-full w-[76.8px] h-[76.8px] my-2"></div>
+            <img src="./albion.png" className="absolute size-[144px] -left-3.5" />
             <span className="text-[#8C7C6B] font-extrabold text-3xl">
               {selectCity}'s Marketplace
             </span>
@@ -136,13 +136,13 @@ function Shop() {
             >
               <FaArrowRotateRight size={16} className="absolute right-0.5 top-0.5" />
             </span>
-            <div className="flex flex-col h-18 absolute ml-[805px] justify-center items-end mt-4">
-              <div className="text-[#8C7C6B] font-semibold text-3xl mr-7">
+            <div className="flex flex-col h-18 absolute ml-[644px] justify-center items-end mt-4">
+              <div className="text-[#8C7C6B] font-semibold text-2xl mr-7">
                 🪩{formatNumber(inventory.silver)}
               </div>
             </div>
             <div>
-              <div className="flex mt-2 absolute flex-col left-[69rem] top-46 gap-3 ">
+              <div className="flex mt-1 absolute flex-col left-[883.2px] top-42 gap-3 ">
                 <button
                   className={`${tabStyles("buy")} text-green-400`}
                   onClick={() => setActiveTab("buy")}
@@ -160,9 +160,9 @@ function Shop() {
           </div>
 
           <div className="flex">
-            <div className="flex border rounded-full p-[5px] gap-0.5 bg-gradient-to-b from-[#716F7B] via-[#4c4a50] to-[#38373b] mr-4 z-50">
+            <div className="flex border rounded-full p-[4px] gap-0.5 bg-gradient-to-b from-[#716F7B] via-[#4c4a50] to-[#38373b] mr-4 z-50">
               <input
-                className="border rounded-full w-45 px-2 text-md bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] placeholder:text-[#926e47] hover:opacity-80"
+                className=" rounded-full w-[144px] px-2 h-5.5 text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] placeholder:text-[#926e47] hover:opacity-80"
                 placeholder="Search..."
                 value={searchTerm}
                 onChange={handleSearchChange}
@@ -174,7 +174,7 @@ function Shop() {
                 <FaArrowRotateLeft size={16} className="absolute right-0.5 top-0.5" />
               </span>
             </div>
-            <div className="flex border rounded-full p-[5px] gap-5 bg-gradient-to-b from-[#716F7B] via-[#4c4a50] to-[#38373b] mr-3">
+            <div className="flex border rounded-full p-[4px] gap-4 bg-gradient-to-b from-[#716F7B] via-[#4c4a50] to-[#38373b] mr-3">
               <CustomDropdown
                 id="type"
                 options={typeOptions}

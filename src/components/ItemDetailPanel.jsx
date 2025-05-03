@@ -102,7 +102,7 @@ function ItemDetailPanel({ item, onClose, mode }) {
   `;
 
   return (
-    <div className="fixed left-115 transform w-[41rem] border-4 border-[#8a6948] bg-[#e4bb93] shadow-[inset_0_0_25px_15px_#eca966] z-50  p-4 bottom-60">
+    <div className="fixed left-[315px] transform w-[554px] border-4 border-[#8a6948] bg-[#e4bb93] shadow-[inset_0_0_25px_15px_#eca966] z-50  p-4 bottom-[180px]">
       <button
         onClick={onClose}
         className="absolute top-2 right-3 border-2 rounded-full p-1 size-6 text-yellow-400 border-[#646179] bg-[#2c2b35] cursor-pointer"
@@ -112,16 +112,16 @@ function ItemDetailPanel({ item, onClose, mode }) {
       </button>
       {mode === "sell" && (
         <>
-          <div className="flex border rounded-full p-[3px] gap-5 bg-gradient-to-b from-[#716F7B] via-[#4c4a50] to-[#38373b] absolute top-33 right-5">
-            <select className="flex justify-between border w-43 border-[#646179] rounded-full px-2 text-md bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] hover:opacity-80">
+          <div className="flex border rounded-full p-[3px] gap-4 bg-gradient-to-b from-[#716F7B] via-[#4c4a50] to-[#38373b] absolute top-[110px] right-4">
+            <select className="flex justify-between border w-[141px] border-[#646179] rounded-full px-2 text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] hover:opacity-80">
               <option>Any</option>
             </select>
 
-            <select className="flex justify-between border w-43 border-[#646179] rounded-full px-2 text-md bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] hover:opacity-80">
+            <select className="flex justify-between border w-[141px] border-[#646179] rounded-full px-2 text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] hover:opacity-80">
               <option>Any</option>
             </select>
 
-            <select className="flex justify-between border w-43 border-[#646179] rounded-full px-2 text-md bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] hover:opacity-80">
+            <select className="flex justify-between border w-[141px] border-[#646179] rounded-full px-2 text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] hover:opacity-80">
               <option>Tier</option>
             </select>
 
@@ -132,46 +132,46 @@ function ItemDetailPanel({ item, onClose, mode }) {
 
           <div className="grid grid-cols-[1fr_4fr] p-3">
             <div
-              className={`w-26 h-26 relative ${"overflow-hidden bg-cover bg-center bg-no-repeat"}`}
+              className={`w-21 h-21 relative ${"overflow-hidden bg-cover bg-center bg-no-repeat"}`}
               style={{
                 backgroundImage: `url('${baseURLimage}${item?.id}?quality=${selectQuality}')`,
                 backgroundSize: "107%",
               }}
             ></div>
-            <div className="text-sm w-[410px] mb-17">
-              <span className="font-semibold text-2xl">{item?.name}</span>
+            <div className="text-xs w-[378px] mb-[54px]">
+              <span className="font-semibold text-xl">{item?.name}</span>
               <br />
               Use the filters below to compare different versions of the same item. Click
               on the restore button to switch back to the original selection.
             </div>
 
-            <p className="ml-7">Action:</p>
+            <p className="ml-7 text-sm">Action:</p>
             <div className="flex flex-col mb-7">
               <div className="flex gap-2 py-0.5 px-2">
                 <button
                   type="button"
                   id="rem-me"
-                  className={`text-sm border-3 px-0.5 rounded-full border-gray-500 bg-gradient-to-b from-stone-900 via-stone-800 to-stone-600 hover:from-stone-800 hover:via-stone-700 hover:to-stone-600 text-[#0c0e0f] cursor-pointer ${
+                  className={`text-sm border-3 rounded-full border-gray-500 bg-gradient-to-b from-stone-900 via-stone-800 to-stone-600 hover:from-stone-800 hover:via-stone-700 hover:to-stone-600 text-[#0c0e0f] cursor-pointer ${
                     rememberMeClicked ? "" : ""
                   } ${commonHoverActiveStyles} ${focusStyles}`}
                   onClick={() => setRememberMeClicked((c) => !c)}
                 >
-                  <IoIosCheckmark size={18} style={{ strokeWidth: "8%" }} />
+                  <IoIosCheckmark size={15} style={{ strokeWidth: "8%" }} />
                 </button>
-                <label>Sell</label>
+                <label className="text-sm">Sell</label>
               </div>
               <div className="flex gap-2 py-0.5 px-2">
                 <button
                   type="button"
                   id="rem-me"
-                  className={`text-sm border-3 px-0.5 rounded-full border-gray-500 bg-gradient-to-b from-stone-900 via-stone-800 to-stone-600 hover:from-stone-800 hover:via-stone-700 hover:to-stone-600 text-[#0c0e0f] cursor-pointer ${
+                  className={`text-sm border-3 rounded-full border-gray-500 bg-gradient-to-b from-stone-900 via-stone-800 to-stone-600 hover:from-stone-800 hover:via-stone-700 hover:to-stone-600 text-[#0c0e0f] cursor-pointer ${
                     rememberMeClicked ? "" : ""
                   } ${commonHoverActiveStyles} ${focusStyles}`}
                   onClick={() => setRememberMeClicked((c) => !c)}
                 >
-                  <IoIosCheckmark size={18} style={{ strokeWidth: "8%" }} />
+                  <IoIosCheckmark size={15} style={{ strokeWidth: "8%" }} />
                 </button>
-                <label>Buy</label>
+                <label className="text-sm">Buy</label>
               </div>
               <div
                 className="flex gap-2 bg-[#923826] py-0.5 px-2"
@@ -180,54 +180,58 @@ function ItemDetailPanel({ item, onClose, mode }) {
                 <button
                   type="button"
                   id="rem-me"
-                  className={`text-sm border-3 px-0.5 rounded-full border-gray-500 bg-gradient-to-b from-yellow-400 via-yellow-500 to-yellow-600 hover:from-yellow-400 hover:via-yellow-500 hover:to-yellow-600 text-yellow-700  cursor-pointer ${
+                  className={`text-sm border-3 rounded-full border-gray-500 bg-gradient-to-b from-yellow-400 via-yellow-500 to-yellow-600 hover:from-yellow-400 hover:via-yellow-500 hover:to-yellow-600 text-yellow-700  cursor-pointer ${
                     rememberMeClicked
                       ? "bg-gradient-to-b from-yellow-400 via-yellow-500 to-yellow-600 hover:from-yellow-400 hover:via-yellow-500 hover:to-yellow-600 text-yellow-700"
                       : ""
                   } ${commonHoverActiveStyles} ${focusStyles}`}
                   onClick={() => setRememberMeClicked((c) => !c)}
                 >
-                  <IoIosCheckmark size={18} style={{ strokeWidth: "8%" }} />
+                  <IoIosCheckmark size={15} style={{ strokeWidth: "8%" }} />
                 </button>
-                <label className="text-yellow-400">Sell Order</label>
+                <label className="text-yellow-400 text-sm">Sell Order</label>
               </div>
               <div className="flex gap-2 py-0.5 px-2">
                 <button
                   type="button"
                   id="rem-me"
-                  className={`text-sm border-3 px-0.5 rounded-full border-gray-500 bg-gradient-to-b from-stone-900 via-stone-800 to-stone-600 hover:from-stone-800 hover:via-stone-700 hover:to-stone-600 text-[#0c0e0f] cursor-pointer ${
+                  className={`text-sm border-3  rounded-full border-gray-500 bg-gradient-to-b from-stone-900 via-stone-800 to-stone-600 hover:from-stone-800 hover:via-stone-700 hover:to-stone-600 text-[#0c0e0f] cursor-pointer ${
                     rememberMeClicked ? "" : ""
                   } ${commonHoverActiveStyles} ${focusStyles}`}
                   onClick={() => setRememberMeClicked((c) => !c)}
                 >
-                  <IoIosCheckmark size={18} style={{ strokeWidth: "8%" }} />
+                  <IoIosCheckmark size={15} style={{ strokeWidth: "8%" }} />
                 </button>
-                <label>Buy Order</label>
+                <label className="text-sm">Buy Order</label>
               </div>
             </div>
-            <p className="ml-7 mb-3">Amount:</p>
+            <p className="ml-7 mb-3 text-sm">Amount:</p>
             <IconSlider
               min={0}
               max={maxQuantity}
               value={quantity}
               onChange={handleQuantityChange}
             />
-            <p className="ml-9.5 mt-1">Price:</p>
-            <div className="border rounded-full p-1 max-w-73 max-h-9 bg-gradient-to-b from-[#716F7B] via-[#4c4a50] to-[#38373b] mb-4">
-              <div className="border px-2 py-0.5 rounded-full max-w-70 text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] mb-3">
+            <p className="ml-9.5 mt-1 text-sm">Price:</p>
+            <div className="border rounded-full p-1 max-w-60 max-h-8 bg-gradient-to-b from-[#716F7B] via-[#4c4a50] to-[#38373b] mb-4">
+              <div className="border px-2 rounded-full max-w-70 text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] mb-3">
                 <p>🪩 {formatNumber(totalGrossValue)}</p>
               </div>
             </div>
             <div></div>
-            <p className="text-red-600">🪩 {formatNumber(premiumTax)}(2% premium tax)</p>
+            <p className="text-red-600 text-sm">
+              🪩 {formatNumber(premiumTax)}(2% premium tax)
+            </p>
             <div></div>
-            <p className="mb-3 text-red-600">🪩 {formatNumber(setupFee)}(1% setup fee)</p>
+            <p className="mb-3 text-red-600 text-sm">
+              🪩 {formatNumber(setupFee)}(1% setup fee)
+            </p>
 
-            <div className="ml-9 ">Total: </div>
-            <div className="flex justify-between">
+            <div className="ml-9 text-sm">Total: </div>
+            <div className="flex justify-between text-sm">
               🪩 {formatNumber(totalNetSellPrice)}
               <button
-                className="w-[140px] py-2 border-3 rounded-full text-sm border-gray-500 cursor-pointer active:scale-95 transition ease-in-out hover:opacity-80 duration-150 shadow-[inset_0_0_10px_1px_#660101] bg-[#b10808] text-yellow-400"
+                className="w-[112px] py-1.5 border-3 rounded-full text-sm border-gray-500 cursor-pointer active:scale-95 transition ease-in-out hover:opacity-80 duration-150 shadow-[inset_0_0_10px_1px_#660101] bg-[#b10808] text-yellow-400"
                 onClick={handleCreateSellOrder}
               >
                 Sell
@@ -238,16 +242,16 @@ function ItemDetailPanel({ item, onClose, mode }) {
       )}
       {mode === "buy" && (
         <>
-          <div className="flex border rounded-full p-[3px] gap-5 bg-gradient-to-b from-[#716F7B] via-[#4c4a50] to-[#38373b] absolute top-33 right-5">
-            <select className="flex justify-between border w-43 border-[#646179] rounded-full px-2 text-md bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] hover:opacity-80">
+          <div className="flex border rounded-full p-[3px] gap-4 bg-gradient-to-b from-[#716F7B] via-[#4c4a50] to-[#38373b] absolute top-[110px] right-4">
+            <select className="flex justify-between border w-[141px] border-[#646179] rounded-full px-2 text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] hover:opacity-80">
               <option>Any</option>
             </select>
 
-            <select className="flex justify-between border w-43 border-[#646179] rounded-full px-2 text-md bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] hover:opacity-80">
+            <select className="flex justify-between border w-[141px] border-[#646179] rounded-full px-2 text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] hover:opacity-80">
               <option>Any</option>
             </select>
 
-            <select className="flex justify-between border w-43 border-[#646179] rounded-full px-2 text-md bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] hover:opacity-80">
+            <select className="flex justify-between border w-[141px] border-[#646179] rounded-full px-2 text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] hover:opacity-80">
               <option>Tier</option>
             </select>
 
@@ -256,35 +260,35 @@ function ItemDetailPanel({ item, onClose, mode }) {
             </span>
           </div>
 
-          <div className="grid grid-cols-[1fr_4fr] p-1">
+          <div className="grid grid-cols-[1fr_4fr] p-3">
             <div
-              className={`w-26 h-26 relative ${"overflow-hidden bg-cover bg-center bg-no-repeat"}`}
+              className={`w-21 h-21 relative ${"overflow-hidden bg-cover bg-center bg-no-repeat"}`}
               style={{
                 backgroundImage: `url('${baseURLimage}${item?.id}?quality=${selectQuality}')`,
                 backgroundSize: "107%",
               }}
             ></div>
-            <div className="text-sm w-[410px] mb-17">
-              <span className="font-semibold text-2xl">{item?.name}</span>
+            <div className="text-xs w-[378px] mb-[54px]">
+              <span className="font-semibold text-xl">{item?.name}</span>
               <br />
               Use the filters below to compare different versions of the same item. Click
               on the restore button to switch back to the original selection.
             </div>
 
-            <p className="ml-7">Action:</p>
+            <p className="ml-7 text-sm">Action:</p>
             <div className="flex flex-col mb-7">
               <div className="flex gap-2 py-0.5 px-2">
                 <button
                   type="button"
                   id="rem-me"
-                  className={`text-sm border-3 px-0.5 rounded-full border-gray-500 bg-gradient-to-b from-stone-900 via-stone-800 to-stone-600 hover:from-stone-800 hover:via-stone-700 hover:to-stone-600 text-[#0c0e0f] cursor-pointer ${
+                  className={`text-sm border-3 rounded-full border-gray-500 bg-gradient-to-b from-stone-900 via-stone-800 to-stone-600 hover:from-stone-800 hover:via-stone-700 hover:to-stone-600 text-[#0c0e0f] cursor-pointer ${
                     rememberMeClicked ? "" : ""
                   } ${commonHoverActiveStyles} ${focusStyles}`}
                   onClick={() => setRememberMeClicked((c) => !c)}
                 >
-                  <IoIosCheckmark size={18} style={{ strokeWidth: "8%" }} />
+                  <IoIosCheckmark size={15} style={{ strokeWidth: "8%" }} />
                 </button>
-                <label className="font-semibold">Sell</label>
+                <label className="text-sm">Sell</label>
               </div>
               <div
                 className="flex gap-2 bg-[#608b3d] py-0.5 px-2 "
@@ -293,78 +297,78 @@ function ItemDetailPanel({ item, onClose, mode }) {
                 <button
                   type="button"
                   id="rem-me"
-                  className={`text-sm border-3 px-0.5 rounded-full border-gray-500 bg-gradient-to-b from-yellow-400 via-yellow-500 to-yellow-600 hover:from-yellow-400 hover:via-yellow-500 hover:to-yellow-600 text-yellow-700  cursor-pointer ${
+                  className={`text-sm border-3 rounded-full border-gray-500 bg-gradient-to-b from-yellow-400 via-yellow-500 to-yellow-600 hover:from-yellow-400 hover:via-yellow-500 hover:to-yellow-600 text-yellow-700  cursor-pointer ${
                     rememberMeClicked
                       ? "bg-gradient-to-b from-yellow-400 via-yellow-500 to-yellow-600 hover:from-yellow-400 hover:via-yellow-500 hover:to-yellow-600 text-yellow-700"
                       : ""
                   } ${commonHoverActiveStyles} ${focusStyles}`}
                   onClick={() => setRememberMeClicked((c) => !c)}
                 >
-                  <IoIosCheckmark size={18} style={{ strokeWidth: "8%" }} />
+                  <IoIosCheckmark size={15} style={{ strokeWidth: "8%" }} />
                 </button>
-                <label className="text-yellow-400">Buy</label>
+                <label className="text-yellow-400 text-sm">Buy</label>
               </div>
               <div className="flex gap-2 py-0.5 px-2">
                 <button
                   type="button"
                   id="rem-me"
-                  className={`text-sm border-3 px-0.5 rounded-full border-gray-500 bg-gradient-to-b from-stone-900 via-stone-800 to-stone-600 hover:from-stone-800 hover:via-stone-700 hover:to-stone-600 text-[#0c0e0f] cursor-pointer ${
+                  className={`text-sm border-3 rounded-full border-gray-500 bg-gradient-to-b from-stone-900 via-stone-800 to-stone-600 hover:from-stone-800 hover:via-stone-700 hover:to-stone-600 text-[#0c0e0f] cursor-pointer ${
                     rememberMeClicked ? "" : ""
                   } ${commonHoverActiveStyles} ${focusStyles}`}
                   onClick={() => setRememberMeClicked((c) => !c)}
                 >
-                  <IoIosCheckmark size={18} style={{ strokeWidth: "8%" }} />
+                  <IoIosCheckmark size={15} style={{ strokeWidth: "8%" }} />
                 </button>
-                <label>Sell Order</label>
+                <label className="text-sm">Sell Order</label>
               </div>
               <div className="flex gap-2 py-0.5 px-2">
                 <button
                   type="button"
                   id="rem-me"
-                  className={`text-sm border-3 px-0.5 rounded-full border-gray-500 bg-gradient-to-b from-stone-900 via-stone-800 to-stone-600 hover:from-stone-800 hover:via-stone-700 hover:to-stone-600 text-[#0c0e0f] cursor-pointer ${
+                  className={`text-sm border-3 rounded-full border-gray-500 bg-gradient-to-b from-stone-900 via-stone-800 to-stone-600 hover:from-stone-800 hover:via-stone-700 hover:to-stone-600 text-[#0c0e0f] cursor-pointer ${
                     rememberMeClicked ? "" : ""
                   } ${commonHoverActiveStyles} ${focusStyles}`}
                   onClick={() => setRememberMeClicked((c) => !c)}
                 >
-                  <IoIosCheckmark size={18} style={{ strokeWidth: "8%" }} />
+                  <IoIosCheckmark size={15} style={{ strokeWidth: "8%" }} />
                 </button>
-                <label>Buy Order</label>
+                <label className="text-sm">Buy Order</label>
               </div>
             </div>
-            <p className="ml-7 mb-3">Amount:</p>
+            <p className="ml-7 mb-3 text-sm">Amount:</p>
             <IconSlider
               min={1}
               max={maxQuantity}
               value={quantity}
               onChange={handleQuantityChange}
             />
-            <p className="ml-9.5">Price:</p>
+            <p className="ml-9.5 text-sm">Price:</p>
             <div className="flex mb-3">
               🪩 <p>{formatNumber(totalBuyPrice)}</p>
             </div>
-            <p className="ml-2">Transfer:</p>
+            <p className="ml-3 text-sm">Transfer:</p>
             <div className="flex gap-2 py-0.5 px-2">
               <button
                 type="button"
                 id="rem-me"
-                className={`text-sm border-3 px-0.5 rounded-full border-gray-500 bg-gradient-to-b from-yellow-400 via-yellow-500 to-yellow-600 hover:from-yellow-400 hover:via-yellow-500 hover:to-yellow-600 text-yellow-700  cursor-pointer ${
+                className={`text-sm border-3 rounded-full border-gray-500 bg-gradient-to-b from-yellow-400 via-yellow-500 to-yellow-600 hover:from-yellow-400 hover:via-yellow-500 hover:to-yellow-600 text-yellow-700  cursor-pointer ${
                   rememberMeClicked
                     ? "bg-gradient-to-b from-yellow-400 via-yellow-500 to-yellow-600 hover:from-yellow-400 hover:via-yellow-500 hover:to-yellow-600 text-yellow-700"
                     : ""
                 } ${commonHoverActiveStyles} ${focusStyles}`}
                 onClick={() => setRememberMeClicked((c) => !c)}
               >
-                <IoIosCheckmark size={18} style={{ strokeWidth: "8%" }} />
+                <IoIosCheckmark size={15} style={{ strokeWidth: "8%" }} />
               </button>
-              <label>Transfer completed purchases directly </label>
+              <label className="text-sm">Transfer completed purchases directly </label>
             </div>
             <div></div>
-            <p className="ml-11">to inventory</p>
-            <div className="ml-9 mt-1">Total:</div>
-            <div className="flex justify-between mt-1">
+            <p className="ml-9.5 text-sm">to inventory</p>
+            <div className="ml-9 mt-1 text-sm">Total:</div>
+            <div className="flex justify-between mt-1 text-sm">
               🪩{formatNumber(totalBuyPrice)}
               <button
-                className=" w-[118px] py-1 border-2 rounded-full text-lg border-gray-500 cursor-pointer shadow-[inset_0_0_10px_1px_#660101] bg-[#b10808] text-yellow-400 hover:opacity-80 active:scale-95"
+                className="w-[112px] py-1.5 border-3 rounded-full text-sm border-gray-500 cursor-pointer active:scale-95 transition ease-in-out hover:opacity-80 duration-150 shadow-[inset_0_0_10px_1px_#660101] bg-[#b10808] text-yellow-400"
                 onClick={handleConfirmBuy}
               >
                 Buy

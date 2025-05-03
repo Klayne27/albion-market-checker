@@ -93,18 +93,18 @@ function ShopSell({
   return (
     <div className="p-2">
       <div className="border px-3 py-3 bg-[#e4bb93] shadow-[inset_0_0_25px_15px_#eca966]">
-        <h1 className="font-bold mb-2 text-4xl">Your Inventory</h1>
+        <h1 className="font-bold mb-1 text-3xl">Your Inventory</h1>
 
         <div className="grid grid-cols-[2fr_2fr] border rounded-xl p-1 gap-3 mr-6 bg-gradient-to-b from-[#716F7B] via-[#4c4a50] to-[#38373b]">
-          <div className="border px-2 py-0.5 rounded-lg text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966]">
+          <div className="border px-2 rounded-lg text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966]">
             Item
           </div>
-          <div className="border px-2 py-0.5 rounded-lg text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966]">
+          <div className="border px-2  rounded-lg text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966]">
             Durability
           </div>
         </div>
 
-        <div className="border-t border-b border-[#917663] p-1 mt-2 overflow-auto h-[550px] custom-scrollbar">
+        <div className="border-t border-b border-[#917663] p-1 mt-2 overflow-auto h-[440px] custom-scrollbar">
           {currentItems.map((item, i) => (
             <div
               key={item.id}
@@ -114,19 +114,19 @@ function ShopSell({
             >
               <div className="flex justify-start items-center">
                 <div
-                  className={`w-22 h-22 relative ${"overflow-hidden bg-cover bg-center bg-no-repeat"}`}
+                  className={`w-[71px] h-[71px] relative ${"overflow-hidden bg-cover bg-center bg-no-repeat"}`}
                   style={{
                     backgroundImage: `url('${baseURLimage}${item.id}?quality=${item.quality}')`,
                     backgroundSize: "114%",
                   }}
                 ></div>
-                <p className="ml-2 text-[#4e2c08] text-lg">{item.name}</p>
+                <p className="ml-2 text-[#4e2c08] text-md">{item.name}</p>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-[#4e2c08] text-lg">100/100</span>
+                <span className="text-[#4e2c08] text-md">100/100</span>
                 <button
                   type="button"
-                  className=" w-[140px] py-2 border-2 rounded-full text-lg border-gray-500 cursor-pointer shadow-[inset_0_0_10px_1px_#660101] bg-[#b10808] text-yellow-400 hover:opacity-80 active:scale-95"
+                  className=" w-[112px] py-1 border-2 rounded-full text-lg border-gray-500 cursor-pointer shadow-[inset_0_0_10px_1px_#660101] bg-[#b10808] text-yellow-400 hover:opacity-80 active:scale-95"
                   onClick={() => onShowPanel(item)}
                 >
                   Sell
@@ -140,22 +140,22 @@ function ShopSell({
           )}
         </div>
 
-        <div className="flex justify-center gap-4 mt-3 items-center">
+        <div className="flex justify-center gap-4 mt-2 items-center">
           <span className="border h-0 w-full border-[#917663]"></span>
           <button
             onClick={goToPrevPage}
             disabled={currentPage === 1}
-            className="border-2 rounded-full px-3 size-7 text-yellow-400 border-[#646179] bg-[#2c2b35] relative cursor-pointer disabled:opacity-30 hover:opacity-80"
+            className="border-2 rounded-full px-2 size-5 text-yellow-400 border-[#646179] bg-[#2c2b35] relative cursor-pointer disabled:opacity-30 hover:opacity-80"
           >
-            <RxCaretLeft size={32} className="-left-1 -bottom-1 absolute" />
+            <RxCaretLeft size={25} className="-left-1 -bottom-1.5 absolute" />
           </button>
-          <span className="text-lg text-[#43342D] font-bold">{currentPage}</span>
+          <span className="text-md text-[#43342D] font-bold">{currentPage}</span>
           <button
             onClick={goToNextPage}
             disabled={currentPage === totalPages || totalPages === 0}
-            className="border-2 rounded-full px-3 size-7 text-yellow-400 border-[#646179] bg-[#2c2b35] relative cursor-pointer disabled:opacity-30 hover:opacity-80"
+            className="border-2 rounded-full px-2 size-5 text-yellow-400 border-[#646179] bg-[#2c2b35] relative cursor-pointer disabled:opacity-30 hover:opacity-80"
           >
-            <RxCaretRight size={32} className="-left-1 -bottom-1 absolute" />
+            <RxCaretRight size={25} className="-left-1 -bottom-1.5 absolute" />
           </button>
           <span className="border h-0 w-full border-[#917663]"></span>
         </div>

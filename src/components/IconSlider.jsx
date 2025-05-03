@@ -23,10 +23,10 @@ export default function IconSlider({ min = 0, max = 100, value, onChange }) {
 
   const percent = ((value - min) / (max - min)) * 100;
   return (
-    <div className="flex items-center space-x-2">
+    <div className="flex items-center space-x-1">
       <button
         onClick={() => onChange(Math.max(min, value - 1))}
-        className="p-1 bg-[#2c2b35] rounded-full border-2 border-[#646179] text-yellow-400 hover:bg-stone-800 transition cursor-pointer"
+        className=" bg-[#2c2b35] rounded-full border-2 border-[#646179] text-yellow-400 hover:bg-stone-800 transition cursor-pointer"
         disabled={isAtMin}
       >
         <FaMinus size={12} />
@@ -39,7 +39,7 @@ export default function IconSlider({ min = 0, max = 100, value, onChange }) {
           max={max}
           value={value === 0 ? "" : value}
           onChange={handleInputChange} 
-          className="absolute -top-6 transform -translate-x-1/2 text-yellow-400 text-sm font-semibold bg-[#4d4d4d] shadow-[inset_0_0_6px_4px_#252320]  rounded-full border-3 border-gray-400 w-11 text-center"
+          className="absolute -top-5 transform -translate-x-1/2 text-yellow-400 text-xs font-semibold bg-[#4d4d4d] shadow-[inset_0_0_6px_4px_#252320]  rounded-full border-3 border-gray-400 w-11 text-center"
           aria-label="Quantity"
           style={{ left: `${percent}%` }}
         />
@@ -56,7 +56,7 @@ export default function IconSlider({ min = 0, max = 100, value, onChange }) {
       </div>
       <button
         onClick={() => onChange(Math.min(max, value + 1))}
-        className="p-1 bg-[#2c2b35] rounded-full border-2 border-[#646179] text-yellow-400 hover:bg-stone-800 transition cursor-pointer"
+        className=" bg-[#2c2b35] rounded-full border-2 border-[#646179] text-yellow-400 hover:bg-stone-800 transition cursor-pointer"
         disabled={isAtMax}
       >
         <FaPlus size={12} />

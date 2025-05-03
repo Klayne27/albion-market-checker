@@ -21,7 +21,7 @@ function CustomDropdown({
     <div className="relative w-full  cursor-pointer">
       <div
         onClick={() => onOpenDropdown(id)}
-        className={`flex justify-between border w-45 border-[#646179] rounded-full px-2 text-md bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] hover:opacity-80`}
+        className={`flex justify-between border w-[144px] border-[#646179] rounded-full px-2 text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] hover:opacity-80`}
       >
         <span>{displayText}</span>
         <svg
@@ -32,7 +32,7 @@ function CustomDropdown({
         >
           <path
             d="M19 9l-7 7-7-7"
-            strokeWidth="6"
+            strokeWidth="5"
             strokeLinecap="round"
             strokeLinejoin="round"
           />
