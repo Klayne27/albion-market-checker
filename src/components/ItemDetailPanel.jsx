@@ -4,13 +4,19 @@ import { formatNumber } from "../utils/helpers";
 import { ImCross } from "react-icons/im";
 import { IoIosCheckmark } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
-import { buyItem, sellItem } from "../inventorySlice";
+import { buyItem, sellItem } from "../slices/inventorySlice";
 import IconSlider from "./IconSlider";
 
 const baseURLimage = "https://render.albiononline.com/v1/item/";
+const ribbonStrip =
+  "polygon(0% 0%, 100% 0%, calc(100% - 15px) 50%, 100% 100%, 0% 100%, 0px 50%)";
 
 function ItemDetailPanel({ item, onClose, mode }) {
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(() => {
+    const initialMaxQuantity = mode === "sell" ? item?.quantity ?? 1 : 999;
+    return mode === "sell" ? initialMaxQuantity : 1;
+  });
+
   const [rememberMeClicked, setRememberMeClicked] = useState(false);
 
   const selectQuality = useSelector((state) => state.filter.selectQuality);
@@ -19,21 +25,26 @@ function ItemDetailPanel({ item, onClose, mode }) {
   const maxQuantity = useMemo(() => {
     if (mode === "sell") {
       return item?.quantity ?? 1;
-    } 
+    }
     return 999;
   }, [mode, item?.quantity]);
 
   useEffect(() => {
     setQuantity((prevQuantity) => {
       const newMax = maxQuantity;
-      return Math.max(1, Math.min(prevQuantity, newMax));
-    })
+      if (mode === "sell") {
+        return newMax;
+      } else {
+        const minAllowed = 0;
+        return Math.max(minAllowed, Math.min(prevQuantity, newMax));
+      }
+    });
   }, [item, mode, maxQuantity]);
 
-  const unitSellPrice = item?.price ?? 0
+  const unitSellPrice = item?.price ?? 0;
   const unitBuyPrice = item?.sell_price_min ?? 0;
 
-   console.log("Calculated unitSellPrice:", unitSellPrice);
+  console.log("Calculated unitSellPrice:", unitSellPrice);
 
   const { premiumTax, setupFee, totalNetSellPrice, totalGrossValue } = useMemo(() => {
     if (mode !== "sell") return { premiumTax: 0, setupFee: 0, totalNetSellPrice: 0 };
@@ -47,7 +58,7 @@ function ItemDetailPanel({ item, onClose, mode }) {
       totalNetSellPrice: net,
       totalGrossValue: totalGrossValue,
     };
-  }, [unitSellPrice, quantity, mode])
+  }, [unitSellPrice, quantity, mode]);
 
   const totalBuyPrice = useMemo(() => {
     if (mode !== "buy") return 0;
@@ -55,7 +66,7 @@ function ItemDetailPanel({ item, onClose, mode }) {
   }, [unitBuyPrice, quantity, mode]);
 
   const handleQuantityChange = (value) => {
-    const clampedValue = Math.max(1, Math.min(maxQuantity, value));
+    const clampedValue = Math.max(0, Math.min(maxQuantity, value));
     setQuantity(clampedValue);
   };
 
@@ -67,14 +78,14 @@ function ItemDetailPanel({ item, onClose, mode }) {
   const itemQuality = item?.quality ?? selectQuality;
 
   const handleCreateSellOrder = () => {
-  const sellPayload = {
-    itemId: item.id,
-    quality: itemQuality,
-    quantity: quantity,
-    totalNetSilver: totalNetSellPrice,
-  };
-  dispatch(sellItem(sellPayload));
-  onClose();
+    const sellPayload = {
+      itemId: item.id,
+      quality: itemQuality,
+      quantity: quantity,
+      totalNetSilver: totalNetSellPrice,
+    };
+    dispatch(sellItem(sellPayload));
+    onClose();
   };
 
   if (!item) return null;
@@ -162,7 +173,10 @@ function ItemDetailPanel({ item, onClose, mode }) {
                 </button>
                 <label>Buy</label>
               </div>
-              <div className="flex gap-2 bg-[#608b3d] py-0.5 px-2">
+              <div
+                className="flex gap-2 bg-[#923826] py-0.5 px-2"
+                style={{ clipPath: ribbonStrip }}
+              >
                 <button
                   type="button"
                   id="rem-me"
@@ -193,7 +207,7 @@ function ItemDetailPanel({ item, onClose, mode }) {
             </div>
             <p className="ml-7 mb-3">Amount:</p>
             <IconSlider
-              min={1}
+              min={0}
               max={maxQuantity}
               value={quantity}
               onChange={handleQuantityChange}
@@ -272,7 +286,10 @@ function ItemDetailPanel({ item, onClose, mode }) {
                 </button>
                 <label className="font-semibold">Sell</label>
               </div>
-              <div className="flex gap-2 bg-[#608b3d] py-0.5 px-2">
+              <div
+                className="flex gap-2 bg-[#608b3d] py-0.5 px-2 "
+                style={{ clipPath: ribbonStrip }}
+              >
                 <button
                   type="button"
                   id="rem-me"

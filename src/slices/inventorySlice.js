@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   id: 1,
   username: "Klayne",
-  silver: 1_000_000_000,
+  silver: 10_000_000_000,
   inventory: [],
 };
 
@@ -36,7 +36,7 @@ const inventorySlice = createSlice({
         const existingItem = state.inventory[idx];
         if (existingItem.quantity >= quantity) {
           existingItem.quantity -= quantity;
-          
+
           state.silver += totalNetSilver;
 
           if (existingItem.quantity === 0) {

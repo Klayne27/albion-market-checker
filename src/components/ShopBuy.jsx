@@ -6,7 +6,7 @@ import { useItemPrices } from "../hooks/useItemPrices";
 import { IoIosCheckmark } from "react-icons/io";
 import CustomDropdown from "./CustomDropdown";
 import { useDispatch, useSelector } from "react-redux";
-import { setSelectCity, setShowPricedItems } from "../filterSlice";
+import { setSelectCity, setShowPricedItems } from "../slices/filterSlice";
 
 const commonHoverActiveStyles = `
     hover:bg-gradient-to-b hover:from-stone-800 hover:via-stone-700 hover:to-stone-500

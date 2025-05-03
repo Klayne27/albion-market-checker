@@ -1,7 +1,7 @@
 import { ImCross } from "react-icons/im";
 import { formatNumber } from "../utils/helpers";
 import { useSelector } from "react-redux";
-import { selectInventory } from "../inventorySlice";
+import { selectInventory } from "../slices/inventorySlice";
 import { useState } from "react";
 
 const TOTAL_INVENTORY_SLOTS = 48;
@@ -85,7 +85,7 @@ function Inventory() {
               <span className="border rounded-full bg-[#2C2B35] border-[#646179] mr-2 text-lg py-0.5">
                 🌕
               </span>
-              <span className="text-xl">10b</span>
+              <span className="text-lg">10.0b</span>
             </div>
             <div className="text-sm">
               <span className="border rounded-full bg-[#2C2B35] border-[#646179] text-lg py-0.5">

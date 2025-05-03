@@ -5,7 +5,7 @@ import ShopSell from "./ShopSell";
 import ItemDetailPanel from "./ItemDetailPanel";
 import { formatNumber } from "../utils/helpers";
 import { useDispatch, useSelector } from "react-redux";
-import { selectInventory } from "../inventorySlice";
+import { selectInventory } from "../slices/inventorySlice";
 import CustomDropdown from "./CustomDropdown";
 import {
   handleRefreshMarket,
@@ -16,7 +16,7 @@ import {
   setSelectQuality,
   setSelectTier,
   setSelectType,
-} from "../filterSlice";
+} from "../slices/filterSlice";
 
 function Shop() {
   const inventory = useSelector(selectInventory);

@@ -20,55 +20,86 @@ button {
 } */
 
 .custom-scrollbar {
-  /* For Webkit-based browsers (Chrome, Safari, Edge) */
+
   &::-webkit-scrollbar {
     width: 8px;
   }
 
   &::-webkit-scrollbar-track {
-    background: #edc298; /* Color of the track */
-    border-radius: 4px; /* Optional: rounded track corners */
+    background: #edc298;
+    border-radius: 4px;
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: #888; /* Color of the scroll thumb */
-    border-radius: 4px; /* Optional: rounded thumb corners */
+    background-color: #888;
+    border-radius: 4px;
   }
 
   &::-webkit-scrollbar-thumb:hover {
-    background: #555; /* Color of the thumb on hover */
+    background: #555;
   }
 }
 
 input[type="range"] {
-  /* remove default outline on focus */
   outline: none;
 }
 
-/* WebKit browsers */
-input[type="range"]::-webkit-slider-thumb {
+/* input[type="range"]::-webkit-slider-thumb {
   appearance: none;
   width: 1rem;
   height: 1rem;
   border-radius: 50%;
   background: #e4bb93;
   border: 2px solid #8a6948;
-  margin-top: -0.4rem; /* center the thumb on the track */
-}
-input[type="range"]::-webkit-slider-runnable-track {
-  height: 0.5rem;
-  background: transparent; /* we already set the track’s container */
-}
+  margin-top: -0.4rem;
+} */
 
-/* Firefox */
-input[type="range"]::-moz-range-thumb {
+
+/* input[type="range"]::-moz-range-thumb {
   width: 1rem;
   height: 1rem;
   border-radius: 50%;
   background: #e4bb93;
   border: 2px solid #8a6948;
+  
+} */
+
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 0.5rem;
+  background: transparent;
 }
 input[type="range"]::-moz-range-track {
   height: 0.5rem;
   background: transparent;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 0;
+  height: 0;
+  margin-top: -0.4rem;
+  border-left: 0.6rem solid transparent;
+  border-right: 0.6rem solid transparent;
+  border-top: 1rem solid oklch(85.2% 0.199 91.936);
+  cursor: pointer;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 0;
+  height: 0;
+  border-left: 0.6rem solid transparent;
+  border-right: 0.6rem solid transparent;
+  border-top: 1rem solid #000000;
+  cursor: pointer;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* For Firefox */
+input[type='number'] {
+  -moz-appearance: textfield;
 }
