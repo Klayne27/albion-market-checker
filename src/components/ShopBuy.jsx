@@ -6,7 +6,7 @@ import { useItemPrices } from "../hooks/useItemPrices";
 import { IoIosCheckmark } from "react-icons/io";
 import CustomDropdown from "./CustomDropdown";
 import { useDispatch, useSelector } from "react-redux";
-import { setSelectedCity, setShowPricedItems } from "../filterSlice";
+import { setSelectCity, setShowPricedItems } from "../filterSlice";
 
 const commonHoverActiveStyles = `
     hover:bg-gradient-to-b hover:from-stone-800 hover:via-stone-700 hover:to-stone-500
@@ -23,15 +23,6 @@ const baseURLimage = "https://render.albiononline.com/v1/item/";
 
 function ShopBuy({
   onShowPanel,
-  // searchTerm,
-  // selectQuality,
-  // selectTier,
-  // selectEnchantment,
-  // selectType,
-  // selectedCity,
-  // handleCityChange,
-  // showPricedItems,
-  // onShowPricedItems,
   openDropdown,
   onOpenDropdown,
 }) {
@@ -44,7 +35,7 @@ function ShopBuy({
     selectQuality,
     selectType,
     searchTerm,
-    selectedCity,
+    selectCity,
     showPricedItems,
   } = useSelector((state) => state.filter);
 
@@ -63,14 +54,15 @@ function ShopBuy({
 
   const filteredItems = useMemo(() => {
     let currentItems = itemArray;
-    
+
     currentItems = currentItems.filter((item) => {
       const itemId = item.id;
       const isArtifact = itemId.includes("ARTEFACT");
       const isUnique = itemId.startsWith("UNIQUE_");
       const isVanity = itemId.includes("VANITY");
+      const isSkin = itemId.includes("SKIN")
 
-      return !isArtifact && !isUnique && !isVanity;
+      return !isArtifact && !isUnique && !isVanity && !isSkin;
     });
 
     if (!Array.isArray(currentItems)) {
@@ -120,7 +112,7 @@ function ShopBuy({
   const itemIdsToFetch = useMemo(() => pageItems.map((item) => item.id), [pageItems]);
   const { priceData, isPriceLoading, isPriceFetching } = useItemPrices(
     itemIdsToFetch,
-    selectedCity,
+    selectCity,
     isItemDataLoading,
     itemDataError
   );
@@ -141,10 +133,10 @@ function ShopBuy({
           sell_price_min: priceInfo?.sell_price_min ?? 0,
           buy_price_max: priceInfo?.buy_price_max ?? 0,
           last_updated: priceInfo?.last_updated ?? null,
-          location: priceInfo?.location ?? selectedCity,
+          location: priceInfo?.location ?? selectCity,
         };
       });
-  }, [itemArray, priceData, itemIdsToFetch, selectedCity, isItemDataLoading]);
+  }, [itemArray, priceData, itemIdsToFetch, selectCity, isItemDataLoading]);
 
   const sortedItems = useMemo(() => {
     let itemsToSort = combinedItemData;
@@ -154,17 +146,13 @@ function ShopBuy({
     }
 
     const sorted = [...itemsToSort].sort((a, b) => {
-      // Handle items without price data (sell_price_min will be 0 due to ?? 0 fallback)
-      // We'll treat 0 as a valid value for sorting purposes here.
-      // If you want items with price 0 to always be last/first, you'd add that logic.
       const priceA = a.sell_price_min;
       const priceB = b.sell_price_min;
 
       if (sortByPrice === "asc") {
-        return priceA - priceB; // Ascending sort
+        return priceA - priceB;
       } else {
-        // sortByPrice === 'desc'
-        return priceB - priceA; // Descending sort
+        return priceB - priceA;
       }
     });
 
@@ -207,7 +195,7 @@ function ShopBuy({
   }, 200);
 
   const handleCityChange = (value) => {
-    dispatch(setSelectedCity(value));
+    dispatch(setSelectCity(value));
   };
 
   if (isItemDataLoading) {
@@ -233,7 +221,7 @@ function ShopBuy({
               id="city"
               options={citiesOptions}
               onValueChange={handleCityChange}
-              selectedValue={selectedCity}
+              selectedValue={selectCity}
               onOpenDropdown={onOpenDropdown}
               openDropdown={openDropdown}
             />
@@ -328,7 +316,7 @@ function ShopBuy({
                   </span>
                   <button
                     type="button"
-                    className=" w-[118px] py-1 border-2 rounded-full text-lg border-gray-500 cursor-pointer shadow-[inset_0_0_10px_1px_#660101] bg-[#b10808] text-yellow-400 hover:opacity-80 active:scale-95"
+                    className=" w-[140px] py-2 border-2 rounded-full text-lg border-gray-500 cursor-pointer shadow-[inset_0_0_10px_1px_#660101] bg-[#b10808] text-yellow-400 hover:opacity-80 active:scale-95"
                     onClick={() => onShowPanel(item, selectQuality)}
                   >
                     Buy

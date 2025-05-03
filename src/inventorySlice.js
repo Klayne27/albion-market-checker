@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   id: 1,
   username: "Klayne",
-  silver: 98300000,
+  silver: 1_000_000_000,
   inventory: [],
 };
 
@@ -26,16 +26,22 @@ const inventorySlice = createSlice({
     },
 
     sellItem: (state, action) => {
-      const itemName = action.payload;
-      const idx = state.inventory.findIndex((item) => item.name === itemName);
+      const { itemId, quality, quantity, totalNetSilver } = action.payload;
+
+      const idx = state.inventory.findIndex(
+        (item) => item.id === itemId && item.quality === quality
+      );
 
       if (idx !== -1) {
         const existingItem = state.inventory[idx];
-        existingItem.quantity -= 1;
-        state.silver += Math.floor(existingItem.price * 0.8);
+        if (existingItem.quantity >= quantity) {
+          existingItem.quantity -= quantity;
+          
+          state.silver += totalNetSilver;
 
-        if (existingItem.quantity <= 0) {
-          state.inventory.splice(idx, 1);
+          if (existingItem.quantity === 0) {
+            state.inventory.splice(idx, 1);
+          }
         }
       }
     },

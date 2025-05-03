@@ -1,31 +1,83 @@
 import { FaArrowRotateRight } from "react-icons/fa6";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { formatNumber } from "../utils/helpers";
 import { ImCross } from "react-icons/im";
 import { IoIosCheckmark } from "react-icons/io";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { buyItem, sellItem } from "../inventorySlice";
+import IconSlider from "./IconSlider";
+
+const baseURLimage = "https://render.albiononline.com/v1/item/";
 
 function ItemDetailPanel({ item, onClose, mode }) {
   const [quantity, setQuantity] = useState(1);
   const [rememberMeClicked, setRememberMeClicked] = useState(false);
 
+  const selectQuality = useSelector((state) => state.filter.selectQuality);
   const dispatch = useDispatch();
 
-  if (!item) return null;
+  const maxQuantity = useMemo(() => {
+    if (mode === "sell") {
+      return item?.quantity ?? 1;
+    } 
+    return 999;
+  }, [mode, item?.quantity]);
+
+  useEffect(() => {
+    setQuantity((prevQuantity) => {
+      const newMax = maxQuantity;
+      return Math.max(1, Math.min(prevQuantity, newMax));
+    })
+  }, [item, mode, maxQuantity]);
+
+  const unitSellPrice = item?.price ?? 0
+  const unitBuyPrice = item?.sell_price_min ?? 0;
+
+   console.log("Calculated unitSellPrice:", unitSellPrice);
+
+  const { premiumTax, setupFee, totalNetSellPrice, totalGrossValue } = useMemo(() => {
+    if (mode !== "sell") return { premiumTax: 0, setupFee: 0, totalNetSellPrice: 0 };
+    const totalGrossValue = unitSellPrice * quantity;
+    const tax = Math.round(totalGrossValue * 0.02);
+    const fee = Math.round(totalGrossValue * 0.01);
+    const net = totalGrossValue - tax - fee;
+    return {
+      premiumTax: tax,
+      setupFee: fee,
+      totalNetSellPrice: net,
+      totalGrossValue: totalGrossValue,
+    };
+  }, [unitSellPrice, quantity, mode])
+
+  const totalBuyPrice = useMemo(() => {
+    if (mode !== "buy") return 0;
+    return unitBuyPrice * quantity;
+  }, [unitBuyPrice, quantity, mode]);
+
+  const handleQuantityChange = (value) => {
+    const clampedValue = Math.max(1, Math.min(maxQuantity, value));
+    setQuantity(clampedValue);
+  };
 
   const handleConfirmBuy = () => {
-    dispatch(buyItem({ ...item, quantity: quantity }));
+    dispatch(buyItem({ ...item, quantity: quantity, price: unitBuyPrice }));
     onClose();
   };
 
+  const itemQuality = item?.quality ?? selectQuality;
+
   const handleCreateSellOrder = () => {
-    // Here you'd likely need more complex logic for sell orders
-    // involving setting price, quantity, etc.
-    // For now, let's just simulate selling the item directly
-    dispatch(sellItem(item.name, {}));
-    onClose();
+  const sellPayload = {
+    itemId: item.id,
+    quality: itemQuality,
+    quantity: quantity,
+    totalNetSilver: totalNetSellPrice,
   };
+  dispatch(sellItem(sellPayload));
+  onClose();
+  };
+
+  if (!item) return null;
 
   const commonHoverActiveStyles = `
     hover:bg-gradient-to-b hover:from-stone-800 hover:via-stone-700 hover:to-stone-500
@@ -39,27 +91,27 @@ function ItemDetailPanel({ item, onClose, mode }) {
   `;
 
   return (
-    <div className="fixed left-115 transform w-[33rem] border bg-[#EDC298] z-50 shadow-lg  p-4">
+    <div className="fixed left-115 transform w-[41rem] border-4 border-[#8a6948] bg-[#e4bb93] shadow-[inset_0_0_25px_15px_#eca966] z-50  p-4 bottom-60">
       <button
         onClick={onClose}
-        className="absolute top-2 right-2 border-2 rounded-full p-1 size-5 text-yellow-400 border-[#646179] bg-[#2c2b35] cursor-pointer"
+        className="absolute top-2 right-3 border-2 rounded-full p-1 size-6 text-yellow-400 border-[#646179] bg-[#2c2b35] cursor-pointer"
         aria-label="Close panel"
       >
-        <ImCross size={10} className="absolute  top-1" />
+        <ImCross size={13} className="absolute  top-1 right-1" />
       </button>
       {mode === "sell" && (
         <>
-          <div className="flex border rounded-full p-[3px] gap-5 bg-[#716F7B] absolute top-31 left-3">
-            <select className="border rounded-full w-35 px-2 text-xs bg-[#FBD7A6]">
-              <option>Melee</option>
+          <div className="flex border rounded-full p-[3px] gap-5 bg-gradient-to-b from-[#716F7B] via-[#4c4a50] to-[#38373b] absolute top-33 right-5">
+            <select className="flex justify-between border w-43 border-[#646179] rounded-full px-2 text-md bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] hover:opacity-80">
+              <option>Any</option>
             </select>
 
-            <select className="border rounded-full w-35 px-2 text-xs bg-[#FBD7A6]">
-              <option>Sword</option>
+            <select className="flex justify-between border w-43 border-[#646179] rounded-full px-2 text-md bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] hover:opacity-80">
+              <option>Any</option>
             </select>
 
-            <select className="border rounded-full w-35 px-2 text-xs bg-[#FBD7A6]">
-              <option>Tier 8</option>
+            <select className="flex justify-between border w-43 border-[#646179] rounded-full px-2 text-md bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] hover:opacity-80">
+              <option>Tier</option>
             </select>
 
             <span className="border-2 rounded-full px-1 size-5 text-yellow-400 border-[#646179] bg-[#2c2b35]  relative">
@@ -68,24 +120,28 @@ function ItemDetailPanel({ item, onClose, mode }) {
           </div>
 
           <div className="grid grid-cols-[1fr_4fr] p-3">
-            <div className="border w-20 h-20 mb-17"></div>
-            <div className="text-sm h-full">
+            <div
+              className={`w-26 h-26 relative ${"overflow-hidden bg-cover bg-center bg-no-repeat"}`}
+              style={{
+                backgroundImage: `url('${baseURLimage}${item?.id}?quality=${selectQuality}')`,
+                backgroundSize: "107%",
+              }}
+            ></div>
+            <div className="text-sm w-[410px] mb-17">
               <span className="font-semibold text-2xl">{item?.name}</span>
               <br />
               Use the filters below to compare different versions of the same item. Click
               on the restore button to switch back to the original selection.
             </div>
 
-            <p className="ml-6">Action:</p>
-            <div className="flex flex-col mb-7 gap-1">
-              <div className="flex gap-2">
+            <p className="ml-7">Action:</p>
+            <div className="flex flex-col mb-7">
+              <div className="flex gap-2 py-0.5 px-2">
                 <button
                   type="button"
                   id="rem-me"
-                  className={`text-sm border-3 rounded-full border-gray-500 bg-gradient-to-b from-yellow-400 via-yellow-500 to-yellow-600 hover:from-yellow-400 hover:via-yellow-500 hover:to-yellow-600 text-yellow-700  cursor-pointer ${
-                    rememberMeClicked
-                      ? "bg-gradient-to-b from-yellow-400 via-yellow-500 to-yellow-600 hover:from-yellow-400 hover:via-yellow-500 hover:to-yellow-600 text-yellow-700"
-                      : ""
+                  className={`text-sm border-3 px-0.5 rounded-full border-gray-500 bg-gradient-to-b from-stone-900 via-stone-800 to-stone-600 hover:from-stone-800 hover:via-stone-700 hover:to-stone-600 text-[#0c0e0f] cursor-pointer ${
+                    rememberMeClicked ? "" : ""
                   } ${commonHoverActiveStyles} ${focusStyles}`}
                   onClick={() => setRememberMeClicked((c) => !c)}
                 >
@@ -93,11 +149,11 @@ function ItemDetailPanel({ item, onClose, mode }) {
                 </button>
                 <label>Sell</label>
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 py-0.5 px-2">
                 <button
                   type="button"
                   id="rem-me"
-                  className={`text-sm border-3 rounded-full border-gray-500 bg-gradient-to-b from-stone-900 via-stone-800 to-stone-600 hover:from-stone-800 hover:via-stone-700 hover:to-stone-600 text-[#0c0e0f] cursor-pointer ${
+                  className={`text-sm border-3 px-0.5 rounded-full border-gray-500 bg-gradient-to-b from-stone-900 via-stone-800 to-stone-600 hover:from-stone-800 hover:via-stone-700 hover:to-stone-600 text-[#0c0e0f] cursor-pointer ${
                     rememberMeClicked ? "" : ""
                   } ${commonHoverActiveStyles} ${focusStyles}`}
                   onClick={() => setRememberMeClicked((c) => !c)}
@@ -106,24 +162,26 @@ function ItemDetailPanel({ item, onClose, mode }) {
                 </button>
                 <label>Buy</label>
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 bg-[#608b3d] py-0.5 px-2">
                 <button
                   type="button"
                   id="rem-me"
-                  className={`text-sm border-3 rounded-full border-gray-500 bg-gradient-to-b from-stone-900 via-stone-800 to-stone-600 hover:from-stone-800 hover:via-stone-700 hover:to-stone-600 text-[#0c0e0f] cursor-pointer ${
-                    rememberMeClicked ? "" : ""
+                  className={`text-sm border-3 px-0.5 rounded-full border-gray-500 bg-gradient-to-b from-yellow-400 via-yellow-500 to-yellow-600 hover:from-yellow-400 hover:via-yellow-500 hover:to-yellow-600 text-yellow-700  cursor-pointer ${
+                    rememberMeClicked
+                      ? "bg-gradient-to-b from-yellow-400 via-yellow-500 to-yellow-600 hover:from-yellow-400 hover:via-yellow-500 hover:to-yellow-600 text-yellow-700"
+                      : ""
                   } ${commonHoverActiveStyles} ${focusStyles}`}
                   onClick={() => setRememberMeClicked((c) => !c)}
                 >
                   <IoIosCheckmark size={18} style={{ strokeWidth: "8%" }} />
                 </button>
-                <label>Sell Order</label>
+                <label className="text-yellow-400">Sell Order</label>
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 py-0.5 px-2">
                 <button
                   type="button"
                   id="rem-me"
-                  className={`text-sm border-3 rounded-full border-gray-500 bg-gradient-to-b from-stone-900 via-stone-800 to-stone-600 hover:from-stone-800 hover:via-stone-700 hover:to-stone-600 text-[#0c0e0f] cursor-pointer ${
+                  className={`text-sm border-3 px-0.5 rounded-full border-gray-500 bg-gradient-to-b from-stone-900 via-stone-800 to-stone-600 hover:from-stone-800 hover:via-stone-700 hover:to-stone-600 text-[#0c0e0f] cursor-pointer ${
                     rememberMeClicked ? "" : ""
                   } ${commonHoverActiveStyles} ${focusStyles}`}
                   onClick={() => setRememberMeClicked((c) => !c)}
@@ -133,24 +191,29 @@ function ItemDetailPanel({ item, onClose, mode }) {
                 <label>Buy Order</label>
               </div>
             </div>
-            <p className="ml-5 mb-3">Amount</p>
-            <input type="range" className="mb-3" />
-            <p className="ml-10">Price</p>
-            <div className="flex mb-3">
-              <button>-</button>
-              <p>{formatNumber(item?.price)}</p>
-              <p>9% above average</p>
-              <button>+</button>
+            <p className="ml-7 mb-3">Amount:</p>
+            <IconSlider
+              min={1}
+              max={maxQuantity}
+              value={quantity}
+              onChange={handleQuantityChange}
+            />
+            <p className="ml-9.5 mt-1">Price:</p>
+            <div className="border rounded-full p-1 max-w-73 max-h-9 bg-gradient-to-b from-[#716F7B] via-[#4c4a50] to-[#38373b] mb-4">
+              <div className="border px-2 py-0.5 rounded-full max-w-70 text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] mb-3">
+                <p>🪩 {formatNumber(totalGrossValue)}</p>
+              </div>
             </div>
             <div></div>
-            <p>380(2 % premium tax)</p>
+            <p className="text-red-600">🪩 {formatNumber(premiumTax)}(2% premium tax)</p>
             <div></div>
-            <p>190(1 % setup fee)</p>
-            <div className="ml-9 mt-1">Total: </div>
-            <div className="flex justify-between mt-1">
-              {formatNumber(item?.price)}
+            <p className="mb-3 text-red-600">🪩 {formatNumber(setupFee)}(1% setup fee)</p>
+
+            <div className="ml-9 ">Total: </div>
+            <div className="flex justify-between">
+              🪩 {formatNumber(totalNetSellPrice)}
               <button
-                className="px-9 py-1 border-3 rounded-full text-sm border-gray-500 cursor-pointer active:scale-95 transition ease-in-out hover:opacity-80 duration-150 shadow-[inset_0_0_10px_1px_#660101] bg-[#b10808] text-yellow-400"
+                className="w-[140px] py-2 border-3 rounded-full text-sm border-gray-500 cursor-pointer active:scale-95 transition ease-in-out hover:opacity-80 duration-150 shadow-[inset_0_0_10px_1px_#660101] bg-[#b10808] text-yellow-400"
                 onClick={handleCreateSellOrder}
               >
                 Sell
@@ -161,17 +224,17 @@ function ItemDetailPanel({ item, onClose, mode }) {
       )}
       {mode === "buy" && (
         <>
-          <div className="flex border rounded-full p-[3px] gap-5 bg-[#716F7B] absolute top-31 left-3">
-            <select className="border rounded-full w-35 px-2 text-xs bg-[#FBD7A6]">
-              <option>Melee</option>
+          <div className="flex border rounded-full p-[3px] gap-5 bg-gradient-to-b from-[#716F7B] via-[#4c4a50] to-[#38373b] absolute top-33 right-5">
+            <select className="flex justify-between border w-43 border-[#646179] rounded-full px-2 text-md bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] hover:opacity-80">
+              <option>Any</option>
             </select>
 
-            <select className="border rounded-full w-35 px-2 text-xs bg-[#FBD7A6]">
-              <option>Sword</option>
+            <select className="flex justify-between border w-43 border-[#646179] rounded-full px-2 text-md bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] hover:opacity-80">
+              <option>Any</option>
             </select>
 
-            <select className="border rounded-full w-35 px-2 text-xs bg-[#FBD7A6]">
-              <option>Tier 8</option>
+            <select className="flex justify-between border w-43 border-[#646179] rounded-full px-2 text-md bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] hover:opacity-80">
+              <option>Tier</option>
             </select>
 
             <span className="border-2 rounded-full px-1 size-5 text-yellow-400 border-[#646179] bg-[#2c2b35]  relative">
@@ -179,22 +242,28 @@ function ItemDetailPanel({ item, onClose, mode }) {
             </span>
           </div>
 
-          <div className="grid grid-cols-[1fr_4fr] p-3">
-            <div className="border w-20 h-20 mb-17"></div>
-            <div className="text-sm h-full">
+          <div className="grid grid-cols-[1fr_4fr] p-1">
+            <div
+              className={`w-26 h-26 relative ${"overflow-hidden bg-cover bg-center bg-no-repeat"}`}
+              style={{
+                backgroundImage: `url('${baseURLimage}${item?.id}?quality=${selectQuality}')`,
+                backgroundSize: "107%",
+              }}
+            ></div>
+            <div className="text-sm w-[410px] mb-17">
               <span className="font-semibold text-2xl">{item?.name}</span>
               <br />
               Use the filters below to compare different versions of the same item. Click
               on the restore button to switch back to the original selection.
             </div>
 
-            <p className="ml-6">Action:</p>
-            <div className="flex flex-col mb-7 gap-1">
-              <div className="flex gap-2">
+            <p className="ml-7">Action:</p>
+            <div className="flex flex-col mb-7">
+              <div className="flex gap-2 py-0.5 px-2">
                 <button
                   type="button"
                   id="rem-me"
-                  className={`text-sm border-3 rounded-full border-gray-500 bg-gradient-to-b from-stone-900 via-stone-800 to-stone-600 hover:from-stone-800 hover:via-stone-700 hover:to-stone-600 text-[#0c0e0f] cursor-pointer ${
+                  className={`text-sm border-3 px-0.5 rounded-full border-gray-500 bg-gradient-to-b from-stone-900 via-stone-800 to-stone-600 hover:from-stone-800 hover:via-stone-700 hover:to-stone-600 text-[#0c0e0f] cursor-pointer ${
                     rememberMeClicked ? "" : ""
                   } ${commonHoverActiveStyles} ${focusStyles}`}
                   onClick={() => setRememberMeClicked((c) => !c)}
@@ -203,11 +272,11 @@ function ItemDetailPanel({ item, onClose, mode }) {
                 </button>
                 <label className="font-semibold">Sell</label>
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 bg-[#608b3d] py-0.5 px-2">
                 <button
                   type="button"
                   id="rem-me"
-                  className={`text-sm border-3 rounded-full border-gray-500 bg-gradient-to-b from-yellow-400 via-yellow-500 to-yellow-600 hover:from-yellow-400 hover:via-yellow-500 hover:to-yellow-600 text-yellow-700  cursor-pointer ${
+                  className={`text-sm border-3 px-0.5 rounded-full border-gray-500 bg-gradient-to-b from-yellow-400 via-yellow-500 to-yellow-600 hover:from-yellow-400 hover:via-yellow-500 hover:to-yellow-600 text-yellow-700  cursor-pointer ${
                     rememberMeClicked
                       ? "bg-gradient-to-b from-yellow-400 via-yellow-500 to-yellow-600 hover:from-yellow-400 hover:via-yellow-500 hover:to-yellow-600 text-yellow-700"
                       : ""
@@ -216,13 +285,13 @@ function ItemDetailPanel({ item, onClose, mode }) {
                 >
                   <IoIosCheckmark size={18} style={{ strokeWidth: "8%" }} />
                 </button>
-                <label>Buy</label>
+                <label className="text-yellow-400">Buy</label>
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 py-0.5 px-2">
                 <button
                   type="button"
                   id="rem-me"
-                  className={`text-sm border-3 rounded-full border-gray-500 bg-gradient-to-b from-stone-900 via-stone-800 to-stone-600 hover:from-stone-800 hover:via-stone-700 hover:to-stone-600 text-[#0c0e0f] cursor-pointer ${
+                  className={`text-sm border-3 px-0.5 rounded-full border-gray-500 bg-gradient-to-b from-stone-900 via-stone-800 to-stone-600 hover:from-stone-800 hover:via-stone-700 hover:to-stone-600 text-[#0c0e0f] cursor-pointer ${
                     rememberMeClicked ? "" : ""
                   } ${commonHoverActiveStyles} ${focusStyles}`}
                   onClick={() => setRememberMeClicked((c) => !c)}
@@ -231,11 +300,11 @@ function ItemDetailPanel({ item, onClose, mode }) {
                 </button>
                 <label>Sell Order</label>
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 py-0.5 px-2">
                 <button
                   type="button"
                   id="rem-me"
-                  className={`text-sm border-3 rounded-full border-gray-500 bg-gradient-to-b from-stone-900 via-stone-800 to-stone-600 hover:from-stone-800 hover:via-stone-700 hover:to-stone-600 text-[#0c0e0f] cursor-pointer ${
+                  className={`text-sm border-3 px-0.5 rounded-full border-gray-500 bg-gradient-to-b from-stone-900 via-stone-800 to-stone-600 hover:from-stone-800 hover:via-stone-700 hover:to-stone-600 text-[#0c0e0f] cursor-pointer ${
                     rememberMeClicked ? "" : ""
                   } ${commonHoverActiveStyles} ${focusStyles}`}
                   onClick={() => setRememberMeClicked((c) => !c)}
@@ -245,22 +314,38 @@ function ItemDetailPanel({ item, onClose, mode }) {
                 <label>Buy Order</label>
               </div>
             </div>
-            <p className="ml-5 mb-3">Amount</p>
-            <input type="range" className="mb-3" />
-            <p className="ml-10">Price</p>
+            <p className="ml-7 mb-3">Amount:</p>
+            <IconSlider
+              min={1}
+              max={maxQuantity}
+              value={quantity}
+              onChange={handleQuantityChange}
+            />
+            <p className="ml-9.5">Price:</p>
             <div className="flex mb-3">
-              <button>-</button>
-              <p>{formatNumber(item.sell_price_min)}</p>
-              <p>9% above average</p>
-              <button>+</button>
+              🪩 <p>{formatNumber(totalBuyPrice)}</p>
+            </div>
+            <p className="ml-2">Transfer:</p>
+            <div className="flex gap-2 py-0.5 px-2">
+              <button
+                type="button"
+                id="rem-me"
+                className={`text-sm border-3 px-0.5 rounded-full border-gray-500 bg-gradient-to-b from-yellow-400 via-yellow-500 to-yellow-600 hover:from-yellow-400 hover:via-yellow-500 hover:to-yellow-600 text-yellow-700  cursor-pointer ${
+                  rememberMeClicked
+                    ? "bg-gradient-to-b from-yellow-400 via-yellow-500 to-yellow-600 hover:from-yellow-400 hover:via-yellow-500 hover:to-yellow-600 text-yellow-700"
+                    : ""
+                } ${commonHoverActiveStyles} ${focusStyles}`}
+                onClick={() => setRememberMeClicked((c) => !c)}
+              >
+                <IoIosCheckmark size={18} style={{ strokeWidth: "8%" }} />
+              </button>
+              <label>Transfer completed purchases directly </label>
             </div>
             <div></div>
-            <p>380(2 % premium tax)</p>
-            <div></div>
-            <p>380(2 % premium tax)</p>
+            <p className="ml-11">to inventory</p>
             <div className="ml-9 mt-1">Total:</div>
             <div className="flex justify-between mt-1">
-              {formatNumber(item.sell_price_min)}
+              🪩{formatNumber(totalBuyPrice)}
               <button
                 className=" w-[118px] py-1 border-2 rounded-full text-lg border-gray-500 cursor-pointer shadow-[inset_0_0_10px_1px_#660101] bg-[#b10808] text-yellow-400 hover:opacity-80 active:scale-95"
                 onClick={handleConfirmBuy}

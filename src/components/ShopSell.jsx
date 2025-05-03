@@ -7,10 +7,6 @@ const baseURLimage = "https://render.albiononline.com/v1/item/";
 
 function ShopSell({
   onShowPanel,
-  // searchTerm,
-  // selectTier,
-  // selectEnchantment,
-  // selectType,
 }) {
   const [currentPage, setCurrentPage] = useState(1);
   const { inventory } = useSelector(selectInventory);
@@ -130,7 +126,7 @@ function ShopSell({
                 <span className="text-[#4e2c08] text-lg">100/100</span>
                 <button
                   type="button"
-                  className=" w-[118px] py-1 border-2 rounded-full text-lg border-gray-500 cursor-pointer shadow-[inset_0_0_10px_1px_#660101] bg-[#b10808] text-yellow-400 hover:opacity-80 active:scale-95"
+                  className=" w-[140px] py-2 border-2 rounded-full text-lg border-gray-500 cursor-pointer shadow-[inset_0_0_10px_1px_#660101] bg-[#b10808] text-yellow-400 hover:opacity-80 active:scale-95"
                   onClick={() => onShowPanel(item)}
                 >
                   Sell

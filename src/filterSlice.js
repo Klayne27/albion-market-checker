@@ -1,13 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  searchTerm: "",
   selectTier: "any",
   selectQuality: "1",
   selectEnchantment: "any",
   selectType: "any",
+  selectCity: "Caerleon",
+  searchTerm: "",
   showPricedItems: false,
-  selectedCity: "Caerleon",
 };
 
 const filterSlice = createSlice({
@@ -29,8 +29,8 @@ const filterSlice = createSlice({
     setSearchTerm(state, action) {
       state.searchTerm = action.payload;
     },
-    setSelectedCity(state, action) {
-      state.selectedCity = action.payload;
+    setSelectCity(state, action) {
+      state.selectCity = action.payload;
     },
     setShowPricedItems(state, action) {
       state.showPricedItems = action.payload;
@@ -63,7 +63,7 @@ export const {
   setSelectQuality,
   setSelectTier,
   setSelectType,
-  setSelectedCity,
+  setSelectCity,
   setShowPricedItems,
   handleResetFilters,
   handleResetSearch,

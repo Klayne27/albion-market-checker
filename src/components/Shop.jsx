@@ -31,7 +31,7 @@ function Shop() {
     selectType,
     selectQuality,
     searchTerm,
-    selectedCity,
+    selectCity,
   } = useSelector((state) => state.filter);
 
   const dispatch = useDispatch();
@@ -96,8 +96,8 @@ function Shop() {
     setSelectedItem(null);
   };
 
-  const handleSearchChange = (event) => {
-    dispatch(setSearchTerm(event.target.value));
+  const handleSearchChange = (e) => {
+    dispatch(setSearchTerm(e.target.value));
   };
 
   const handleSelectQuality = (value) => {
@@ -128,7 +128,7 @@ function Shop() {
             <div className="border-3 border-[#8C7C6B] rounded-full w-24 h-24 my-2"></div>
             <img src="./albion.png" className="absolute size-45 -left-5.5" />
             <span className="text-[#8C7C6B] font-extrabold text-3xl">
-              {selectedCity}'s Marketplace
+              {selectCity}'s Marketplace
             </span>
             <span
               className="border-2 rounded-full px-1 size-6 text-yellow-400 border-[#646179] bg-[#2c2b35] mt-2 relative hover:opacity-80 cursor-pointer"
@@ -226,29 +226,11 @@ function Shop() {
           {activeTab === "buy" && (
             <ShopBuy
               onShowPanel={handleShowPanel}
-              // searchTerm={searchTerm}
-              // selectQuality={selectQuality}
-              // selectTier={selectTier}
-              // selectEnchantment={selectEnchantment}
-              // selectType={selectType}
-              // selectedCity={selectedCity}
-              // setSelectedCity={setSelectedCity}
-              // handleCityChange={handleCityChange}
-              // showPricedItems={showPricedItems}
-              // onShowPricedItems={handlePriceFilter}
               openDropdown={openDropdown}
               onOpenDropdown={handleToggleDropdown}
             />
           )}
-          {activeTab === "sell" && (
-            <ShopSell
-              onShowPanel={handleShowPanel}
-              searchTerm={searchTerm}
-              selectTier={selectTier}
-              selectEnchantment={selectEnchantment}
-              selectType={selectType}
-            />
-          )}
+          {activeTab === "sell" && <ShopSell onShowPanel={handleShowPanel} />}
         </div>
       </div>
       {isPanelOpen && selectedItem && (

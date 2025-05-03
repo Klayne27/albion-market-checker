@@ -7,22 +7,8 @@ import store from "./store";
 function App() {
   return (
     <Provider store={store}>
-      <div className="relative w-full">
+      <div className="relative w-full bg-gradient-to-t from-[#212a55] via-[#181f3d] to-[#131831]">
         <div className="flex justify-around items-center w-full h-screen">
-          <img
-            src="/bgmarket.jpeg"
-            className="relative w-full flex justify-center items-start overflow-hidden"
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              zIndex: -1,
-            }}
-            alt="Background"
-          />
           <Shop />
           <Inventory />
         </div>

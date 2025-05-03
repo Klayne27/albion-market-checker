@@ -85,7 +85,7 @@ function Inventory() {
               <span className="border rounded-full bg-[#2C2B35] border-[#646179] mr-2 text-lg py-0.5">
                 🌕
               </span>
-              <span className="text-xl">100k</span>
+              <span className="text-xl">10b</span>
             </div>
             <div className="text-sm">
               <span className="border rounded-full bg-[#2C2B35] border-[#646179] text-lg py-0.5">
@@ -214,7 +214,7 @@ function Inventory() {
               }
             >
               {!item.empty && (
-                <p className="absolute text-white left-16.5 bottom-2 text-xs z-10">
+                <p className="absolute text-white left-16 bottom-2.5 text-xs z-10">
                   {item.quantity}
                 </p>
               )}
@@ -224,7 +224,7 @@ function Inventory() {
       </div>
       <div className="flex items-center justify-center gap-5 mb-2 mt-2">
         <div className="text-lg">
-          <span className="text-sm">Est. Market Value:</span>{" "}
+          <span className="text-sm">Est. Market Value:</span>🪩
           {formatNumber(totalInventoryValue)}
         </div>
         <div className="flex items-center justify-center gap-1">
