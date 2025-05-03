@@ -9,7 +9,6 @@ const baseURLimage = "https://render.albiononline.com/v1/item/";
 
 function Inventory() {
   const inventory = useSelector(selectInventory);
-  console.log(inventory.inventory);
 
   const [isSorted, setIsSorted] = useState(false);
 

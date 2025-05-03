@@ -4,9 +4,19 @@ import ShopBuy from "./ShopBuy";
 import ShopSell from "./ShopSell";
 import ItemDetailPanel from "./ItemDetailPanel";
 import { formatNumber } from "../utils/helpers";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectInventory } from "../inventorySlice";
 import CustomDropdown from "./CustomDropdown";
+import {
+  handleRefreshMarket,
+  handleResetFilters,
+  handleResetSearch,
+  setSearchTerm,
+  setSelectEnchantment,
+  setSelectQuality,
+  setSelectTier,
+  setSelectType,
+} from "../filterSlice";
 
 function Shop() {
   const inventory = useSelector(selectInventory);
@@ -14,12 +24,17 @@ function Shop() {
   const [activeTab, setActiveTab] = useState("buy");
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
-  const [selectQuality, setSelectQuality] = useState(1);
-  const [selectTier, setSelectTier] = useState("any");
-  const [selectEnchantment, setSelectEnchantment] = useState("any");
-  const [selectType, setSelectType] = useState("any");
-  const [showPricedItems, setShowPricedItems] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
+
+  const {
+    selectTier,
+    selectEnchantment,
+    selectType,
+    selectQuality,
+    searchTerm,
+    selectedCity,
+  } = useSelector((state) => state.filter);
+
+  const dispatch = useDispatch();
 
   const [openDropdown, setOpenDropdown] = useState(null);
 
@@ -31,8 +46,6 @@ function Shop() {
 
     return `${baseStyles} ${activeTab === tabName ? activeStyles : inactiveStyles}`;
   };
-
-  const [selectedCity, setSelectedCity] = useState("Caerleon");
 
   const typeOptions = [
     { name: "Any", value: "any" },
@@ -84,53 +97,28 @@ function Shop() {
   };
 
   const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
-  };
-
-  const handleResetSearch = () => {
-    setSearchTerm("");
+    dispatch(setSearchTerm(event.target.value));
   };
 
   const handleSelectQuality = (value) => {
-    setSelectQuality(value);
+    dispatch(setSelectQuality(value));
   };
 
   const handleSelectTier = (value) => {
-    setSelectTier(value);
+    dispatch(setSelectTier(value));
   };
 
   const handleSelectEnchantment = (value) => {
-    setSelectEnchantment(value);
+    dispatch(setSelectEnchantment(value));
   };
 
   const handleSelectType = (value) => {
-    setSelectType(value);
-  };
-
-  const handleCityChange = (value) => {
-    setSelectedCity(value);
-  };
-
-  const handlePriceFilter = (isChecked) => {
-    setShowPricedItems(isChecked);
+    dispatch(setSelectType(value));
   };
 
   const handleToggleDropdown = (id) => {
     setOpenDropdown(openDropdown === id ? null : id);
   };
-
-  const handleResetFilters = () => {
-    setSelectQuality(1);
-    setSelectTier("any");
-    setSelectEnchantment("any");
-    setSelectType("any");
-  };
-
-  const handleRefreshMarket = () => {
-    handleResetFilters()
-    handleResetSearch()
-    setShowPricedItems(false)
-  }
 
   return (
     <>
@@ -144,7 +132,7 @@ function Shop() {
             </span>
             <span
               className="border-2 rounded-full px-1 size-6 text-yellow-400 border-[#646179] bg-[#2c2b35] mt-2 relative hover:opacity-80 cursor-pointer"
-              onClick={handleRefreshMarket}
+              onClick={() => dispatch(handleRefreshMarket())}
             >
               <FaArrowRotateRight size={16} className="absolute right-0.5 top-0.5" />
             </span>
@@ -181,12 +169,12 @@ function Shop() {
               />
               <span
                 className="border-2 rounded-full px-1 size-6 text-yellow-400 border-[#646179] bg-[#2c2b35] relative  hover:opacity-80 cursor-pointer"
-                onClick={handleResetSearch}
+                onClick={() => dispatch(handleResetSearch())}
               >
                 <FaArrowRotateLeft size={16} className="absolute right-0.5 top-0.5" />
               </span>
             </div>
-            <div className="flex border rounded-full p-[5px] g ap-5 bg-gradient-to-b from-[#716F7B] via-[#4c4a50] to-[#38373b] mr-3">
+            <div className="flex border rounded-full p-[5px] gap-5 bg-gradient-to-b from-[#716F7B] via-[#4c4a50] to-[#38373b] mr-3">
               <CustomDropdown
                 id="type"
                 options={typeOptions}
@@ -226,7 +214,7 @@ function Shop() {
                 />
                 <span
                   className="border-2 rounded-full px-1 size-6 text-yellow-400 border-[#646179] bg-[#2c2b35] relative  hover:opacity-80 cursor-pointer"
-                  onClick={handleResetFilters}
+                  onClick={() => dispatch(handleResetFilters())}
                 >
                   <FaArrowRotateLeft size={16} className="absolute right-0.5 top-0.5" />
                 </span>
@@ -238,16 +226,16 @@ function Shop() {
           {activeTab === "buy" && (
             <ShopBuy
               onShowPanel={handleShowPanel}
-              searchTerm={searchTerm}
-              selectQuality={selectQuality}
-              selectTier={selectTier}
-              selectEnchantment={selectEnchantment}
-              selectType={selectType}
-              selectedCity={selectedCity}
-              showPricedItems={showPricedItems}
-              onShowPricedItems={handlePriceFilter}
-              setSelectedCity={setSelectedCity}
-              handleCityChange={handleCityChange}
+              // searchTerm={searchTerm}
+              // selectQuality={selectQuality}
+              // selectTier={selectTier}
+              // selectEnchantment={selectEnchantment}
+              // selectType={selectType}
+              // selectedCity={selectedCity}
+              // setSelectedCity={setSelectedCity}
+              // handleCityChange={handleCityChange}
+              // showPricedItems={showPricedItems}
+              // onShowPricedItems={handlePriceFilter}
               openDropdown={openDropdown}
               onOpenDropdown={handleToggleDropdown}
             />
@@ -256,13 +244,9 @@ function Shop() {
             <ShopSell
               onShowPanel={handleShowPanel}
               searchTerm={searchTerm}
-              selectQuality={selectQuality}
               selectTier={selectTier}
               selectEnchantment={selectEnchantment}
               selectType={selectType}
-              selectedCity={selectedCity}
-              showPricedItems={showPricedItems}
-              onShowPricedItems={handlePriceFilter}
             />
           )}
         </div>

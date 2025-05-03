@@ -5,6 +5,8 @@ import { useItemData } from "../hooks/useItemData";
 import { useItemPrices } from "../hooks/useItemPrices";
 import { IoIosCheckmark } from "react-icons/io";
 import CustomDropdown from "./CustomDropdown";
+import { useDispatch, useSelector } from "react-redux";
+import { setSelectedCity, setShowPricedItems } from "../filterSlice";
 
 const commonHoverActiveStyles = `
     hover:bg-gradient-to-b hover:from-stone-800 hover:via-stone-700 hover:to-stone-500
@@ -21,21 +23,32 @@ const baseURLimage = "https://render.albiononline.com/v1/item/";
 
 function ShopBuy({
   onShowPanel,
-  searchTerm,
-  selectQuality,
-  selectTier,
-  selectEnchantment,
-  selectedCity,
-  selectType,
-  showPricedItems,
-  onShowPricedItems,
-  handleCityChange,
+  // searchTerm,
+  // selectQuality,
+  // selectTier,
+  // selectEnchantment,
+  // selectType,
+  // selectedCity,
+  // handleCityChange,
+  // showPricedItems,
+  // onShowPricedItems,
   openDropdown,
   onOpenDropdown,
 }) {
   const { itemArray, loading: isItemDataLoading, error: itemDataError } = useItemData();
   const [currentPage, setCurrentPage] = useState(1);
   const [sortByPrice, setSortByPrice] = useState(null);
+  const {
+    selectTier,
+    selectEnchantment,
+    selectQuality,
+    selectType,
+    searchTerm,
+    selectedCity,
+    showPricedItems,
+  } = useSelector((state) => state.filter);
+
+  const dispatch = useDispatch();
 
   const citiesOptions = [
     { name: "Thetford", value: "Thetford" },
@@ -50,9 +63,7 @@ function ShopBuy({
 
   const filteredItems = useMemo(() => {
     let currentItems = itemArray;
-
-    console.log("--- Filtered Items (after all filters) ---", currentItems);
-    console.log("Filtered Items Count:", currentItems.length);
+    
     currentItems = currentItems.filter((item) => {
       const itemId = item.id;
       const isArtifact = itemId.includes("ARTEFACT");
@@ -136,11 +147,11 @@ function ShopBuy({
   }, [itemArray, priceData, itemIdsToFetch, selectedCity, isItemDataLoading]);
 
   const sortedItems = useMemo(() => {
-    let itemsToSort = combinedItemData; // Start with the combined data // If sortByPrice is null, return the original order
+    let itemsToSort = combinedItemData;
 
     if (!sortByPrice) {
       return itemsToSort;
-    } // Create a shallow copy before sorting to avoid mutating the original array
+    }
 
     const sorted = [...itemsToSort].sort((a, b) => {
       // Handle items without price data (sell_price_min will be 0 due to ?? 0 fallback)
@@ -165,7 +176,7 @@ function ShopBuy({
   }, [searchTerm]);
 
   const displayItems = useMemo(() => {
-    let itemsToDisplay = sortedItems; // Apply the price filter AFTER sorting
+    let itemsToDisplay = sortedItems;
 
     if (showPricedItems) {
       itemsToDisplay = itemsToDisplay.filter((item) => item.sell_price_min > 0);
@@ -195,9 +206,14 @@ function ShopBuy({
     setCurrentPage((p) => Math.max(1, p - 1));
   }, 200);
 
+  const handleCityChange = (value) => {
+    dispatch(setSelectedCity(value));
+  };
+
   if (isItemDataLoading) {
     return <p className="text-center text-blue-600 text-lg p-4">Loading item list...</p>;
   }
+
   if (itemDataError) {
     return (
       <p className="text-center text-red-600 text-lg p-4">
@@ -205,11 +221,6 @@ function ShopBuy({
       </p>
     );
   }
-
-  const handlePriceSort = () => {
-    combinedItemData.sort((a, b) => a.sell_price_min - b.sell_price_min);
-    console.log("test price sort");
-  };
 
   return (
     <div className="p-2">
@@ -231,7 +242,7 @@ function ShopBuy({
             <button
               type="button"
               id="show-price"
-              onClick={() => onShowPricedItems(!showPricedItems)}
+              onClick={() => dispatch(setShowPricedItems(!showPricedItems))}
               className={`text-sm border-3 rounded-full border-gray-500 bg-gradient-to-b from-stone-900 via-stone-800 to-stone-600 hover:from-stone-800 hover:via-stone-700 hover:to-stone-600 text-[#0c0e0f] cursor-pointer ${
                 showPricedItems
                   ? "bg-gradient-to-b from-yellow-400 via-yellow-500 to-yellow-600 hover:from-yellow-400 hover:via-yellow-500 hover:to-yellow-600 text-yellow-700"
@@ -254,7 +265,7 @@ function ShopBuy({
             Duration
           </div>
           <div
-            className="border px-2 py-0.5 rounded-lg text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] flex justify-between"
+            className="border px-2 py-0.5 rounded-lg text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] flex justify-between cursor-pointer"
             onClick={() => {
               setSortByPrice((prevSort) => {
                 if (prevSort === "asc") return "desc";
@@ -263,26 +274,25 @@ function ShopBuy({
             }}
           >
             Price
-              <div
-                className={`size-4 flex items-center justify-center ml-1 transform ${
-                  sortByPrice === "asc" ? "rotate-180" : "rotate-0"
-                }`}
+            <div
+              className={`size-4 flex items-center justify-center ml-1 transform ${
+                sortByPrice === "asc" ? "rotate-180" : "rotate-0"
+              }`}
+            >
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox={`${sortByPrice === "asc" ? " 0 10 24 24" : "0 0 24 24"}`}
               >
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox={`${sortByPrice === "asc" ? " 0 10 24 24" : "0 0 24 24"}`}
-                >
-                  <path
-                    d="M19 14l-7 7-7-7"
-                    strokeWidth="6"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </div>
-
+                <path
+                  d="M19 14l-7 7-7-7"
+                  strokeWidth="6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
           </div>
         </div>
 

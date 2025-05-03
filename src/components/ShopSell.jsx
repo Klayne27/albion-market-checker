@@ -7,18 +7,14 @@ const baseURLimage = "https://render.albiononline.com/v1/item/";
 
 function ShopSell({
   onShowPanel,
-  searchTerm,
-  selectQuality,
-  selectTier,
-  selectEnchantment,
-  selectedCity,
-  setSelectedCity,
-  selectType,
-  showPricedItems,
-  onShowPricedItems,
+  // searchTerm,
+  // selectTier,
+  // selectEnchantment,
+  // selectType,
 }) {
   const [currentPage, setCurrentPage] = useState(1);
   const { inventory } = useSelector(selectInventory);
+  const {searchTerm, selectTier, selectEnchantment, selectType} = useSelector(state => state.filter)
   const itemsPerPage = 30;
 
   const filtered = useMemo(() => {
@@ -33,8 +29,6 @@ function ShopSell({
   const filteredItems = useMemo(() => {
     let currentItems = inventory;
 
-    console.log("--- Filtered Items (after all filters) ---", currentItems);
-    console.log("Filtered Items Count:", currentItems.length);
     currentItems = currentItems.filter((item) => {
       const itemId = item.id;
       const isArtifact = itemId.includes("ARTEFACT");
