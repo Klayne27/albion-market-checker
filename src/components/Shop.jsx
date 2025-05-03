@@ -35,7 +35,7 @@ function Shop() {
   const [selectedCity, setSelectedCity] = useState("Caerleon");
 
   const typeOptions = [
-    { name: "Any Type", value: "any" },
+    { name: "Any", value: "any" },
     { name: "2H Weapon", value: "2H" },
     { name: "Off-Hand", value: "OFF" },
     { name: "Main Hand", value: "MAIN" },
@@ -46,7 +46,7 @@ function Shop() {
   ];
 
   const tierOptions = [
-    { name: "Tier", value: "any" }, // Placeholder option
+    { name: "Tier", value: "any" },
     { name: "Tier 1", value: "1" },
     { name: "Tier 2", value: "2" },
     { name: "Tier 3", value: "3" },
@@ -58,7 +58,7 @@ function Shop() {
   ];
 
   const enchantmentOptions = [
-    { name: "All", value: "any" }, // Placeholder option
+    { name: "All", value: "any" },
     { name: "Enchantment 1", value: "1" },
     { name: "Enchantment 2", value: "2" },
     { name: "Enchantment 3", value: "3" },
@@ -66,7 +66,6 @@ function Shop() {
   ];
 
   const qualityOptions = [
-    { name: "Quality", value: "any" }, // Placeholder option
     { name: "Normal", value: 1 },
     { name: "Good", value: 2 },
     { name: "Outstanding", value: 3 },
@@ -127,6 +126,12 @@ function Shop() {
     setSelectType("any");
   };
 
+  const handleRefreshMarket = () => {
+    handleResetFilters()
+    handleResetSearch()
+    setShowPricedItems(false)
+  }
+
   return (
     <>
       <div className="border border-[#665249] bg-[#43342D] shadow-[inset_0_0_25px_10px_#665249] w-[70rem] h-[57rem] z-0 relative">
@@ -137,7 +142,10 @@ function Shop() {
             <span className="text-[#8C7C6B] font-extrabold text-3xl">
               {selectedCity}'s Marketplace
             </span>
-            <span className="border-2 rounded-full px-1 size-6 text-yellow-400 border-[#646179] bg-[#2c2b35] mt-2 relative">
+            <span
+              className="border-2 rounded-full px-1 size-6 text-yellow-400 border-[#646179] bg-[#2c2b35] mt-2 relative hover:opacity-80 cursor-pointer"
+              onClick={handleRefreshMarket}
+            >
               <FaArrowRotateRight size={16} className="absolute right-0.5 top-0.5" />
             </span>
             <div className="flex flex-col h-18 absolute ml-[805px] justify-center items-end mt-4">
@@ -172,13 +180,13 @@ function Shop() {
                 onChange={handleSearchChange}
               />
               <span
-                className="border-2 rounded-full px-1 size-6 text-yellow-400 border-[#646179] bg-[#2c2b35] relative"
+                className="border-2 rounded-full px-1 size-6 text-yellow-400 border-[#646179] bg-[#2c2b35] relative  hover:opacity-80 cursor-pointer"
                 onClick={handleResetSearch}
               >
                 <FaArrowRotateLeft size={16} className="absolute right-0.5 top-0.5" />
               </span>
             </div>
-            <div className="flex border rounded-full p-[5px] gap-5 bg-gradient-to-b from-[#716F7B] via-[#4c4a50] to-[#38373b] mr-3">
+            <div className="flex border rounded-full p-[5px] g ap-5 bg-gradient-to-b from-[#716F7B] via-[#4c4a50] to-[#38373b] mr-3">
               <CustomDropdown
                 id="type"
                 options={typeOptions}
@@ -217,7 +225,7 @@ function Shop() {
                   onOpenDropdown={handleToggleDropdown}
                 />
                 <span
-                  className="border-2 rounded-full px-1 size-6 text-yellow-400 border-[#646179] bg-[#2c2b35] relative"
+                  className="border-2 rounded-full px-1 size-6 text-yellow-400 border-[#646179] bg-[#2c2b35] relative  hover:opacity-80 cursor-pointer"
                   onClick={handleResetFilters}
                 >
                   <FaArrowRotateLeft size={16} className="absolute right-0.5 top-0.5" />

@@ -103,9 +103,9 @@ function ShopSell({
   return (
     <div className="p-2">
       <div className="border px-3 py-3 bg-[#e4bb93] shadow-[inset_0_0_25px_15px_#eca966]">
-        <h1 className="font-bold mb-1 text-4xl">Your Inventory</h1>
+        <h1 className="font-bold mb-2 text-4xl">Your Inventory</h1>
 
-        <div className="grid grid-cols-[2fr_2fr] border rounded-xl p-1 gap-3 mr-6 bg-[#716F7B]">
+        <div className="grid grid-cols-[2fr_2fr] border rounded-xl p-1 gap-3 mr-6 bg-gradient-to-b from-[#716F7B] via-[#4c4a50] to-[#38373b]">
           <div className="border px-2 py-0.5 rounded-lg text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966]">
             Item
           </div>

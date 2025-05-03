@@ -31,10 +31,11 @@ function ShopBuy({
   onShowPricedItems,
   handleCityChange,
   openDropdown,
-  onOpenDropdown
+  onOpenDropdown,
 }) {
   const { itemArray, loading: isItemDataLoading, error: itemDataError } = useItemData();
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortByPrice, setSortByPrice] = useState(null);
 
   const citiesOptions = [
     { name: "Thetford", value: "Thetford" },
@@ -112,7 +113,6 @@ function ShopBuy({
     isItemDataLoading,
     itemDataError
   );
-
   const combinedItemData = useMemo(() => {
     if (isItemDataLoading || !Array.isArray(itemArray) || !Array.isArray(priceData)) {
       return [];
@@ -135,23 +135,43 @@ function ShopBuy({
       });
   }, [itemArray, priceData, itemIdsToFetch, selectedCity, isItemDataLoading]);
 
-  console.log("--- Combined Item Data (for current page) ---", combinedItemData);
-  console.log("Combined Item Data Count:", combinedItemData.length);
+  const sortedItems = useMemo(() => {
+    let itemsToSort = combinedItemData; // Start with the combined data // If sortByPrice is null, return the original order
+
+    if (!sortByPrice) {
+      return itemsToSort;
+    } // Create a shallow copy before sorting to avoid mutating the original array
+
+    const sorted = [...itemsToSort].sort((a, b) => {
+      // Handle items without price data (sell_price_min will be 0 due to ?? 0 fallback)
+      // We'll treat 0 as a valid value for sorting purposes here.
+      // If you want items with price 0 to always be last/first, you'd add that logic.
+      const priceA = a.sell_price_min;
+      const priceB = b.sell_price_min;
+
+      if (sortByPrice === "asc") {
+        return priceA - priceB; // Ascending sort
+      } else {
+        // sortByPrice === 'desc'
+        return priceB - priceA; // Descending sort
+      }
+    });
+
+    return sorted;
+  }, [combinedItemData, sortByPrice]);
 
   useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm]);
 
   const displayItems = useMemo(() => {
-    let itemsToDisplay = combinedItemData;
+    let itemsToDisplay = sortedItems; // Apply the price filter AFTER sorting
 
     if (showPricedItems) {
       itemsToDisplay = itemsToDisplay.filter((item) => item.sell_price_min > 0);
     }
-    console.log("--- Final Display Items ---", itemsToDisplay);
-    console.log("Final Display Items Count:", itemsToDisplay.length);
     return itemsToDisplay;
-  }, [combinedItemData, showPricedItems]);
+  }, [sortedItems, showPricedItems]);
 
   function useThrottle(fn, delay = 200) {
     const last = useRef(0);
@@ -185,6 +205,11 @@ function ShopBuy({
       </p>
     );
   }
+
+  const handlePriceSort = () => {
+    combinedItemData.sort((a, b) => a.sell_price_min - b.sell_price_min);
+    console.log("test price sort");
+  };
 
   return (
     <div className="p-2">
@@ -228,8 +253,36 @@ function ShopBuy({
           <div className="border px-2 py-0.5 rounded-lg text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966]">
             Duration
           </div>
-          <div className="border px-2 py-0.5 rounded-lg text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966]">
+          <div
+            className="border px-2 py-0.5 rounded-lg text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] flex justify-between"
+            onClick={() => {
+              setSortByPrice((prevSort) => {
+                if (prevSort === "asc") return "desc";
+                return "asc";
+              });
+            }}
+          >
             Price
+              <div
+                className={`size-4 flex items-center justify-center ml-1 transform ${
+                  sortByPrice === "asc" ? "rotate-180" : "rotate-0"
+                }`}
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox={`${sortByPrice === "asc" ? " 0 10 24 24" : "0 0 24 24"}`}
+                >
+                  <path
+                    d="M19 14l-7 7-7-7"
+                    strokeWidth="6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
+
           </div>
         </div>
 

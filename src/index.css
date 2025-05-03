@@ -6,7 +6,7 @@ html {
   font-weight: 600;
 }
 
-body {
+/* body {
   cursor: url(/cursor.png), auto;
 }
 
@@ -17,7 +17,7 @@ label,
 option,
 button {
   cursor: inherit;
-}
+} */
 
 .custom-scrollbar {
   /* For Webkit-based browsers (Chrome, Safari, Edge) */

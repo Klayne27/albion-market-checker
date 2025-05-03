@@ -150,7 +150,7 @@ function ItemDetailPanel({ item, onClose, mode }) {
             <div className="flex justify-between mt-1">
               {formatNumber(item?.price)}
               <button
-                className="px-9 py-1 border-3 rounded-full text-sm border-gray-500 cursor-pointer active:scale-95 transition ease-in-out duration-150 bg-gradient-to-b from-[#660101] via-[#7c0101] to-[#c70101] text-yellow-400 hover:from-[#7a0101] hover:via-[#700101] hover:to-[#a80101] active:from-[#520101] active:via-[#690101] active:to-[#970202]"
+                className="px-9 py-1 border-3 rounded-full text-sm border-gray-500 cursor-pointer active:scale-95 transition ease-in-out hover:opacity-80 duration-150 shadow-[inset_0_0_10px_1px_#660101] bg-[#b10808] text-yellow-400"
                 onClick={handleCreateSellOrder}
               >
                 Sell
@@ -262,7 +262,7 @@ function ItemDetailPanel({ item, onClose, mode }) {
             <div className="flex justify-between mt-1">
               {formatNumber(item.sell_price_min)}
               <button
-                className="px-9 py-1 border-3 rounded-full text-sm border-gray-500 cursor-pointer active:scale-95 transition ease-in-out duration-150 bg-gradient-to-b from-[#660101] via-[#7c0101] to-[#c70101] text-yellow-400 hover:from-[#7a0101] hover:via-[#700101] hover:to-[#a80101] active:from-[#520101] active:via-[#690101] active:to-[#970202]"
+                className=" w-[118px] py-1 border-2 rounded-full text-lg border-gray-500 cursor-pointer shadow-[inset_0_0_10px_1px_#660101] bg-[#b10808] text-yellow-400 hover:opacity-80 active:scale-95"
                 onClick={handleConfirmBuy}
               >
                 Buy

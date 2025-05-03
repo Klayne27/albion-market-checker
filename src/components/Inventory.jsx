@@ -2,12 +2,16 @@ import { ImCross } from "react-icons/im";
 import { formatNumber } from "../utils/helpers";
 import { useSelector } from "react-redux";
 import { selectInventory } from "../inventorySlice";
+import { useState } from "react";
 
 const TOTAL_INVENTORY_SLOTS = 48;
 const baseURLimage = "https://render.albiononline.com/v1/item/";
 
 function Inventory() {
   const inventory = useSelector(selectInventory);
+  console.log(inventory.inventory);
+
+  const [isSorted, setIsSorted] = useState(false);
 
   const totalInventoryValue = inventory.inventory.reduce((acc, item) => {
     if (!item.empty && item.price !== undefined && item.quantity !== undefined) {
@@ -16,9 +20,17 @@ function Inventory() {
     return acc;
   }, 0);
 
+  const sortedInventory = isSorted
+    ? [...inventory.inventory].sort((a, b) => a.id.localeCompare(b.id))
+    : inventory.inventory;
+
   const displayInventory = Array.from({ length: TOTAL_INVENTORY_SLOTS }).map(
-    (_, index) => inventory.inventory[index] || { id: `empty-${index}`, empty: true }
+    (_, index) => sortedInventory[index] || { id: `empty-${index}`, empty: true }
   );
+
+  const handleSortInventory = () => {
+    setIsSorted((sort) => !sort);
+  };
 
   return (
     <div className="border w-[450px] bg-[#e4bb93] shadow-[inset_0_0_25px_15px_#eca966]">
@@ -183,7 +195,7 @@ function Inventory() {
           <div className="h-3 border w-10 "></div>
         </div>
       </div>
-      <div className="overflow-auto h-[30rem] custom-scrollbar mr-3">
+      <div className="overflow-auto h-[31rem] custom-scrollbar mr-3">
         <div className="relative grid grid-cols-4 gap-y-[3px] border-[#8C7C6B] mt-4 mx-auto max-w-[365px] justify-center items-center mr-5">
           {displayInventory.map((item, index) => (
             <div
@@ -217,12 +229,15 @@ function Inventory() {
           {formatNumber(totalInventoryValue)}
         </div>
         <div className="flex items-center justify-center gap-1">
-          <span className="border rounded-full text-lg bg-[#2C2B35] text-yellow-400 border-[#646179] w-18 text-center">
+          <button className="border rounded-full text-lg bg-[#2C2B35] text-yellow-400 border-[#646179] w-18 text-center cursor-pointer">
             Stack
-          </span>
-          <span className="border rounded-full text-lg bg-[#2C2B35] text-yellow-400 border-[#646179] w-18 text-center ">
+          </button>
+          <button
+            className="border rounded-full text-lg bg-[#2C2B35] text-yellow-400 border-[#646179] w-18 text-center cursor-pointer"
+            onClick={handleSortInventory}
+          >
             Sort
-          </span>
+          </button>
         </div>
       </div>
       <div>
