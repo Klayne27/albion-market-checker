@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState, useEffect } from "react"; // Added useEffect
+import React, { useCallback, useMemo, useRef, useState, useEffect } from "react";
 import { RxCaretLeft, RxCaretRight } from "react-icons/rx";
 import { formatNumber } from "../utils/helpers";
 import { useItemData } from "../hooks/useItemData";
@@ -7,6 +7,7 @@ import { IoIosCheckmark } from "react-icons/io";
 import CustomDropdown from "./CustomDropdown";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectCity, setShowPricedItems } from "../slices/filterSlice";
+import { citiesOptions } from "../data/itemOptions";
 
 const commonHoverActiveStyles = `
     hover:bg-gradient-to-b hover:from-stone-800 hover:via-stone-700 hover:to-stone-500
@@ -23,8 +24,6 @@ const baseURLimage = "https://render.albiononline.com/v1/item/";
 
 function ShopBuy({
   onShowPanel,
-  openDropdown,
-  onOpenDropdown,
 }) {
   const { itemArray, loading: isItemDataLoading, error: itemDataError } = useItemData();
   const [currentPage, setCurrentPage] = useState(1);
@@ -40,15 +39,6 @@ function ShopBuy({
   } = useSelector((state) => state.filter);
 
   const dispatch = useDispatch();
-
-  const citiesOptions = [
-    { name: "Thetford", value: "Thetford" },
-    { name: "Bridgewatch", value: "Bridgewatch" },
-    { name: "Lymhurst", value: "Lymhurst" },
-    { name: "Fort Sterling", value: "Fort Sterling" },
-    { name: "Caerleon", value: "Caerleon" },
-    { name: "Black Market", value: "Black Market" },
-  ];
 
   const itemsPerPage = 170;
 
@@ -113,6 +103,7 @@ function ShopBuy({
   const { priceData, isPriceLoading, isPriceFetching } = useItemPrices(
     itemIdsToFetch,
     selectCity,
+    selectQuality,
     isItemDataLoading,
     itemDataError
   );
@@ -222,8 +213,6 @@ function ShopBuy({
               options={citiesOptions}
               onValueChange={handleCityChange}
               selectedValue={selectCity}
-              onOpenDropdown={onOpenDropdown}
-              openDropdown={openDropdown}
             />
           </div>
           <div className=" flex items-center justify-start sm:justify-start gap-2 mb-2">

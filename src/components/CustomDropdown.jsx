@@ -1,12 +1,16 @@
+import { useDispatch, useSelector } from "react-redux";
+import { handleToggleDropdown } from "../slices/filterSlice";
+
 function CustomDropdown({
   options,
   selectedValue,
   onValueChange,
   placeholder,
   id,
-  openDropdown,
-  onOpenDropdown,
 }) {
+  const dispatch = useDispatch()
+  const openDropdown = useSelector(state => state.filter.openDropdown)
+
   const isOpen = openDropdown === id;
 
   const selectedOption = options.find((option) => option.value === selectedValue);
@@ -14,13 +18,13 @@ function CustomDropdown({
 
   const handleSelect = (value) => {
     onValueChange(value);
-    onOpenDropdown(false);
+    dispatch(handleToggleDropdown(false));
   };
 
   return (
     <div className="relative w-full  cursor-pointer">
       <div
-        onClick={() => onOpenDropdown(id)}
+        onClick={() => dispatch(handleToggleDropdown(id))}
         className={`flex justify-between border w-[144px] border-[#646179] rounded-full px-2 text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] hover:opacity-80`}
       >
         <span>{displayText}</span>

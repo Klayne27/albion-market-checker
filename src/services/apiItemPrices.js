@@ -1,14 +1,38 @@
-export const getItemPrices = async (itemIdsToFetch, city) => {
+export const getItemPrices = async (itemIdsToFetch, city, quality) => {
+
   const baseUrl = `https://east.albion-online-data.com/api/v2/stats/prices/`;
   const itemIdsParam = itemIdsToFetch.join(",");
-  const locationParam = city ? `?locations=${city}` : "";
 
-  const apiUrl = `${baseUrl}${itemIdsParam}${locationParam}`;
+  let apiUrl = `${baseUrl}${itemIdsParam}`;
+  const queryParams = [];
+
+  if (city && city !== "") {
+    queryParams.push(`locations=${city}`);
+  }
+
+  if (quality !== undefined && quality !== null) {
+    queryParams.push(`qualities=${quality}`);
+  } else {
+    console.warn(
+      "getItemPrices called without a quality parameter. Defaulting to quality=1"
+    );
+    queryParams.push("qualities=1");
+  }
+
+  if (queryParams.length > 0) {
+    apiUrl += `?${queryParams.join("&")}`;
+  }
+
+  console.log("Fetching URL:", apiUrl);
 
   const res = await fetch(apiUrl);
 
-  if (!res.ok) throw new Error("Error: failed to fetch item prices");
+  if (!res.ok) {
+    const errorDetail = await res.text();
+    throw new Error(
+      `Error fetching item prices: ${res.status} ${res.statusText} - Details: ${errorDetail} - URL: ${apiUrl}`
+    );
+  }
 
   return res.json();
 };
-

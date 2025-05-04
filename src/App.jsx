@@ -1,8 +1,10 @@
 import { Provider } from "react-redux";
 import Inventory from "./components/Inventory";
 
-import Shop from "./components/Shop";
+
 import store from "./store";
+import Shop from "./components/shop/Shop";
+
 
 function App() {
   return (

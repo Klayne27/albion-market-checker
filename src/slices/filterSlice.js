@@ -8,6 +8,7 @@ const initialState = {
   selectCity: "Caerleon",
   searchTerm: "",
   showPricedItems: false,
+  openDropdown: null,
 };
 
 const filterSlice = createSlice({
@@ -52,6 +53,9 @@ const filterSlice = createSlice({
       state.searchTerm = "";
       state.showPricedItems = false;
     },
+    handleToggleDropdown(state, action) {
+      state.openDropdown = state.openDropdown === action.payload ? null : action.payload;
+    },
   },
 });
 
@@ -68,4 +72,5 @@ export const {
   handleResetFilters,
   handleResetSearch,
   handleRefreshMarket,
+  handleToggleDropdown,
 } = filterSlice.actions;

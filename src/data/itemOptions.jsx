@@ -1,0 +1,47 @@
+export const typeOptions = [
+  { name: "Any", value: "any" },
+  { name: "2H Weapon", value: "2H" },
+  { name: "Off-Hand", value: "OFF" },
+  { name: "Main Hand", value: "MAIN" },
+  { name: "Head", value: "HEAD" },
+  { name: "Armor", value: "ARMOR" },
+  { name: "Shoes", value: "SHOES" },
+  { name: "Cape", value: "CAPEITEM" },
+];
+
+export const tierOptions = [
+  { name: "Tier", value: "any" },
+  { name: "Tier 1", value: "1" },
+  { name: "Tier 2", value: "2" },
+  { name: "Tier 3", value: "3" },
+  { name: "Tier 4", value: "4" },
+  { name: "Tier 5", value: "5" },
+  { name: "Tier 6", value: "6" },
+  { name: "Tier 7", value: "7" },
+  { name: "Tier 8", value: "8" },
+];
+
+export const enchantmentOptions = [
+  { name: "All", value: "any" },
+  { name: "Enchantment 1", value: "1" },
+  { name: "Enchantment 2", value: "2" },
+  { name: "Enchantment 3", value: "3" },
+  { name: "Enchantment 4", value: "4" },
+];
+
+export const qualityOptions = [
+  { name: "Normal", value: 1 },
+  { name: "Good", value: 2 },
+  { name: "Outstanding", value: 3 },
+  { name: "Excellent", value: 4 },
+  { name: "Masterpiece", value: 5 },
+];
+
+export const citiesOptions = [
+  { name: "Thetford", value: "Thetford" },
+  { name: "Bridgewatch", value: "Bridgewatch" },
+  { name: "Lymhurst", value: "Lymhurst" },
+  { name: "Fort Sterling", value: "Fort Sterling" },
+  { name: "Caerleon", value: "Caerleon" },
+  { name: "Black Market", value: "Black Market" },
+];

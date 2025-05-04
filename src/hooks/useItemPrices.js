@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getItemPrices } from "../services/apiItemPrices";
 
-export const useItemPrices = (itemIdsToFetch, city, isItemDataLoading, itemDataError) => {
+export const useItemPrices = (itemIdsToFetch, city, quality, isItemDataLoading, itemDataError) => {
   const {
     data: priceData,
     isLoading: isPriceLoading,
@@ -9,8 +9,8 @@ export const useItemPrices = (itemIdsToFetch, city, isItemDataLoading, itemDataE
     error: priceError,
     isFetching: isPriceFetching,
   } = useQuery({
-    queryKey: ["itemPrices", itemIdsToFetch, city],
-    queryFn: () => getItemPrices(itemIdsToFetch, city),
+    queryKey: ["itemPrices", itemIdsToFetch, city, quality],
+    queryFn: () => getItemPrices(itemIdsToFetch, city, quality),
     enabled:
       !isItemDataLoading && !itemDataError && itemIdsToFetch.length > 0 && city !== "",
     staleTime: 1000 * 60 * 5,
