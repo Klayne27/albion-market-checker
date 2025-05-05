@@ -93,23 +93,20 @@ function ShopBuy({ onShowPanel }) {
     }
 
     if (selectType !== "any") {
-      // Assuming 'any' means no type filter applied
       currentItems = currentItems.filter((item) => {
-        // Ensure item.id is a string before processing
         if (typeof item.id !== "string" || item.id === "") {
-          return false; // Exclude items without a valid ID string
+          return false; 
         }
 
         const id = item.id;
-        const firstUnderscoreIndex = id.indexOf("_"); // If there's no underscore, it doesn't fit the T#_TYPE... pattern, so it can't match a type filter
+        const firstUnderscoreIndex = id.indexOf("_");
 
         if (firstUnderscoreIndex === -1) {
           return false;
-        } // Get the substring immediately after the first underscore // This segment contains the Type, SubType, Set, etc.
+        } 
 
-        const segmentAfterFirstUnderscore = id.substring(firstUnderscoreIndex + 1); // --- Check if this segment starts with the selected type/subtype value ---
+        const segmentAfterFirstUnderscore = id.substring(firstUnderscoreIndex + 1);
 
-        // Convert both to lowercase for case-insensitive comparison
         const selectTypeLower = selectType.toLowerCase();
         const segmentLower = segmentAfterFirstUnderscore.toLowerCase();
 
@@ -196,24 +193,22 @@ function ShopBuy({ onShowPanel }) {
     }
 
     if (selectType !== "any") {
-      // Assuming 'any' means no type filter applied
       listings = listings.filter((priceItem) => {
-        // Ensure item ID is a valid string
         if (typeof priceItem.item_id !== "string" || priceItem.item_id === "") {
-          return false; // Exclude if ID is not a string
+          return false; 
         }
 
         const id = priceItem.item_id;
-        const firstUnderscoreIndex = id.indexOf("_"); // If no underscore, it doesn't fit the T#_TYPE... pattern
+        const firstUnderscoreIndex = id.indexOf("_");
 
         if (firstUnderscoreIndex === -1) {
           return false;
-        } // Get the substring immediately after the first underscore // This segment contains the Type, SubType, Set, etc.
+        }
 
-        const segmentAfterFirstUnderscore = id.substring(firstUnderscoreIndex + 1); // Compare in lowercase for case-insensitivity
+        const segmentAfterFirstUnderscore = id.substring(firstUnderscoreIndex + 1);
 
         const selectTypeLower = selectType.toLowerCase();
-        const segmentLower = segmentAfterFirstUnderscore.toLowerCase(); // Check if the segment after the first underscore starts with the selected type/subtype
+        const segmentLower = segmentAfterFirstUnderscore.toLowerCase();
 
         return segmentLower.startsWith(selectTypeLower);
       });
@@ -395,7 +390,7 @@ function ShopBuy({ onShowPanel }) {
             Posted
           </div>
           <div
-            className="border px-2 rounded-lg text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] flex justify-between cursor-pointer"
+            className="border px-2 rounded-lg text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] flex justify-between cursor-pointer hover:opacity-80"
             onClick={() => {
               setSortByPrice((prevSort) => {
                 if (prevSort === "asc") return "desc";

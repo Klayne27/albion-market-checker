@@ -5,9 +5,9 @@ const initialState = {
   selectQuality: [1, 2, 3, 4, 5],
   selectEnchantment: "any",
   selectType: "any",
-  selectCity: "Caerleon",
+  selectCity: "Thetford",
   searchTerm: "",
-  showPricedItems: false,
+  showPricedItems: true,
   openDropdown: null,
 };
 
@@ -41,7 +41,7 @@ const filterSlice = createSlice({
       state.showPricedItems = action.payload;
     },
     handleResetFilters(state) {
-      state.selectQuality = "all";
+      state.selectQuality = [1, 2, 3, 4, 5];
       state.selectTier = "any";
       state.selectEnchantment = "any";
       state.selectType = "any";
@@ -50,12 +50,12 @@ const filterSlice = createSlice({
       state.searchTerm = "";
     },
     handleRefreshMarket(state) {
-      state.selectQuality = "all";
+      state.selectQuality = [1, 2, 3, 4, 5];
       state.selectTier = "any";
       state.selectEnchantment = "any";
       state.selectType = "any";
       state.searchTerm = "";
-      state.showPricedItems = false;
+      state.showPricedItems = true;
     },
     handleToggleDropdown(state, action) {
       state.openDropdown = state.openDropdown === action.payload ? null : action.payload;
