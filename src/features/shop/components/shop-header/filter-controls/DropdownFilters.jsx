@@ -5,14 +5,14 @@ import {
   setSelectQuality,
   setSelectTier,
   setSelectType,
-} from "../../../../slices/filterSlice";
+} from "../../../slices/filterSlice";
 import {
   enchantmentOptions,
   qualityOptions,
   tierOptions,
   typeOptions,
-} from "../../../../data/itemOptions";
-import CustomDropdown from "../../../CustomDropdown";
+} from "../../../../../data/itemOptions";
+import CustomDropdown from "../../../../../components/ui/CustomDropdown"
 import { FaArrowRotateLeft } from "react-icons/fa6";
 
 function DropdownFilters() {

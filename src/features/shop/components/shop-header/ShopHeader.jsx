@@ -1,5 +1,5 @@
-import Filters from "./Filters/Filters";
-import MarketName from "./MarketName";
+import Filters from './filter-controls/Filters'
+import MarketName from "./filter-controls/MarketName";
 
 function ShopHeader({ activeTab, setActiveTab }) {
   return (

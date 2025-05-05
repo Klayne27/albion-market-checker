@@ -1,13 +1,13 @@
 import React, { useCallback, useMemo, useRef, useState, useEffect } from "react";
 import { RxCaretLeft, RxCaretRight } from "react-icons/rx";
-import { formatNumber, formatTimeAgoUTC } from "../utils/helpers";
-import { useItemData } from "../hooks/useItemData";
-import { useItemPrices } from "../hooks/useItemPrices";
+import { formatNumber, formatTimeAgoUTC } from "../../../utils/helpers";
+import { useItemData } from "../../../hooks/useItemData";
+import { useItemPrices } from "../../../hooks/useItemPrices";
 import { IoIosCheckmark } from "react-icons/io";
-import CustomDropdown from "./CustomDropdown";
+import CustomDropdown from "../../../components/ui/CustomDropdown"
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectCity, setShowPricedItems } from "../slices/filterSlice";
-import { citiesOptions } from "../data/itemOptions";
+import { citiesOptions } from "../../../data/itemOptions";
 
 const commonHoverActiveStyles = `
     hover:bg-gradient-to-b hover:from-stone-800 hover:via-stone-700 hover:to-stone-500

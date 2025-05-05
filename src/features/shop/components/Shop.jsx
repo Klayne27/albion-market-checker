@@ -1,9 +1,9 @@
 import { useState } from "react";
-import ShopBuy from "../ShopBuy";
-import ShopSell from "../ShopSell";
-import ItemDetailPanel from "../ItemDetailPanel";
-import ShopHeader from "./ShopHeader/ShopHeader";
-import Tabs from "./Tabs";
+import ShopBuy from "./ShopBuy";
+import ShopSell from "./ShopSell";
+import ItemDetailPanel from "./ItemDetailPanel";
+import ShopHeader from './shop-header/ShopHeader'
+import Tabs from "./shop-header/Tabs";
 
 function Shop() {
   const [activeTab, setActiveTab] = useState("buy");

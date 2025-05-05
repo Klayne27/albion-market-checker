@@ -69,10 +69,6 @@ export function formatTimeAgoUTC(isoString) {
 
   const diffMilliseconds = nowUtcTime - postedUtcTime;
 
-  if (diffMilliseconds < 0) {
-       return "Posted in the future";
-  }
-
   const diffSeconds = diffMilliseconds / 1000;
   const diffMinutes = diffSeconds / 60;
   const diffHours = diffMinutes / 60;

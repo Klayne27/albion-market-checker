@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { handleRefreshMarket } from "../../../slices/filterSlice";
-import { formatNumber } from "../../../utils/helpers";
+import { formatNumber } from "../../../../../utils/helpers";
 import { FaArrowRotateRight } from "react-icons/fa6";
 
 function MarketName() {

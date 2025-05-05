@@ -12,9 +12,6 @@ export const getItemPrices = async (itemIdsToFetch, city, quality) => {
   if (quality && quality.length > 0) {
     queryParams.push(`qualities=${quality.join(",")}`);
   } else {
-    console.warn(
-      "getItemPrices called without a quality parameter. Defaulting to quality=1"
-    );
     queryParams.push("qualities=1,2,3,4,5");
   }
 
@@ -25,10 +22,7 @@ export const getItemPrices = async (itemIdsToFetch, city, quality) => {
   const res = await fetch(apiUrl);
 
   if (!res.ok) {
-    const errorDetail = await res.text();
-    throw new Error(
-      `Error fetching item prices: ${res.status} ${res.statusText} - Details: ${errorDetail} - URL: ${apiUrl}`
-    );
+    throw new Error(`Error fetching item prices`);
   }
 
   return res.json();

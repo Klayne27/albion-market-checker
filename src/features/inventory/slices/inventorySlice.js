@@ -5,13 +5,14 @@ const initialState = {
   username: "Klayne",
   silver: 10_000_000_000,
   inventory: [],
+  isSorted: false,
 };
 
 const inventorySlice = createSlice({
   name: "inventory",
   initialState,
   reducers: {
-    buyItem: (state, action) => {
+    buyItem(state, action) {
       const { id, name, quantity, sell_price_min, quality } = action.payload;
       const existingItem = state.inventory.find(
         (item) => item.id === id && item.quality === quality
@@ -24,8 +25,7 @@ const inventorySlice = createSlice({
       }
       state.silver -= sell_price_min * quantity;
     },
-
-    sellItem: (state, action) => {
+    sellItem(state, action) {
       const { itemId, quality, quantity, totalNetSilver } = action.payload;
 
       const idx = state.inventory.findIndex(
@@ -45,18 +45,13 @@ const inventorySlice = createSlice({
         }
       }
     },
-
-    loadInventory: (state, action) => {
-      const { id, username, silver, inventory } = action.payload;
-      state.id = id;
-      state.username = username;
-      state.silver = silver;
-      state.inventory = inventory;
-    },
+    setIsSorted(state) {
+      state.isSorted = !state.isSorted
+    }
   },
 });
 
-export const { buyItem, sellItem, loadInventory } = inventorySlice.actions;
+export const { buyItem, sellItem, setIsSorted } = inventorySlice.actions;
 
 export default inventorySlice.reducer;
 

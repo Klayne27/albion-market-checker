@@ -1,11 +1,11 @@
 import { FaArrowRotateRight } from "react-icons/fa6";
 import { useEffect, useMemo, useState } from "react";
-import { formatNumber } from "../utils/helpers";
+import { formatNumber } from "../../../utils/helpers";
 import { ImCross } from "react-icons/im";
 import { IoIosCheckmark } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
-import { buyItem, sellItem } from "../slices/inventorySlice";
-import IconSlider from "./IconSlider";
+import { buyItem, sellItem } from "../../inventory/slices/inventorySlice";
+import IconSlider from "../../../components/ui/IconSlider";
 
 const baseURLimage = "https://render.albiononline.com/v1/item/";
 const ribbonStrip =

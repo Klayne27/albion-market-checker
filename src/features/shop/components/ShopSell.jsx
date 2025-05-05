@@ -1,7 +1,7 @@
 import { RxCaretLeft, RxCaretRight } from "react-icons/rx";
 import { useMemo, useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
-import { selectInventory } from "../slices/inventorySlice";
+import { selectInventory } from "../../inventory/slices/inventorySlice"
 
 const baseURLimage = "https://render.albiononline.com/v1/item/";
 

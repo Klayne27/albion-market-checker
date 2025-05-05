@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { handleToggleDropdown } from "../slices/filterSlice";
+import { handleToggleDropdown } from "../../features/shop/slices/filterSlice";
 import { useEffect, useRef } from "react";
 
 function CustomDropdown({ options, selectedValue, onValueChange, placeholder, id }) {

@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { handleResetSearch, setSearchTerm } from "../../../../slices/filterSlice";
+import { handleResetSearch, setSearchTerm } from "../../../slices/filterSlice";
 import { FaArrowRotateLeft } from "react-icons/fa6";
 
 function SearchFilter() {

@@ -2,8 +2,7 @@ export const getItemData = async () => {
   const response = await fetch("/itemData.txt");
 
   if (!response.ok) {
-    const errorBody = await response.text();
-    throw new Error(`HTTP error! status: ${response.status} - ${errorBody}`);
+    throw new Error(`Error fetching itemData`);
   }
 
   const rawItemData = await response.text();
