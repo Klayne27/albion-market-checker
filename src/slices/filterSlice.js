@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   selectTier: "any",
-  selectQuality: "1",
+  selectQuality: [1, 2, 3, 4, 5],
   selectEnchantment: "any",
   selectType: "any",
   selectCity: "Caerleon",
@@ -19,7 +19,11 @@ const filterSlice = createSlice({
       state.selectTier = action.payload;
     },
     setSelectQuality(state, action) {
-      state.selectQuality = action.payload;
+      if (action.payload === "all") {
+        state.selectQuality = [1, 2, 3, 4, 5];
+      } else {
+        state.selectQuality = [action.payload];
+      }
     },
     setSelectEnchantment(state, action) {
       state.selectEnchantment = action.payload;
@@ -37,7 +41,7 @@ const filterSlice = createSlice({
       state.showPricedItems = action.payload;
     },
     handleResetFilters(state) {
-      state.selectQuality = "1";
+      state.selectQuality = "all";
       state.selectTier = "any";
       state.selectEnchantment = "any";
       state.selectType = "any";
@@ -46,7 +50,7 @@ const filterSlice = createSlice({
       state.searchTerm = "";
     },
     handleRefreshMarket(state) {
-      state.selectQuality = "1";
+      state.selectQuality = "all";
       state.selectTier = "any";
       state.selectEnchantment = "any";
       state.selectType = "any";

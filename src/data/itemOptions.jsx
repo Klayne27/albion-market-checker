@@ -1,12 +1,29 @@
 export const typeOptions = [
-  { name: "Any", value: "any" },
+  { name: "Type", value: "any" },
   { name: "2H Weapon", value: "2H" },
   { name: "Off-Hand", value: "OFF" },
-  { name: "Main Hand", value: "MAIN" },
-  { name: "Head", value: "HEAD" },
-  { name: "Armor", value: "ARMOR" },
-  { name: "Shoes", value: "SHOES" },
   { name: "Cape", value: "CAPEITEM" },
+  { name: "Bag", value: "BAG" },
+  { name: "Food", value: "MEAL" },
+  { name: "Potion", value: "POTION" },
+  { name: "Mount", value: "MOUNT" },
+  { name: "Main Hand", value: "MAIN" },
+  { name: "Head (all)", value: "HEAD" },
+  { name: "Armor (all)", value: "ARMOR" },
+  { name: "Shoes (all)", value: "SHOES" },
+  { name: "Plate Helmet", value: "ARMOR_PLATE" },
+  { name: "Plate Armor", value: "ARMOR_PLATE" },
+  { name: "Plate Boots", value: "ARMOR_PLATE" },
+  { name: "Leather Hood", value: "HEAD_LEATHER" },
+  { name: "Leather Armor", value: "ARMOR_LEATHER" },
+  { name: "Leather Shoes", value: "SHOES_LEATHER" },
+  { name: "Cloth Cowl", value: "ARMOR_LEATHER" },
+  { name: "Cloth Robe", value: "ARMOR_CLOTH" },
+  { name: "Cloth Sandals", value: "ARMOR_CLOTH" },
+  { name: "Leather Armor", value: "ARMOR_CLOTH" },
+  { name: "Gather Gear", value: "ARMOR_GATHERER" },
+  { name: "City Heart", value: "FACTION" },
+  { name: "Artifact", value: "ARTEFACT" },
 ];
 
 export const tierOptions = [
@@ -22,7 +39,8 @@ export const tierOptions = [
 ];
 
 export const enchantmentOptions = [
-  { name: "All", value: "any" },
+  { name: "Enchantment", value: "any" },
+  { name: "Enchantment 0", value: "0" },
   { name: "Enchantment 1", value: "1" },
   { name: "Enchantment 2", value: "2" },
   { name: "Enchantment 3", value: "3" },
@@ -30,6 +48,7 @@ export const enchantmentOptions = [
 ];
 
 export const qualityOptions = [
+  { name: "Quality", value: "all" },
   { name: "Normal", value: 1 },
   { name: "Good", value: 2 },
   { name: "Outstanding", value: 3 },

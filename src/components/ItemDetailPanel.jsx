@@ -44,8 +44,6 @@ function ItemDetailPanel({ item, onClose, mode }) {
   const unitSellPrice = item?.price ?? 0;
   const unitBuyPrice = item?.sell_price_min ?? 0;
 
-  console.log("Calculated unitSellPrice:", unitSellPrice);
-
   const { premiumTax, setupFee, totalNetSellPrice, totalGrossValue } = useMemo(() => {
     if (mode !== "sell") return { premiumTax: 0, setupFee: 0, totalNetSellPrice: 0 };
     const totalGrossValue = unitSellPrice * quantity;
@@ -71,7 +69,14 @@ function ItemDetailPanel({ item, onClose, mode }) {
   };
 
   const handleConfirmBuy = () => {
-    dispatch(buyItem({ ...item, quantity: quantity, price: unitBuyPrice }));
+    const payload = {
+      id: item?.id,
+      name: item?.name,
+      quantity: quantity,
+      sell_price_min: item?.sell_price_min,
+      quality: item?.quality,
+    };
+    dispatch(buyItem(payload));
     onClose();
   };
 
@@ -80,7 +85,7 @@ function ItemDetailPanel({ item, onClose, mode }) {
   const handleCreateSellOrder = () => {
     const sellPayload = {
       itemId: item.id,
-      quality: itemQuality,
+      quality: item?.quality,
       quantity: quantity,
       totalNetSilver: totalNetSellPrice,
     };
@@ -141,8 +146,8 @@ function ItemDetailPanel({ item, onClose, mode }) {
             <div className="text-xs w-[378px] mb-[54px]">
               <span className="font-semibold text-xl">{item?.name}</span>
               <br />
-              Use the filters below to compare different versions of the same item. Click
-              on the restore button to switch back to the original selection.
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+              tempor incididunt ut labore et dolore magna aliqua.
             </div>
 
             <p className="ml-7 text-sm">Action:</p>
@@ -243,15 +248,24 @@ function ItemDetailPanel({ item, onClose, mode }) {
       {mode === "buy" && (
         <>
           <div className="flex border rounded-full p-[3px] gap-4 bg-gradient-to-b from-[#716F7B] via-[#4c4a50] to-[#38373b] absolute top-[110px] right-4">
-            <select className="flex justify-between border w-[141px] border-[#646179] rounded-full px-2 text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] hover:opacity-80">
+            <select
+              className="flex justify-between border w-[141px] border-[#646179] rounded-full px-2 text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] hover:opacity-80"
+              disabled
+            >
               <option>Any</option>
             </select>
 
-            <select className="flex justify-between border w-[141px] border-[#646179] rounded-full px-2 text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] hover:opacity-80">
+            <select
+              className="flex justify-between border w-[141px] border-[#646179] rounded-full px-2 text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] hover:opacity-80"
+              disabled
+            >
               <option>Any</option>
             </select>
 
-            <select className="flex justify-between border w-[141px] border-[#646179] rounded-full px-2 text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] hover:opacity-80">
+            <select
+              className="flex justify-between border w-[141px] border-[#646179] rounded-full px-2 text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] hover:opacity-80"
+              disabled
+            >
               <option>Tier</option>
             </select>
 
@@ -271,8 +285,8 @@ function ItemDetailPanel({ item, onClose, mode }) {
             <div className="text-xs w-[378px] mb-[54px]">
               <span className="font-semibold text-xl">{item?.name}</span>
               <br />
-              Use the filters below to compare different versions of the same item. Click
-              on the restore button to switch back to the original selection.
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+              tempor incididunt ut labore et dolore magna aliqua.
             </div>
 
             <p className="ml-7 text-sm">Action:</p>

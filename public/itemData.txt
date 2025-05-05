@@ -4335,7 +4335,7 @@
 4335: T8_SHOES_LEATHER_UNDEAD@1                                        : Elder's Specter Shoes
 4336: T8_SHOES_LEATHER_UNDEAD@2                                        : Elder's Specter Shoes
 4337: T8_SHOES_LEATHER_UNDEAD@3                                        : Elder's Specter Shoes
-4338: T8_SHOES_LEATHER_UNDEAD@4                                        : Elder's Specter Shoes
+4338: T8_SHOES_LEATHER_UNDEAD@4                                       : Elder's Specter Shoes
 4339: T4_HEAD_LEATHER_FEY                                              : Adept's Mistwalker Hood
 4340: T4_HEAD_LEATHER_FEY@1                                            : Adept's Mistwalker Hood
 4341: T4_HEAD_LEATHER_FEY@2                                            : Adept's Mistwalker Hood

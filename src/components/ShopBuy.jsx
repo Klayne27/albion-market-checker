@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useRef, useState, useEffect } from "react";
 import { RxCaretLeft, RxCaretRight } from "react-icons/rx";
-import { formatNumber } from "../utils/helpers";
+import { formatNumber, formatTimeAgoUTC } from "../utils/helpers";
 import { useItemData } from "../hooks/useItemData";
 import { useItemPrices } from "../hooks/useItemPrices";
 import { IoIosCheckmark } from "react-icons/io";
@@ -22,10 +22,21 @@ const focusStyles = `
 
 const baseURLimage = "https://render.albiononline.com/v1/item/";
 
-function ShopBuy({
-  onShowPanel,
-}) {
+const MAX_URL_LENGTH = 4096;
+const URL_OVERHEAD_ESTIMATE = 300;
+
+const MAX_ITEM_IDS_PARAM_LENGTH = MAX_URL_LENGTH - URL_OVERHEAD_ESTIMATE;
+
+function ShopBuy({ onShowPanel }) {
   const { itemArray, loading: isItemDataLoading, error: itemDataError } = useItemData();
+  const itemNameMap = useMemo(() => {
+    const map = new Map();
+    if (Array.isArray(itemArray)) {
+      itemArray.forEach((item) => map.set(item.id, item.name));
+    }
+    return map;
+  }, [itemArray]);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [sortByPrice, setSortByPrice] = useState(null);
   const {
@@ -40,19 +51,18 @@ function ShopBuy({
 
   const dispatch = useDispatch();
 
-  const itemsPerPage = 170;
+  const itemsPerPage = 299;
 
   const filteredItems = useMemo(() => {
     let currentItems = itemArray;
 
     currentItems = currentItems.filter((item) => {
       const itemId = item.id;
-      const isArtifact = itemId.includes("ARTEFACT");
       const isUnique = itemId.startsWith("UNIQUE_");
       const isVanity = itemId.includes("VANITY");
-      const isSkin = itemId.includes("SKIN")
+      const isSkin = itemId.includes("SKIN");
 
-      return !isArtifact && !isUnique && !isVanity && !isSkin;
+      return  !isUnique && !isVanity && !isSkin;
     });
 
     if (!Array.isArray(currentItems)) {
@@ -83,57 +93,173 @@ function ShopBuy({
     }
 
     if (selectType !== "any") {
+      // Assuming 'any' means no type filter applied
       currentItems = currentItems.filter((item) => {
-        const parts = item.id.split("_");
-        return parts.length > 1 && parts[1] === selectType;
+        // Ensure item.id is a string before processing
+        if (typeof item.id !== "string" || item.id === "") {
+          return false; // Exclude items without a valid ID string
+        }
+
+        const id = item.id;
+        const firstUnderscoreIndex = id.indexOf("_"); // If there's no underscore, it doesn't fit the T#_TYPE... pattern, so it can't match a type filter
+
+        if (firstUnderscoreIndex === -1) {
+          return false;
+        } // Get the substring immediately after the first underscore // This segment contains the Type, SubType, Set, etc.
+
+        const segmentAfterFirstUnderscore = id.substring(firstUnderscoreIndex + 1); // --- Check if this segment starts with the selected type/subtype value ---
+
+        // Convert both to lowercase for case-insensitive comparison
+        const selectTypeLower = selectType.toLowerCase();
+        const segmentLower = segmentAfterFirstUnderscore.toLowerCase();
+
+        return segmentLower.startsWith(selectTypeLower);
       });
     }
 
     return currentItems;
   }, [itemArray, searchTerm, selectTier, selectEnchantment, selectType]);
 
-  const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
+  const itemIdsForApiFetch = useMemo(() => {
+    if (!Array.isArray(filteredItems) || filteredItems.length === 0) {
+      return [];
+    }
 
-  const pageItems = useMemo(() => {
-    const start = (currentPage - 1) * itemsPerPage;
-    return filteredItems.slice(start, start + itemsPerPage);
-  }, [filteredItems, currentPage]);
+    const ids = [];
+    let currentLength = 0;
 
-  const itemIdsToFetch = useMemo(() => pageItems.map((item) => item.id), [pageItems]);
+    for (const item of filteredItems) {
+      const itemId = item.id;
+      if (!itemId || typeof itemId !== "string") {
+        console.warn("Skipping item with invalid ID:", item);
+        continue;
+      }
+
+      const lengthAfterAdding =
+        ids.length === 0 ? itemId.length : currentLength + 1 + itemId.length;
+
+      if (lengthAfterAdding > MAX_ITEM_IDS_PARAM_LENGTH) {
+        break;
+      }
+
+      ids.push(itemId);
+      currentLength = lengthAfterAdding;
+    }
+
+    if (ids.length === 0 && filteredItems.length > 0) {
+      console.warn(
+        "First item ID alone exceeds URL length limit after overhead for current filters."
+      );
+    }
+
+    return ids;
+  }, [filteredItems]);
+
   const { priceData, isPriceLoading, isPriceFetching } = useItemPrices(
-    itemIdsToFetch,
+    itemIdsForApiFetch,
     selectCity,
     selectQuality,
     isItemDataLoading,
     itemDataError
   );
+
   const combinedItemData = useMemo(() => {
     if (isItemDataLoading || !Array.isArray(itemArray) || !Array.isArray(priceData)) {
       return [];
     }
 
-    const priceMap = new Map(priceData.map((item) => [item.item_id, item]));
+    let listings = priceData;
 
-    return itemArray
-      .filter((item) => itemIdsToFetch.includes(item.id))
-      .map((item) => {
-        const priceInfo = priceMap.get(item.id);
-        return {
-          id: item.id,
-          name: item.name,
-          sell_price_min: priceInfo?.sell_price_min ?? 0,
-          buy_price_max: priceInfo?.buy_price_max ?? 0,
-          last_updated: priceInfo?.last_updated ?? null,
-          location: priceInfo?.location ?? selectCity,
-        };
+    if (searchTerm) {
+      const lower = searchTerm.toLowerCase();
+      listings = listings.filter((priceItem) => {
+        const itemName = itemNameMap.get(priceItem.item_id) || priceItem.item_id;
+        return (
+          itemName.toLowerCase().includes(lower) ||
+          priceItem.item_id.toLowerCase().includes(lower)
+        );
       });
-  }, [itemArray, priceData, itemIdsToFetch, selectCity, isItemDataLoading]);
+    }
+
+    if (selectTier !== "any") {
+      listings = listings.filter((priceItem) => {
+        return priceItem.item_id.startsWith(`T${selectTier}_`);
+      });
+    }
+
+    if (selectEnchantment !== "any") {
+      listings = listings.filter((priceItem) => {
+        const enchantmentMatch = priceItem.item_id.match(/@(\d+)$/);
+        const itemEnchantment = enchantmentMatch ? enchantmentMatch[1] : "0";
+        return itemEnchantment === selectEnchantment;
+      });
+    }
+
+    if (selectType !== "any") {
+      // Assuming 'any' means no type filter applied
+      listings = listings.filter((priceItem) => {
+        // Ensure item ID is a valid string
+        if (typeof priceItem.item_id !== "string" || priceItem.item_id === "") {
+          return false; // Exclude if ID is not a string
+        }
+
+        const id = priceItem.item_id;
+        const firstUnderscoreIndex = id.indexOf("_"); // If no underscore, it doesn't fit the T#_TYPE... pattern
+
+        if (firstUnderscoreIndex === -1) {
+          return false;
+        } // Get the substring immediately after the first underscore // This segment contains the Type, SubType, Set, etc.
+
+        const segmentAfterFirstUnderscore = id.substring(firstUnderscoreIndex + 1); // Compare in lowercase for case-insensitivity
+
+        const selectTypeLower = selectType.toLowerCase();
+        const segmentLower = segmentAfterFirstUnderscore.toLowerCase(); // Check if the segment after the first underscore starts with the selected type/subtype
+
+        return segmentLower.startsWith(selectTypeLower);
+      });
+    }
+
+    if (showPricedItems) {
+      listings = listings.filter((priceItem) => priceItem.sell_price_min > 0);
+    }
+
+    listings = listings.filter((priceItem) => {
+      return typeof priceItem.item_id === "string" && priceItem.item_id !== "";
+    });
+
+    return listings.map((priceItem) => {
+      const itemName = itemNameMap.get(priceItem.item_id) || priceItem.item_id;
+      return {
+        id: priceItem.item_id,
+        quality: priceItem.quality,
+        city: priceItem.city,
+        sell_price_min: priceItem.sell_price_min,
+        sell_price_min_date: priceItem.sell_price_min_date,
+        name: itemName,
+        _key_suffix: `${priceItem.item_id}-${priceItem.city || ""}-${priceItem.quality}`,
+      };
+    });
+  }, [
+    itemArray,
+    priceData,
+    itemNameMap,
+    selectTier,
+    selectEnchantment,
+    selectType,
+    searchTerm,
+    showPricedItems,
+    isItemDataLoading,
+  ]);
 
   const sortedItems = useMemo(() => {
     let itemsToSort = combinedItemData;
 
     if (!sortByPrice) {
-      return itemsToSort;
+      return [...itemsToSort].sort((a, b) => {
+        if (a.id !== b.id) return a.id.localeCompare(b.id);
+        if (a.quality !== b.quality) return a.quality - b.quality;
+        return a.city.localeCompare(b.city);
+      });
     }
 
     const sorted = [...itemsToSort].sort((a, b) => {
@@ -141,8 +267,20 @@ function ShopBuy({
       const priceB = b.sell_price_min;
 
       if (sortByPrice === "asc") {
+        if (priceA === 0 && priceB === 0) {
+          if (a.quality !== b.quality) return a.quality - b.quality;
+          return a.city.localeCompare(b.city);
+        }
+        if (priceA === 0) return 1;
+        if (priceB === 0) return -1;
         return priceA - priceB;
       } else {
+        if (priceA === 0 && priceB === 0) {
+          if (a.quality !== b.quality) return b.quality - a.quality;
+          return b.city.localeCompare(a.city);
+        }
+        if (priceA === 0) return 1;
+        if (priceB === 0) return -1;
         return priceB - priceA;
       }
     });
@@ -152,7 +290,15 @@ function ShopBuy({
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerm]);
+  }, [
+    searchTerm,
+    selectCity,
+    selectTier,
+    selectEnchantment,
+    selectQuality,
+    selectType,
+    showPricedItems,
+  ]);
 
   const displayItems = useMemo(() => {
     let itemsToDisplay = sortedItems;
@@ -176,6 +322,13 @@ function ShopBuy({
       [fn, delay]
     );
   }
+
+  const totalPages = Math.ceil(sortedItems.length / itemsPerPage);
+
+  const pageItems = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return sortedItems.slice(start, start + itemsPerPage);
+  }, [itemsPerPage, currentPage, sortedItems]);
 
   const goToNextPage = useThrottle(() => {
     setCurrentPage((p) => Math.min(totalPages, p + 1));
@@ -239,7 +392,7 @@ function ShopBuy({
             Item
           </div>
           <div className="border px-2  rounded-lg text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966]">
-            Duration
+            Posted
           </div>
           <div
             className="border px-2 rounded-lg text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] flex justify-between cursor-pointer"
@@ -275,10 +428,10 @@ function ShopBuy({
 
         <div className="border-t border-b border-[#917663] p-1 mt-2 overflow-auto h-[440px] custom-scrollbar relative">
           {!isPriceLoading &&
-            displayItems.length > 0 &&
-            displayItems.map((item, i) => (
+            pageItems.length > 0 &&
+            pageItems.map((item, i) => (
               <div
-                key={`${item.id}-${currentPage}`}
+                key={`${baseURLimage}${item.id}?quality=${item.quality}`}
                 className={`px-2 py-2 grid grid-cols-[2fr_1fr_2fr] items-center ${
                   i % 2 === 0 ? "bg-[#dab593]" : ""
                 }`}
@@ -287,7 +440,7 @@ function ShopBuy({
                   <div
                     className={`w-[71px] h-[71px] relative ${"overflow-hidden bg-cover bg-center bg-no-repeat"}`}
                     style={{
-                      backgroundImage: `url('${baseURLimage}${item?.id}?quality=${selectQuality}')`,
+                      backgroundImage: `url('${baseURLimage}${item.id}?quality=${item.quality}')`,
                       backgroundSize: "114%",
                     }}
                   ></div>
@@ -295,7 +448,11 @@ function ShopBuy({
                     {item.name}
                   </p>
                 </div>
-                <p className="ml-4 text-[#4e2c08] text-md">29 d 23 h</p>
+                <p className="ml-4 text-[#4e2c08] text-md">
+                  {item.sell_price_min_date
+                    ? formatTimeAgoUTC(item.sell_price_min_date)
+                    : "N/A"}
+                </p>
                 <div className="flex justify-between items-center ml-4">
                   <span className="text-[#4e2c08] text-md">
                     {`🪩 ${formatNumber(item.sell_price_min)}`}
@@ -310,6 +467,7 @@ function ShopBuy({
                 </div>
               </div>
             ))}
+
           {!isPriceLoading && displayItems.length === 0 && searchTerm && (
             <p className="text-center text-[#4e2c08] p-4">
               No items exactly match "{searchTerm}" on this page.

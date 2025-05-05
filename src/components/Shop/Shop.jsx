@@ -11,7 +11,9 @@ function Shop() {
   const [selectedItem, setSelectedItem] = useState(null);
 
   const handleShowPanel = (item, quality) => {
-    setSelectedItem({ ...item, quality: quality });
+    const valueBeingSetToQuality = quality;
+    setSelectedItem({ ...item, quality: valueBeingSetToQuality });
+
     setIsPanelOpen(true);
   };
 
@@ -31,7 +33,7 @@ function Shop() {
         </div>
       </div>
       {isPanelOpen && selectedItem && (
-        <div>
+        <>
           <div
             className="fixed inset-0 bg-black opacity-50 z-40"
             onClick={handleClosePanel}
@@ -41,7 +43,7 @@ function Shop() {
             onClose={handleClosePanel}
             mode={activeTab}
           />
-        </div>
+        </>
       )}
     </>
   );

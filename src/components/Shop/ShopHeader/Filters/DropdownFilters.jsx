@@ -20,6 +20,13 @@ function DropdownFilters() {
     (state) => state.filter
   );
 
+  const dropdownSelectedQualityValue =
+    selectQuality.length === qualityOptions.length - 1 
+      ? "all"
+      : selectQuality.length === 1
+      ? selectQuality[0]
+      : "";
+
   const dispatch = useDispatch();
 
   const handleSelectQuality = (value) => {
@@ -64,7 +71,7 @@ function DropdownFilters() {
         <CustomDropdown
           id="quality"
           options={qualityOptions}
-          selectedValue={selectQuality}
+          selectedValue={dropdownSelectedQualityValue}
           onValueChange={handleSelectQuality}
           placeholder="Normal"
         />
