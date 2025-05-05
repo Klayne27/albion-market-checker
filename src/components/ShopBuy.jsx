@@ -38,7 +38,7 @@ function ShopBuy({ onShowPanel }) {
   }, [itemArray]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [sortByPrice, setSortByPrice] = useState(null);
+  const [sortByPrice, setSortByPrice] = useState("asc");
   const {
     selectTier,
     selectEnchantment,
