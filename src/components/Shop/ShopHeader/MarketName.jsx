@@ -8,7 +8,6 @@ function MarketName() {
   const silver = useSelector(state => state.inventory.silver);
   const selectCity = useSelector(state => state.filter.selectCity)
 
-
   return (
     <div className="flex items-center gap-2">
       <div className="border-3 border-[#8C7C6B] rounded-full w-[76.8px] h-[76.8px] my-2"></div>

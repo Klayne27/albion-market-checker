@@ -19,7 +19,7 @@ const filterSlice = createSlice({
       state.selectTier = action.payload;
     },
     setSelectQuality(state, action) {
-      if (action.payload === "all") {
+      if (action.payload === "all" || action.payload === "") {
         state.selectQuality = [1, 2, 3, 4, 5];
       } else {
         state.selectQuality = [action.payload];

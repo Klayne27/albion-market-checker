@@ -73,7 +73,7 @@ function DropdownFilters() {
           options={qualityOptions}
           selectedValue={dropdownSelectedQualityValue}
           onValueChange={handleSelectQuality}
-          placeholder="Normal"
+          placeholder="Quality"
         />
         <span
           className="border-2 rounded-full px-1 size-6 text-yellow-400 border-[#646179] bg-[#2c2b35] relative  hover:opacity-80 cursor-pointer"
