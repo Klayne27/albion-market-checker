@@ -27,9 +27,9 @@ const inventorySlice = createSlice({
     },
     sellItem(state, action) {
       const { itemId, quality, quantity, totalNetSilver } = action.payload;
-
+      
       const idx = state.inventory.findIndex(
-        (item) => item.id === itemId && typeof item.quality === typeof quality
+        (item) => item.id === itemId &&  item.quality === quality
       );
 
       if (idx !== -1) {

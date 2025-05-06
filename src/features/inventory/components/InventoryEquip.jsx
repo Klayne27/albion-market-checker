@@ -1,9 +1,11 @@
 import { useSelector } from "react-redux";
 import { formatNumber } from "../../../utils/helpers";
 import { ImCross } from "react-icons/im";
+import { useState } from "react";
 
 function InventoryEquip() {
-  const { username, silver } = useSelector((state) => state.inventory);
+  const silver = useSelector((state) => state.inventory.silver);
+  const [editUsername, setEditUsername] = useState('Coalition #1')
 
   return (
     <>
@@ -11,15 +13,16 @@ function InventoryEquip() {
         <div className="border-3 border-[#8C7C6B] rounded-full w-[73px] h-[73px] my-2"></div>
         <img src="./avatar2.png" className="absolute size-[138px] -left-8" />
         <div className="flex flex-col text-[22px]">
-          <span>{username}:</span>
+          <input value={editUsername} onChange={e => setEditUsername(e.target.value)} className="absolute top-3 max-w-50 active:border-none" />
 
-          <span className="text-3xl font-semibold text-[#64421e] ">Inventory</span>
+          <span className="text-3xl font-semibold text-[#64421e] mt-8">Inventory</span>
         </div>
         <span className="border-2 rounded-full px-1 size-6 text-yellow-400 border-[#646179] bg-[#2c2b35] left-[44px] bottom-5 relative">
           <ImCross size={13} className="absolute top-1 left-1" />
         </span>
       </div>
       <div className="grid grid-cols-3 justify-center items-center mx-auto max-w-[240px]">
+
         <div className="flex flex-col">
           <EquipmentSlots digit="1" itemId="T8_BAG_INSIGHT@4?quality=5" />
           <EquipmentSlots digit="1" itemId="T8_2H_CLEAVER_HELL@4?quality=5" />
@@ -65,6 +68,7 @@ function InventoryEquip() {
             </div>
           </div>
         </div>
+        
       </div>
       <Weight />
     </>

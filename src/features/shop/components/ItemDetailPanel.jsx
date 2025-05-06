@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { formatNumber } from "../../../utils/helpers";
 import { ImCross } from "react-icons/im";
 import { IoIosCheckmark } from "react-icons/io";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { buyItem, sellItem } from "../../inventory/slices/inventorySlice";
 import IconSlider from "../../../components/ui/IconSlider";
 
@@ -19,7 +19,6 @@ function ItemDetailPanel({ item, onClose, mode }) {
 
   const [rememberMeClicked, setRememberMeClicked] = useState(false);
 
-  const selectQuality = useSelector((state) => state.filter.selectQuality);
   const dispatch = useDispatch();
 
   const maxQuantity = useMemo(() => {
@@ -70,26 +69,26 @@ function ItemDetailPanel({ item, onClose, mode }) {
 
   const handleConfirmBuy = () => {
     const payload = {
-      id: item?.id,
-      name: item?.name,
+      id: item.id,
+      name: item.name,
       quantity: quantity,
-      sell_price_min: item?.sell_price_min,
-      quality: item?.quality,
+      sell_price_min: item.sell_price_min,
+      quality: item.quality,
     };
     dispatch(buyItem(payload));
     onClose();
   };
 
-  const itemQuality = item?.quality ?? selectQuality;
-
   const handleCreateSellOrder = () => {
     const sellPayload = {
       itemId: item.id,
-      quality: item?.quality,
+      quality: item.quality,
       quantity: quantity,
       totalNetSilver: totalNetSellPrice,
     };
+    console.log(`PRE-SELL: ${item.id}`);
     dispatch(sellItem(sellPayload));
+    console.log(`SOLD: ${item.quality}`);
     onClose();
   };
 
@@ -139,7 +138,7 @@ function ItemDetailPanel({ item, onClose, mode }) {
             <div
               className={`w-21 h-21 relative ${"overflow-hidden bg-cover bg-center bg-no-repeat"}`}
               style={{
-                backgroundImage: `url('${baseURLimage}${item?.id}?quality=${selectQuality}')`,
+                backgroundImage: `url('${baseURLimage}${item?.id}?quality=${item.quality}')`,
                 backgroundSize: "107%",
               }}
             ></div>
@@ -278,7 +277,7 @@ function ItemDetailPanel({ item, onClose, mode }) {
             <div
               className={`w-21 h-21 relative ${"overflow-hidden bg-cover bg-center bg-no-repeat"}`}
               style={{
-                backgroundImage: `url('${baseURLimage}${item?.id}?quality=${selectQuality}')`,
+                backgroundImage: `url('${baseURLimage}${item?.id}?quality=${item.quality}')`,
                 backgroundSize: "107%",
               }}
             ></div>

@@ -2,7 +2,7 @@ import { useState } from "react";
 import ShopBuy from "./ShopBuy";
 import ShopSell from "./ShopSell";
 import ItemDetailPanel from "./ItemDetailPanel";
-import ShopHeader from './shop-header/ShopHeader'
+import ShopHeader from "./shop-header/ShopHeader";
 import Tabs from "./shop-header/Tabs";
 
 function Shop() {

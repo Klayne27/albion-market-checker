@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { handleToggleDropdown } from "../../features/shop/slices/filterSlice";
 import { useEffect, useRef } from "react";
 
-function CustomDropdown({ options, selectedValue, onValueChange, placeholder, id }) {
+function CustomDropdown({ options, selectedValue, onValueChange, placeholder, id, allOptionValue, isInteracted }) {
   const dispatch = useDispatch();
   const openDropdown = useSelector((state) => state.filter.openDropdown);
 
@@ -30,7 +30,13 @@ function CustomDropdown({ options, selectedValue, onValueChange, placeholder, id
   }, [isOpen, dispatch]);
 
   const selectedOption = options.find((option) => option.value === selectedValue);
-  const displayText = selectedOption ? selectedOption.name : placeholder;
+  let displayText = selectedOption ? selectedOption.name : placeholder;
+
+  if (!isInteracted && selectedValue === allOptionValue) {
+    displayText = placeholder
+  } else if (selectedOption) {
+    displayText = selectedOption.name;
+  }
 
   const handleSelect = (value) => {
     onValueChange(value);
@@ -66,7 +72,7 @@ function CustomDropdown({ options, selectedValue, onValueChange, placeholder, id
         >
           {options.map((option) => (
             <li
-              key={option.value}
+              key={option.name}
               onClick={() => {
                 if (option && option.value !== undefined) {
                   handleSelect(option.value);

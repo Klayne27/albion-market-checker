@@ -1,11 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  selectTier: "any",
+  selectTier: "All",
   selectQuality: [1, 2, 3, 4, 5],
-  selectEnchantment: "any",
-  selectType: "any",
+  selectEnchantment: "All",
+  selectType: "All",
   selectCity: "Thetford",
+  isTierInteracted: false,
+  isTypeInteracted: false,
+  isEnchantmentInteracted: false,
+  isQualityInteracted: false,
   searchTerm: "",
   showPricedItems: true,
   openDropdown: null,
@@ -17,19 +21,23 @@ const filterSlice = createSlice({
   reducers: {
     setSelectTier(state, action) {
       state.selectTier = action.payload;
+      state.isTierInteracted = true;
     },
     setSelectQuality(state, action) {
-      if (action.payload === "all" || action.payload === "") {
+      if (action.payload === "All") {
         state.selectQuality = [1, 2, 3, 4, 5];
       } else {
         state.selectQuality = [action.payload];
       }
+      state.isQualityInteracted = true;
     },
     setSelectEnchantment(state, action) {
       state.selectEnchantment = action.payload;
+      state.isEnchantmentInteracted = true;
     },
     setSelectType(state, action) {
       state.selectType = action.payload;
+      state.isTypeInteracted = true;
     },
     setSearchTerm(state, action) {
       state.searchTerm = action.payload;
@@ -42,18 +50,22 @@ const filterSlice = createSlice({
     },
     handleResetFilters(state) {
       state.selectQuality = [1, 2, 3, 4, 5];
-      state.selectTier = "any";
-      state.selectEnchantment = "any";
-      state.selectType = "any";
+      state.selectTier = "All";
+      state.selectEnchantment = "All";
+      state.selectType = "All";
+      state.isQualityInteracted = false,
+      state.isTierInteracted = false,
+      state.isTypeInteracted = false,
+      state.isEnchantmentInteracted = false
     },
     handleResetSearch(state) {
       state.searchTerm = "";
     },
     handleRefreshMarket(state) {
       state.selectQuality = [1, 2, 3, 4, 5];
-      state.selectTier = "any";
-      state.selectEnchantment = "any";
-      state.selectType = "any";
+      state.selectTier = "All";
+      state.selectEnchantment = "All";
+      state.selectType = "All";
       state.searchTerm = "";
       state.showPricedItems = true;
     },

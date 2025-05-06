@@ -1,5 +1,6 @@
 export const typeOptions = [
-  { name: "Type", value: "any" },
+  // { name: "Type", value: "All" },
+  { name: "All", value: "All" },
   { name: "2H Weapon", value: "2H" },
   { name: "Off-Hand", value: "OFF" },
   { name: "Cape", value: "CAPEITEM" },
@@ -26,7 +27,8 @@ export const typeOptions = [
 ];
 
 export const tierOptions = [
-  { name: "Tier", value: "any" },
+  // { name: "Tier", value: "All" },
+  { name: "All", value: "All" },
   { name: "Tier 1", value: "1" },
   { name: "Tier 2", value: "2" },
   { name: "Tier 3", value: "3" },
@@ -38,7 +40,8 @@ export const tierOptions = [
 ];
 
 export const enchantmentOptions = [
-  { name: "Enchantment", value: "any" },
+  // { name: "Enchantment", value: "All" },
+  { name: "All", value: "All" },
   { name: "Enchantment 0", value: "0" },
   { name: "Enchantment 1", value: "1" },
   { name: "Enchantment 2", value: "2" },
@@ -47,7 +50,8 @@ export const enchantmentOptions = [
 ];
 
 export const qualityOptions = [
-  { name: "Quality", value: "all" },
+  // { name: "Quality", value: "placeholder" },
+  { name: "All", value: "All" },
   { name: "Normal", value: 1 },
   { name: "Good", value: 2 },
   { name: "Outstanding", value: 3 },

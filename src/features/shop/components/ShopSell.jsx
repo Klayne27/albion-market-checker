@@ -46,13 +46,13 @@ function ShopSell({ onShowPanel }) {
       );
     }
 
-    if (selectTier !== "any") {
+    if (selectTier !== "All") {
       currentItems = currentItems.filter((item) => {
         return item.id.startsWith(`T${selectTier}_`);
       });
     }
 
-    if (selectEnchantment !== "any") {
+    if (selectEnchantment !== "All") {
       currentItems = currentItems.filter((item) => {
         const enchantmentMatch = item.id.match(/@(\d+)$/);
         const itemEnchantment = enchantmentMatch ? enchantmentMatch[1] : "0";
@@ -61,7 +61,7 @@ function ShopSell({ onShowPanel }) {
       });
     }
 
-    if (selectType !== "any") {
+    if (selectType !== "All") {
       currentItems = currentItems.filter((item) => {
         const parts = item.id.split("_");
         return parts.length > 1 && parts[1] === selectType;
@@ -127,7 +127,7 @@ function ShopSell({ onShowPanel }) {
                 <button
                   type="button"
                   className=" w-[112px] py-1 border-2 rounded-full text-lg border-gray-500 cursor-pointer shadow-[inset_0_0_10px_1px_#660101] bg-[#b10808] text-yellow-400 hover:opacity-80 active:scale-95"
-                  onClick={() => onShowPanel(item, selectQuality)}
+                  onClick={() => onShowPanel(item, item.quality)}
                 >
                   Sell
                 </button>

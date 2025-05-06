@@ -4,7 +4,7 @@ import { formatNumber, formatTimeAgoUTC } from "../../../utils/helpers";
 import { useItemData } from "../../../hooks/useItemData";
 import { useItemPrices } from "../../../hooks/useItemPrices";
 import { IoIosCheckmark } from "react-icons/io";
-import CustomDropdown from "../../../components/ui/CustomDropdown"
+import CustomDropdown from "../../../components/ui/CustomDropdown";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectCity, setShowPricedItems } from "../slices/filterSlice";
 import { citiesOptions } from "../../../data/itemOptions";
@@ -62,7 +62,7 @@ function ShopBuy({ onShowPanel }) {
       const isVanity = itemId.includes("VANITY");
       const isSkin = itemId.includes("SKIN");
 
-      return  !isUnique && !isVanity && !isSkin;
+      return !isUnique && !isVanity && !isSkin;
     });
 
     if (!Array.isArray(currentItems)) {
@@ -77,13 +77,13 @@ function ShopBuy({ onShowPanel }) {
       );
     }
 
-    if (selectTier !== "any") {
+    if (selectTier !== "All") {
       currentItems = currentItems.filter((item) => {
         return item.id.startsWith(`T${selectTier}_`);
       });
     }
 
-    if (selectEnchantment !== "any") {
+    if (selectEnchantment !== "All") {
       currentItems = currentItems.filter((item) => {
         const enchantmentMatch = item.id.match(/@(\d+)$/);
         const itemEnchantment = enchantmentMatch ? enchantmentMatch[1] : "0";
@@ -92,10 +92,10 @@ function ShopBuy({ onShowPanel }) {
       });
     }
 
-    if (selectType !== "any") {
+    if (selectType !== "All") {
       currentItems = currentItems.filter((item) => {
         if (typeof item.id !== "string" || item.id === "") {
-          return false; 
+          return false;
         }
 
         const id = item.id;
@@ -103,7 +103,7 @@ function ShopBuy({ onShowPanel }) {
 
         if (firstUnderscoreIndex === -1) {
           return false;
-        } 
+        }
 
         const segmentAfterFirstUnderscore = id.substring(firstUnderscoreIndex + 1);
 
@@ -178,13 +178,13 @@ function ShopBuy({ onShowPanel }) {
       });
     }
 
-    if (selectTier !== "any") {
+    if (selectTier !== "All") {
       listings = listings.filter((priceItem) => {
         return priceItem.item_id.startsWith(`T${selectTier}_`);
       });
     }
 
-    if (selectEnchantment !== "any") {
+    if (selectEnchantment !== "All") {
       listings = listings.filter((priceItem) => {
         const enchantmentMatch = priceItem.item_id.match(/@(\d+)$/);
         const itemEnchantment = enchantmentMatch ? enchantmentMatch[1] : "0";
@@ -192,10 +192,10 @@ function ShopBuy({ onShowPanel }) {
       });
     }
 
-    if (selectType !== "any") {
+    if (selectType !== "All") {
       listings = listings.filter((priceItem) => {
         if (typeof priceItem.item_id !== "string" || priceItem.item_id === "") {
-          return false; 
+          return false;
         }
 
         const id = priceItem.item_id;
@@ -455,7 +455,7 @@ function ShopBuy({ onShowPanel }) {
                   <button
                     type="button"
                     className=" w-[112px] py-1 border-2 rounded-full text-lg border-gray-500 cursor-pointer shadow-[inset_0_0_10px_1px_#660101] bg-[#b10808] text-yellow-400 hover:opacity-80 active:scale-95"
-                    onClick={() => onShowPanel(item, selectQuality)}
+                    onClick={() => onShowPanel(item, item.quality)}
                   >
                     Buy
                   </button>
