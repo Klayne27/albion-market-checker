@@ -8,6 +8,7 @@ import CustomDropdown from "../../../components/ui/CustomDropdown";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectCity, setShowPricedItems } from "../slices/filterSlice";
 import { citiesOptions } from "../../../data/itemOptions";
+import Loader from "../../../components/ui/Loader";
 
 const commonHoverActiveStyles = `
     hover:bg-gradient-to-b hover:from-stone-800 hover:via-stone-700 hover:to-stone-500
@@ -23,7 +24,7 @@ const focusStyles = `
 const baseURLimage = "https://render.albiononline.com/v1/item/";
 
 const MAX_URL_LENGTH = 4096;
-const URL_OVERHEAD_ESTIMATE = 300;
+const URL_OVERHEAD_ESTIMATE = 299;
 
 const MAX_ITEM_IDS_PARAM_LENGTH = MAX_URL_LENGTH - URL_OVERHEAD_ESTIMATE;
 
@@ -100,10 +101,6 @@ function ShopBuy({ onShowPanel }) {
 
         const id = item.id;
         const firstUnderscoreIndex = id.indexOf("_");
-
-        if (firstUnderscoreIndex === -1) {
-          return false;
-        }
 
         const segmentAfterFirstUnderscore = id.substring(firstUnderscoreIndex + 1);
 
@@ -200,10 +197,6 @@ function ShopBuy({ onShowPanel }) {
 
         const id = priceItem.item_id;
         const firstUnderscoreIndex = id.indexOf("_");
-
-        if (firstUnderscoreIndex === -1) {
-          return false;
-        }
 
         const segmentAfterFirstUnderscore = id.substring(firstUnderscoreIndex + 1);
 
@@ -337,9 +330,7 @@ function ShopBuy({ onShowPanel }) {
     dispatch(setSelectCity(value));
   };
 
-  if (isItemDataLoading) {
-    return <p className="text-center text-blue-600 text-lg p-4">Loading item list...</p>;
-  }
+  if (isItemDataLoading) return <Loader />
 
   if (itemDataError) {
     return (
@@ -455,7 +446,7 @@ function ShopBuy({ onShowPanel }) {
                   <button
                     type="button"
                     className=" w-[112px] py-1 border-2 rounded-full text-lg border-gray-500 cursor-pointer shadow-[inset_0_0_10px_1px_#660101] bg-[#b10808] text-yellow-400 hover:opacity-80 active:scale-95"
-                    onClick={() => onShowPanel(item, item.quality)}
+                    onClick={() => onShowPanel(item)}
                   >
                     Buy
                   </button>

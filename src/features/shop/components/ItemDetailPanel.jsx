@@ -8,6 +8,7 @@ import { buyItem, sellItem } from "../../inventory/slices/inventorySlice";
 import IconSlider from "../../../components/ui/IconSlider";
 
 const baseURLimage = "https://render.albiononline.com/v1/item/";
+
 const ribbonStrip =
   "polygon(0% 0%, 100% 0%, calc(100% - 15px) 50%, 100% 100%, 0% 100%, 0px 50%)";
 

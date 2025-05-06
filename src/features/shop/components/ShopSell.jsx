@@ -1,42 +1,18 @@
 import { RxCaretLeft, RxCaretRight } from "react-icons/rx";
 import { useMemo, useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
-import { selectInventory } from "../../inventory/slices/inventorySlice"
+import { selectInventory } from "../../inventory/slices/inventorySlice";
 
 const baseURLimage = "https://render.albiononline.com/v1/item/";
 
 function ShopSell({ onShowPanel }) {
   const [currentPage, setCurrentPage] = useState(1);
   const { inventory } = useSelector(selectInventory);
-  const { searchTerm, selectTier, selectEnchantment, selectType } = useSelector(
-    (state) => state.filter
-  );
-  const itemsPerPage = 30;
-
-  const filtered = useMemo(() => {
-    if (!searchTerm) return inventory;
-    const lower = searchTerm.toLowerCase();
-    return inventory.filter(
-      (item) =>
-        item.name.toLowerCase().includes(lower) || item.id.toLowerCase().includes(lower)
-    );
-  }, [inventory, searchTerm]);
+  const { searchTerm, selectTier, selectEnchantment, selectType, selectCity } =
+    useSelector((state) => state.filter);
 
   const filteredItems = useMemo(() => {
     let currentItems = inventory;
-
-    currentItems = currentItems.filter((item) => {
-      const itemId = item.id;
-      const isUnique = itemId.startsWith("UNIQUE_");
-      const isVanity = itemId.includes("VANITY");
-      const isSkin = itemId.includes("SKIN");
-
-      return !isUnique && !isVanity && !isSkin;
-    });
-
-    if (!Array.isArray(currentItems)) {
-      return [];
-    }
 
     if (searchTerm) {
       const lower = searchTerm.toLowerCase();
@@ -63,19 +39,27 @@ function ShopSell({ onShowPanel }) {
 
     if (selectType !== "All") {
       currentItems = currentItems.filter((item) => {
-        const parts = item.id.split("_");
-        return parts.length > 1 && parts[1] === selectType;
+        if (typeof item.id !== "string" || item.id === "") {
+          return false;
+        }
+
+        const id = item.id;
+        const firstUnderscoreIndex = id.indexOf("_");
+
+        const segmentAfterFirstUnderscore = id.substring(firstUnderscoreIndex + 1);
+
+        const selectTypeLower = selectType.toLowerCase();
+        const segmentLower = segmentAfterFirstUnderscore.toLowerCase();
+
+        return segmentLower.startsWith(selectTypeLower);
       });
     }
 
     return currentItems;
   }, [inventory, searchTerm, selectTier, selectEnchantment, selectType]);
 
-  const totalPages = Math.ceil(filtered.length / itemsPerPage);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm]);
+  const itemsPerPage = 48;
+  const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
 
   const currentItems = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
@@ -89,6 +73,10 @@ function ShopSell({ onShowPanel }) {
   const goToPrevPage = useCallback(() => {
     setCurrentPage((p) => Math.max(1, p - 1));
   }, []);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, selectCity, selectTier, selectEnchantment, selectType]);
 
   return (
     <div className="p-2">
@@ -127,7 +115,7 @@ function ShopSell({ onShowPanel }) {
                 <button
                   type="button"
                   className=" w-[112px] py-1 border-2 rounded-full text-lg border-gray-500 cursor-pointer shadow-[inset_0_0_10px_1px_#660101] bg-[#b10808] text-yellow-400 hover:opacity-80 active:scale-95"
-                  onClick={() => onShowPanel(item, item.quality)}
+                  onClick={() => onShowPanel(item)}
                 >
                   Sell
                 </button>
@@ -135,7 +123,7 @@ function ShopSell({ onShowPanel }) {
             </div>
           ))}
 
-          {filtered.length === 0 && (
+          {filteredItems.length === 0 && (
             <p className="text-center text-gray-600">No items match your search.</p>
           )}
         </div>

@@ -8,9 +8,6 @@ export const typeOptions = [
   { name: "Potion", value: "POTION" },
   { name: "Mount", value: "MOUNT" },
   { name: "Main Hand", value: "MAIN" },
-  { name: "Head (all)", value: "HEAD" },
-  { name: "Armor (all)", value: "ARMOR" },
-  { name: "Shoes (all)", value: "SHOES" },
   { name: "Plate Helmet", value: "HEAD_PLATE" },
   { name: "Plate Armor", value: "ARMOR_PLATE" },
   { name: "Plate Boots", value: "SHOES_PLATE" },
@@ -57,9 +54,10 @@ export const qualityOptions = [
 
 export const citiesOptions = [
   { name: "Thetford", value: "Thetford" },
-  { name: "Bridgewatch", value: "Bridgewatch" },
-  { name: "Lymhurst", value: "Lymhurst" },
   { name: "Fort Sterling", value: "Fort Sterling" },
+  { name: "Lymhurst", value: "Lymhurst" },
+  { name: "Bridgewatch", value: "Bridgewatch" },
+  { name: "Martlock", value: "Martlock" },
   { name: "Caerleon", value: "Caerleon" },
   { name: "Black Market", value: "Black Market" },
 ];

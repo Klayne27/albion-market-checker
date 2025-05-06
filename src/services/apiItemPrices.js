@@ -21,6 +21,7 @@ export const getItemPrices = async (itemIdsToFetch, city, quality) => {
 
   const res = await fetch(apiUrl);
 
+
   if (!res.ok) {
     throw new Error(`Error fetching item prices`);
   }

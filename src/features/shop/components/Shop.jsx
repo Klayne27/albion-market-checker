@@ -10,8 +10,8 @@ function Shop() {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
-  const handleShowPanel = (item, quality) => {
-    setSelectedItem({ ...item, quality: quality });
+  const handleShowPanel = (item) => {
+    setSelectedItem({ ...item });
     setIsPanelOpen(true);
   };
 
