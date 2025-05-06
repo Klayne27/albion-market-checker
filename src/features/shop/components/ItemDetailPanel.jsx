@@ -46,8 +46,8 @@ function ItemDetailPanel({ item, onClose, mode }) {
   const { premiumTax, setupFee, totalNetSellPrice, totalGrossValue } = useMemo(() => {
     if (mode !== "sell") return { premiumTax: 0, setupFee: 0, totalNetSellPrice: 0 };
     const totalGrossValue = unitSellPrice * quantity;
-    const tax = Math.round(totalGrossValue * 0.02);
-    const fee = Math.round(totalGrossValue * 0.01);
+    const tax = Math.round(totalGrossValue * 0.05);
+    const fee = Math.round(totalGrossValue * 0.025);
     const net = totalGrossValue - tax - fee;
     return {
       premiumTax: tax,
@@ -86,9 +86,7 @@ function ItemDetailPanel({ item, onClose, mode }) {
       quantity: quantity,
       totalNetSilver: totalNetSellPrice,
     };
-    console.log(`PRE-SELL: ${item.id}`);
     dispatch(sellItem(sellPayload));
-    console.log(`SOLD: ${item.quality}`);
     onClose();
   };
 
@@ -224,11 +222,11 @@ function ItemDetailPanel({ item, onClose, mode }) {
             </div>
             <div></div>
             <p className="text-red-600 text-sm">
-              🪩 {formatNumber(premiumTax)}(2% premium tax)
+              🪩 {formatNumber(premiumTax)}(5% premium tax)
             </p>
             <div></div>
             <p className="mb-3 text-red-600 text-sm">
-              🪩 {formatNumber(setupFee)}(1% setup fee)
+              🪩 {formatNumber(setupFee)}(2.5% setup fee)
             </p>
 
             <div className="ml-9 text-sm">Total: </div>

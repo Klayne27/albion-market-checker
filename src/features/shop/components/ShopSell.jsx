@@ -8,7 +8,7 @@ const baseURLimage = "https://render.albiononline.com/v1/item/";
 function ShopSell({ onShowPanel }) {
   const [currentPage, setCurrentPage] = useState(1);
   const { inventory } = useSelector(selectInventory);
-  const { searchTerm, selectTier, selectEnchantment, selectType, selectQuality } = useSelector(
+  const { searchTerm, selectTier, selectEnchantment, selectType } = useSelector(
     (state) => state.filter
   );
   const itemsPerPage = 30;
@@ -27,11 +27,11 @@ function ShopSell({ onShowPanel }) {
 
     currentItems = currentItems.filter((item) => {
       const itemId = item.id;
-      const isArtifact = itemId.includes("ARTEFACT");
       const isUnique = itemId.startsWith("UNIQUE_");
       const isVanity = itemId.includes("VANITY");
+      const isSkin = itemId.includes("SKIN");
 
-      return !isArtifact && !isUnique && !isVanity;
+      return !isUnique && !isVanity && !isSkin;
     });
 
     if (!Array.isArray(currentItems)) {

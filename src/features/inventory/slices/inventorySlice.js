@@ -18,7 +18,7 @@ const inventorySlice = createSlice({
         (item) => item.id === id && item.quality === quality
       );
 
-      if (existingItem) {
+      if (existingItem && existingItem.quantity <= 999) {
         existingItem.quantity += quantity;
       } else {
         state.inventory.push({ id, name, quality, quantity, price: sell_price_min });
@@ -27,7 +27,7 @@ const inventorySlice = createSlice({
     },
     sellItem(state, action) {
       const { itemId, quality, quantity, totalNetSilver } = action.payload;
-      
+
       const idx = state.inventory.findIndex(
         (item) => item.id === itemId &&  item.quality === quality
       );
