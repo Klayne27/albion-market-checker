@@ -90,3 +90,5 @@ export const {
   handleRefreshMarket,
   handleToggleDropdown,
 } = filterSlice.actions;
+
+export const selectFilter = state => state.filter

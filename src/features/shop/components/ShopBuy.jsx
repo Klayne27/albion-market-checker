@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setSelectCity, setShowPricedItems } from "../slices/filterSlice";
 import { citiesOptions } from "../../../data/itemOptions";
 import Loader from "../../../components/ui/Loader";
+import ShopPagination from "./ShopPagination";
 
 const commonHoverActiveStyles = `
     hover:bg-gradient-to-b hover:from-stone-800 hover:via-stone-700 hover:to-stone-500
@@ -156,6 +157,8 @@ function ShopBuy({ onShowPanel }) {
     isItemDataLoading,
     itemDataError
   );
+
+  const isLoading = isPriceFetching || isPriceLoading;
 
   const combinedItemData = useMemo(() => {
     if (isItemDataLoading || !Array.isArray(itemArray) || !Array.isArray(priceData)) {
@@ -318,19 +321,18 @@ function ShopBuy({ onShowPanel }) {
     return sortedItems.slice(start, start + itemsPerPage);
   }, [itemsPerPage, currentPage, sortedItems]);
 
-  const goToNextPage = useThrottle(() => {
-    setCurrentPage((p) => Math.min(totalPages, p + 1));
-  }, 200);
-
-  const goToPrevPage = useThrottle(() => {
-    setCurrentPage((p) => Math.max(1, p - 1));
-  }, 200);
+  const handlePageChange = useCallback(
+    (page) => {
+      dispatch(setCurrentPage(page));
+    },
+    [dispatch]
+  );
 
   const handleCityChange = (value) => {
     dispatch(setSelectCity(value));
   };
 
-  if (isItemDataLoading) return <Loader />
+  if (isItemDataLoading) return <Loader />;
 
   if (itemDataError) {
     return (
@@ -468,28 +470,13 @@ function ShopBuy({ onShowPanel }) {
               </p>
             )}
         </div>
-
-        <div className="flex justify-center gap-4 mt-2 items-center">
-          <span className="border h-0 w-full border-[#917663]"></span>
-          <button
-            onClick={goToPrevPage}
-            className="border-2 rounded-full px-2 size-5 text-yellow-400 border-[#646179] bg-[#2c2b35] relative cursor-pointer disabled:opacity-30 hover:opacity-80"
-            disabled={currentPage === 1 || isPriceLoading || isPriceFetching}
-            aria-label="Previous Page"
-          >
-            <RxCaretLeft size={25} className="-left-1 -bottom-1.5 absolute" />
-          </button>
-          <p className="text-md text-[#43342D]">{currentPage}</p>
-          <button
-            onClick={goToNextPage}
-            className="border-2 rounded-full px-2 size-5 text-yellow-400 border-[#646179] bg-[#2c2b35] relative cursor-pointer disabled:opacity-30 hover:opacity-80"
-            disabled={currentPage === totalPages || isPriceLoading || isPriceFetching}
-            aria-label="Next Page"
-          >
-            <RxCaretRight size={25} className="-left-1 -bottom-1.5 absolute" />
-          </button>
-          <span className="border h-0 w-full border-[#917663]"></span>
-        </div>
+        
+        <ShopPagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+          isLoading={isLoading}
+        />
       </div>
     </div>
   );
