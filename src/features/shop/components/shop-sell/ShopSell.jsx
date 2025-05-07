@@ -4,7 +4,7 @@ import { selectInventory } from "../../../inventory/slices/inventorySlice";
 import { selectShop, setCurrentPage } from "../../slices/shopSlice";
 import { selectFilter } from "../../slices/filterSlice";
 
-import ShopSellList from "./ShopSellItemList";
+import ShopSellItemList from "./ShopSellItemList";
 import ShopSellHeader from "./ShopSellHeader";
 import ShopPagination from "../pagination/ShopPagination";
 
@@ -88,7 +88,7 @@ function ShopSell({ onShowPanel }) {
         <ShopSellHeader />
         <div className="border-t border-b border-[#917663] p-1 mt-2 overflow-auto h-[440px] custom-scrollbar">
           {currentItems.map((item, i) => (
-            <ShopSellList
+            <ShopSellItemList
               item={item}
               i={i}
               key={`${item.id}-${item.quality}-${i}`}
