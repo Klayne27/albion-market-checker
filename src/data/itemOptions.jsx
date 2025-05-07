@@ -71,4 +71,5 @@ export const citiesOptions = [
   { name: "Martlock", value: "Martlock" },
   { name: "Caerleon", value: "Caerleon" },
   { name: "Black Market", value: "Black Market" },
+  { name: "Brecilien", value: "Brecilien" },
 ];

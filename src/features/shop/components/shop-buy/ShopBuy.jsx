@@ -229,6 +229,7 @@ function ShopBuy({ onShowPanel }) {
         city: priceItem.city,
         sell_price_min: priceItem.sell_price_min,
         sell_price_min_date: priceItem.sell_price_min_date,
+        sell_price_max: priceItem.sell_price_max,
         name: itemName,
         _key_suffix: `${priceItem.item_id}-${priceItem.city || ""}-${priceItem.quality}`,
       };

@@ -39,7 +39,7 @@ function ShopBuyItemList({ item, i, onShowPanel }) {
         {item.sell_price_min_date ? formatTimeAgoUTC(item.sell_price_min_date) : "N/A"}
       </p>
       <div className="flex justify-between items-center ml-4">
-        <span className="text-[#4e2c08] text-md">
+        <span className="text-[#4e2c08]">
           {`🪩 ${formatNumber(item.sell_price_min)}`}
         </span>
         <button

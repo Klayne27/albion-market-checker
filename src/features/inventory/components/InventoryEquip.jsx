@@ -10,8 +10,8 @@ function InventoryEquip() {
   return (
     <>
       <div className="ml-6 flex items-center gap-2 relative mt-3">
-        <div className="border-3 border-[#8C7C6B] rounded-full w-[73px] h-[73px] my-2"></div>
-        <img src="./avatar2.png" className="absolute size-[138px] -left-8" />
+        <div className="border-[#8C7C6B] rounded-full w-[73px] h-[73px] my-2"></div>
+        <img src="./logoCOA.png" className="absolute size-[138px] -left-8" />
         <div className="flex flex-col text-[22px]">
           <input value={editUsername} onChange={e => setEditUsername(e.target.value)} className="absolute top-3 max-w-50 active:border-none" />
 
