@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import {
   handleResetFilters,
+  selectFilter,
   setSelectEnchantment,
   setSelectQuality,
   setSelectTier,
@@ -25,7 +26,7 @@ function DropdownFilters() {
     isTypeInteracted,
     isEnchantmentInteracted,
     isQualityInteracted,
-  } = useSelector((state) => state.filter);
+  } = useSelector(selectFilter);
 
   const dropdownSelectedQualityValue =
     selectQuality.length === qualityOptions.length - 1

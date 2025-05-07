@@ -107,7 +107,7 @@ function ItemDetailPanel({ item, onClose, mode }) {
         <>
           <PanelFilters />
           <div className="grid grid-cols-[1fr_4fr] p-3">
-            <PanelImgDescription item={item} image={baseURLimage} />
+            <PanelImgDescription item={item} baseURLImage={baseURLimage} />
             <PanelActions mode={mode} />
 
             <p className="ml-7 mb-3 text-sm">Amount:</p>
@@ -147,10 +147,10 @@ function ItemDetailPanel({ item, onClose, mode }) {
       )}
       {mode === "buy" && (
         <>
-          <PanelFilters item={item} image={baseURLimage} />
+          <PanelFilters />
 
           <div className="grid grid-cols-[1fr_4fr] p-3">
-            <PanelImgDescription item={item} image={baseURLimage} />
+            <PanelImgDescription item={item} baseURLImage={baseURLimage} />
             <PanelActions mode={mode} />
 
             <p className="ml-7 mb-3 text-sm">Amount:</p>

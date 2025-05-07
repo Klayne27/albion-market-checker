@@ -14,7 +14,7 @@ function SearchFilter() {
   return (
     <div className="flex border rounded-full p-[4px] gap-0.5 bg-gradient-to-b from-[#716F7B] via-[#4c4a50] to-[#38373b] mr-4">
       <input
-        className=" rounded-full w-[144px] px-2 h-5.5 text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] placeholder:text-[#926e47] hover:opacity-80"
+        className="border-[#646179] border rounded-full w-[144px] px-2 py-0.5 text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] placeholder:text-[#926e47] hover:opacity-80"
         placeholder="Search..."
         value={searchTerm}
         onChange={handleSearchChange}

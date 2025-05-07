@@ -1,6 +1,7 @@
 import { FaArrowRotateRight } from "react-icons/fa6";
 
 function PanelFilters() {
+
   return (
     <div className="flex border rounded-full p-[3px] gap-4 bg-gradient-to-b from-[#716F7B] via-[#4c4a50] to-[#38373b] absolute top-[110px] right-4">
       <select

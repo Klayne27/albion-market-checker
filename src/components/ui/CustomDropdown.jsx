@@ -68,7 +68,7 @@ function CustomDropdown({
     <div className="relative w-full cursor-pointer" ref={dropDownRef}>
       <div
         onClick={() => dispatch(handleToggleDropdown(id))}
-        className={`flex justify-between border w-[144px] border-[#646179] rounded-full px-2 text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] hover:opacity-80`}
+        className={`flex justify-between border w-[144px] border-[#646179] rounded-full px-2 text-sm bg-[#FBD7A6] shadow-[inset_0_0_10px_2px_#eca966] hover:opacity-80 py-0.5`}
       >
         <span>{displayText}</span>
         <svg
