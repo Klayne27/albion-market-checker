@@ -11,7 +11,7 @@ function MarketName() {
   return (
     <div className="flex items-center gap-2">
       <div className="border-3 border-[#8C7C6B] rounded-full w-[76.8px] h-[76.8px] my-2"></div>
-      <img src="./albion.png" className="absolute size-[144px] -left-3.5" />
+      <img src="./albion.png" className="absolute size-[144px] -left-3.5 z-0" />
       <span className="text-[#8C7C6B] font-extrabold text-3xl">
         {selectCity === "" ? "All Cities" : selectCity}'s Marketplace
       </span>
