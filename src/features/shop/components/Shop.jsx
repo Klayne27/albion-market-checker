@@ -1,6 +1,6 @@
 import { useState } from "react";
-import ShopBuy from "./ShopBuy";
-import ShopSell from "./ShopSell";
+import ShopBuy from "./shop-buy/ShopBuy";
+import ShopSell from "./shop-sell/ShopSell";
 import ItemDetailPanel from "./ItemDetailPanel";
 import ShopHeader from "./shop-header/ShopHeader";
 import Tabs from "./shop-header/Tabs";
@@ -21,7 +21,7 @@ function Shop() {
   };
 
   return (
-    <>
+    <div className="relative">
       <div className="border border-[#665249] bg-[#43342D] shadow-[inset_0_0_25px_10px_#665249] w-[56rem] h-[748px] z-0 relative">
         <ShopHeader />
         <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
@@ -43,7 +43,7 @@ function Shop() {
           />
         </>
       )}
-    </>
+    </div>
   );
 }
 

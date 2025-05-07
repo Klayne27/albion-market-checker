@@ -1,15 +1,21 @@
 import React, { useCallback, useMemo, useRef, useState, useEffect } from "react";
-import { RxCaretLeft, RxCaretRight } from "react-icons/rx";
-import { formatNumber, formatTimeAgoUTC } from "../../../utils/helpers";
-import { useItemData } from "../../../hooks/useItemData";
-import { useItemPrices } from "../../../hooks/useItemPrices";
+import { formatNumber, formatTimeAgoUTC } from "../../../../utils/helpers";
+import { useItemData } from "../../../../hooks/useItemData";
+import { useItemPrices } from "../../../../hooks/useItemPrices";
 import { IoIosCheckmark } from "react-icons/io";
-import CustomDropdown from "../../../components/ui/CustomDropdown";
+import CustomDropdown from "../../../../components/ui/CustomDropdown";
 import { useDispatch, useSelector } from "react-redux";
-import { setSelectCity, setShowPricedItems } from "../slices/filterSlice";
-import { citiesOptions } from "../../../data/itemOptions";
-import Loader from "../../../components/ui/Loader";
-import ShopPagination from "./ShopPagination";
+import {
+  selectFilter,
+  setSelectCity,
+  setShowPricedItems,
+} from "../../slices/filterSlice";
+import { citiesOptions } from "../../../../data/itemOptions";
+import Loader from "../../../../components/ui/Loader";
+import ShopPagination from "../pagination/ShopPagination";
+import ShopBuyItemList from "./ShopBuyItemList";
+import Error from "../../../../components/ui/Error";
+import { selectShop, setCurrentPage } from "../../slices/shopSlice";
 
 const commonHoverActiveStyles = `
     hover:bg-gradient-to-b hover:from-stone-800 hover:via-stone-700 hover:to-stone-500
@@ -21,8 +27,6 @@ const commonHoverActiveStyles = `
 const focusStyles = `
     focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 focus:ring-offset-gray-900
   `;
-
-const baseURLimage = "https://render.albiononline.com/v1/item/";
 
 const MAX_URL_LENGTH = 4096;
 const URL_OVERHEAD_ESTIMATE = 299;
@@ -39,7 +43,7 @@ function ShopBuy({ onShowPanel }) {
     return map;
   }, [itemArray]);
 
-  const [currentPage, setCurrentPage] = useState(1);
+  const {currentPage} = useSelector(selectShop)
   const [sortByPrice, setSortByPrice] = useState("asc");
   const {
     selectTier,
@@ -49,7 +53,7 @@ function ShopBuy({ onShowPanel }) {
     searchTerm,
     selectCity,
     showPricedItems,
-  } = useSelector((state) => state.filter);
+  } = useSelector(selectFilter);
 
   const dispatch = useDispatch();
 
@@ -280,7 +284,7 @@ function ShopBuy({ onShowPanel }) {
   }, [combinedItemData, sortByPrice]);
 
   useEffect(() => {
-    setCurrentPage(1);
+    dispatch(setCurrentPage(1));
   }, [
     searchTerm,
     selectCity,
@@ -289,30 +293,8 @@ function ShopBuy({ onShowPanel }) {
     selectQuality,
     selectType,
     showPricedItems,
+    dispatch
   ]);
-
-  const displayItems = useMemo(() => {
-    let itemsToDisplay = sortedItems;
-
-    if (showPricedItems) {
-      itemsToDisplay = itemsToDisplay.filter((item) => item.sell_price_min > 0);
-    }
-    return itemsToDisplay;
-  }, [sortedItems, showPricedItems]);
-
-  function useThrottle(fn, delay = 200) {
-    const last = useRef(0);
-    return useCallback(
-      (...args) => {
-        const now = Date.now();
-        if (now - last.current > delay) {
-          last.current = now;
-          fn(...args);
-        }
-      },
-      [fn, delay]
-    );
-  }
 
   const totalPages = Math.ceil(sortedItems.length / itemsPerPage);
 
@@ -333,14 +315,7 @@ function ShopBuy({ onShowPanel }) {
   };
 
   if (isItemDataLoading) return <Loader />;
-
-  if (itemDataError) {
-    return (
-      <p className="text-center text-red-600 text-lg p-4">
-        Error loading item list: {itemDataError.message}
-      </p>
-    );
-  }
+  if (itemDataError) return <Error />;
 
   return (
     <div className="p-2">
@@ -418,51 +393,21 @@ function ShopBuy({ onShowPanel }) {
           {!isPriceLoading &&
             pageItems.length > 0 &&
             pageItems.map((item, i) => (
-              <div
-                key={`${baseURLimage}${item.id}?quality=${item.quality}`}
-                className={`px-2 py-2 grid grid-cols-[2fr_1fr_2fr] items-center ${
-                  i % 2 === 0 ? "bg-[#dab593]" : ""
-                }`}
-              >
-                <div className="flex items-center gap-2">
-                  <div
-                    className={`w-[71px] h-[71px] relative ${"overflow-hidden bg-cover bg-center bg-no-repeat"}`}
-                    style={{
-                      backgroundImage: `url('${baseURLimage}${item.id}?quality=${item.quality}')`,
-                      backgroundSize: "114%",
-                    }}
-                  ></div>
-                  <p className="text-[#4e2c08] text-sm font-extrabold" title={item.name}>
-                    {item.name}
-                  </p>
-                </div>
-                <p className="ml-4 text-[#4e2c08] text-md">
-                  {item.sell_price_min_date
-                    ? formatTimeAgoUTC(item.sell_price_min_date)
-                    : "N/A"}
-                </p>
-                <div className="flex justify-between items-center ml-4">
-                  <span className="text-[#4e2c08] text-md">
-                    {`🪩 ${formatNumber(item.sell_price_min)}`}
-                  </span>
-                  <button
-                    type="button"
-                    className=" w-[112px] py-1 border-2 rounded-full text-lg border-gray-500 cursor-pointer shadow-[inset_0_0_10px_1px_#660101] bg-[#b10808] text-yellow-400 hover:opacity-80 active:scale-95"
-                    onClick={() => onShowPanel(item)}
-                  >
-                    Buy
-                  </button>
-                </div>
-              </div>
+              <ShopBuyItemList
+                item={item}
+                i={i}
+                onShowPanel={onShowPanel}
+                key={`${item.id}-${item.quality}-${i}`}
+              />
             ))}
 
-          {!isPriceLoading && displayItems.length === 0 && searchTerm && (
+          {!isPriceLoading && pageItems.length === 0 && searchTerm && (
             <p className="text-center text-[#4e2c08] p-4">
               No items exactly match "{searchTerm}" on this page.
             </p>
           )}
           {!isPriceLoading &&
-            displayItems.length === 0 &&
+            pageItems.length === 0 &&
             !searchTerm &&
             !isPriceFetching && (
               <p className="text-center text-[#4e2c08] p-4">
@@ -470,7 +415,7 @@ function ShopBuy({ onShowPanel }) {
               </p>
             )}
         </div>
-        
+
         <ShopPagination
           currentPage={currentPage}
           totalPages={totalPages}

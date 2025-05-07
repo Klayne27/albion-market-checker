@@ -5,7 +5,7 @@ const initialState = {
   selectQuality: [1, 2, 3, 4, 5],
   selectEnchantment: "All",
   selectType: "All",
-  selectCity: "Thetford",
+  selectCity: "",
   isTierInteracted: false,
   isTypeInteracted: false,
   isEnchantmentInteracted: false,
@@ -67,6 +67,7 @@ const filterSlice = createSlice({
       state.selectEnchantment = "All";
       state.selectType = "All";
       state.searchTerm = "";
+      state.selectCity = ""
       state.showPricedItems = true;
     },
     handleToggleDropdown(state, action) {

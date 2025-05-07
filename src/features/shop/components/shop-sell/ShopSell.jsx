@@ -1,12 +1,12 @@
 import { useMemo, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectInventory } from "../../inventory/slices/inventorySlice";
-import { selectShop, setCurrentPage } from "../slices/shopSlice";
-import { selectFilter } from "../slices/filterSlice";
+import { selectInventory } from "../../../inventory/slices/inventorySlice";
+import { selectShop, setCurrentPage } from "../../slices/shopSlice";
+import { selectFilter } from "../../slices/filterSlice";
 
-import ShopSellList from "./ShopSellList";
+import ShopSellList from "./ShopSellItemList";
 import ShopSellHeader from "./ShopSellHeader";
-import ShopPagination from "./ShopPagination";
+import ShopPagination from "../pagination/ShopPagination";
 
 function ShopSell({ onShowPanel }) {
   const { inventory } = useSelector(selectInventory);

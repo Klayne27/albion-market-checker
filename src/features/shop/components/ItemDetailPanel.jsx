@@ -105,7 +105,7 @@ function ItemDetailPanel({ item, onClose, mode }) {
   `;
 
   return (
-    <div className="fixed left-[315px] transform w-[554px] border-4 border-[#8a6948] bg-[#e4bb93] shadow-[inset_0_0_25px_15px_#eca966] z-50  p-4 bottom-[180px]">
+    <div className="absolute left-[170px] transform w-[554px] border-4 border-[#8a6948] bg-[#e4bb93] shadow-[inset_0_0_25px_15px_#eca966] z-50  p-4 bottom-[100px]">
       <button
         onClick={onClose}
         className="absolute top-2 right-3 border-2 rounded-full p-1 size-6 text-yellow-400 border-[#646179] bg-[#2c2b35] cursor-pointer"

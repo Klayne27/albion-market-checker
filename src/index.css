@@ -26,6 +26,11 @@ html {
   }
 }
 
+
+/* .hide-scrollbar::-webkit-scrollbar {
+  display: none;
+} */
+
 input[type="range"] {
   outline: none;
 }

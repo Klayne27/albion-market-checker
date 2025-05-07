@@ -1,6 +1,6 @@
 const baseURLimage = "https://render.albiononline.com/v1/item/";
 
-function ShopSellList({ item, i, onShowPanel }) {
+function ShopSellItemList({ item, i, onShowPanel }) {
   return (
     <div
       className={`px-2 py-2 grid grid-cols-[2fr_2fr] justify-between ${
@@ -31,4 +31,4 @@ function ShopSellList({ item, i, onShowPanel }) {
   );
 }
 
-export default ShopSellList;
+export default ShopSellItemList;

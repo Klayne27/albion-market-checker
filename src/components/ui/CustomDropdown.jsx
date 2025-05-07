@@ -1,22 +1,35 @@
 import { useDispatch, useSelector } from "react-redux";
 import { handleToggleDropdown } from "../../features/shop/slices/filterSlice";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
-function CustomDropdown({ options, selectedValue, onValueChange, placeholder, id, allOptionValue, isInteracted }) {
+function CustomDropdown({
+  options,
+  selectedValue,
+  onValueChange,
+  placeholder,
+  id,
+  allOptionValue,
+  isInteracted,
+}) {
   const dispatch = useDispatch();
   const openDropdown = useSelector((state) => state.filter.openDropdown);
 
   const isOpen = openDropdown === id;
 
   const dropDownRef = useRef(null);
+  const listItemRef = useRef(null);
+  const [itemHeight, setItemHeight] = useState(0);
+  const maxDropdownHeight = 400;
+
+  useEffect(() => {
+    if (isOpen && listItemRef.current && itemHeight === 0) {
+      setItemHeight(listItemRef.current.offsetHeight);
+    }
+  }, [isOpen, itemHeight]);
 
   useEffect(() => {
     const handleOutsideClick = (e) => {
-      if (
-        isOpen &&
-        dropDownRef.current &&
-        !dropDownRef.current.contains(e.target)
-      ) {
+      if (isOpen && dropDownRef.current && !dropDownRef.current.contains(e.target)) {
         dispatch(handleToggleDropdown(false));
       }
     };
@@ -30,13 +43,21 @@ function CustomDropdown({ options, selectedValue, onValueChange, placeholder, id
   }, [isOpen, dispatch]);
 
   const selectedOption = options.find((option) => option.value === selectedValue);
-  let displayText = selectedOption ? selectedOption.name : placeholder;
 
+  let displayText
   if (!isInteracted && selectedValue === allOptionValue) {
-    displayText = placeholder
+    displayText = placeholder;
   } else if (selectedOption) {
     displayText = selectedOption.name;
   }
+
+  const dynamicHeight = useMemo(() => {
+    if (itemHeight === 0 || !Array.isArray(options)) {
+      return "auto";
+    }
+    const calculatedHeight = options.length * itemHeight + 7;
+    return Math.min(calculatedHeight, maxDropdownHeight);
+  }, [options, itemHeight, maxDropdownHeight]);
 
   const handleSelect = (value) => {
     onValueChange(value);
@@ -67,12 +88,15 @@ function CustomDropdown({ options, selectedValue, onValueChange, placeholder, id
       {isOpen && (
         <ul
           className="absolute z-10 mt-1 w-full bg-[#FFD8AF] border-3 border-gray-600 rounded-lg shadow-lg
-                      cursor-pointer overflow-auto h-max
-          "
+                      cursor-pointer overflow-auto custom-scrollbar"
+          style={{
+            height: dynamicHeight === "auto" ? dynamicHeight : `${dynamicHeight}px`,
+          }}
         >
           {options.map((option) => (
             <li
               key={option.name}
+              ref={listItemRef}
               onClick={() => {
                 if (option && option.value !== undefined) {
                   handleSelect(option.value);

@@ -13,7 +13,7 @@ function MarketName() {
       <div className="border-3 border-[#8C7C6B] rounded-full w-[76.8px] h-[76.8px] my-2"></div>
       <img src="./albion.png" className="absolute size-[144px] -left-3.5" />
       <span className="text-[#8C7C6B] font-extrabold text-3xl">
-        {selectCity}'s Marketplace
+        {selectCity === "" ? "All Cities" : selectCity}'s Marketplace
       </span>
       <span
         className="border-2 rounded-full px-1 size-6 text-yellow-400 border-[#646179] bg-[#2c2b35] mt-2 relative hover:opacity-80 cursor-pointer"
