@@ -1,5 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState, useEffect } from "react";
-import { formatNumber, formatTimeAgoUTC } from "../../../../utils/helpers";
+import React, { useCallback, useMemo, useState, useEffect } from "react";
 import { useItemData } from "../../../../hooks/useItemData";
 import { useItemPrices } from "../../../../hooks/useItemPrices";
 import { IoIosCheckmark } from "react-icons/io";

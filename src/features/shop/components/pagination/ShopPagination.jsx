@@ -5,7 +5,6 @@ function ShopPagination({
   onPageChange,
   totalPages,
   currentPage,
-  itemsPerPage,
   isLoading,
 }) {
   const goToNextPage = useCallback(() => {

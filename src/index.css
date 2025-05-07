@@ -26,7 +26,6 @@ html {
   }
 }
 
-
 /* .hide-scrollbar::-webkit-scrollbar {
   display: none;
 } */
@@ -71,6 +70,27 @@ input::-webkit-inner-spin-button {
 }
 
 /* For Firefox */
-input[type='number'] {
+input[type="number"] {
   -moz-appearance: textfield;
+}
+
+.active-tab-arrow {
+  position: relative; 
+}
+
+.active-tab-arrow::before {
+  content: "";
+  position: absolute;
+  left: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  border-right: 20px solid #535166;
+}
+
+.active-tab-arrow span {
+  padding-left: 20px;
 }

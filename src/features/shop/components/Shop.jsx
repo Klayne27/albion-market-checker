@@ -22,7 +22,7 @@ function Shop() {
 
   return (
     <div className="relative">
-      <div className="border border-[#665249] bg-[#43342D] shadow-[inset_0_0_25px_10px_#665249] w-[56rem] h-[748px] z-0 relative">
+      <div className="border border-[#665249] bg-[#43342D] shadow-[inset_0_0_25px_10px_#665249] w-[56rem] h-[748px] relative">
         <ShopHeader />
         <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
         <div className="flex-grow overflow-hidden">

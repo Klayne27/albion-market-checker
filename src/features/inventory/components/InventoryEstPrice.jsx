@@ -22,11 +22,11 @@ function InventoryEstPrice() {
         {formatNumber(totalInventoryValue)}
       </div>
       <div className="flex items-center justify-center gap-1">
-        <button className="border rounded-full text-sm bg-[#2C2B35] text-yellow-400 border-[#646179] w-14 text-center cursor-pointer">
+        <button className="border rounded-full text-sm bg-[#2C2B35] text-yellow-400 border-[#646179] w-14 text-center cursor-pointer hover:opacity-80">
           Stack
         </button>
         <button
-          className="border rounded-full text-sm bg-[#2C2B35] text-yellow-400 border-[#646179] w-14 text-center cursor-pointer"
+          className="border rounded-full text-sm bg-[#2C2B35] text-yellow-400 border-[#646179] w-14 text-center cursor-pointer hover:opacity-80"
           onClick={handleSortInventory}
         >
           Sort
