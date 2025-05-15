@@ -53,10 +53,10 @@ const filterSlice = createSlice({
       state.selectTier = "All";
       state.selectEnchantment = "All";
       state.selectType = "All";
-      state.isQualityInteracted = false,
-      state.isTierInteracted = false,
-      state.isTypeInteracted = false,
-      state.isEnchantmentInteracted = false
+      (state.isQualityInteracted = false),
+        (state.isTierInteracted = false),
+        (state.isTypeInteracted = false),
+        (state.isEnchantmentInteracted = false);
     },
     handleResetSearch(state) {
       state.searchTerm = "";
@@ -67,8 +67,12 @@ const filterSlice = createSlice({
       state.selectEnchantment = "All";
       state.selectType = "All";
       state.searchTerm = "";
-      state.selectCity = ""
+      state.selectCity = "";
       state.showPricedItems = true;
+      (state.isQualityInteracted = false),
+        (state.isTierInteracted = false),
+        (state.isTypeInteracted = false),
+        (state.isEnchantmentInteracted = false);
     },
     handleToggleDropdown(state, action) {
       state.openDropdown = state.openDropdown === action.payload ? null : action.payload;
@@ -92,4 +96,4 @@ export const {
   handleToggleDropdown,
 } = filterSlice.actions;
 
-export const selectFilter = state => state.filter
+export const selectFilter = (state) => state.filter;
